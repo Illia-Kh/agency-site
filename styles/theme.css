@@ -1,0 +1,61 @@
+/* Color scheme for native UI */
+:root { color-scheme: light dark; }
+
+:where(a,button,[role="button"],input,select,textarea):focus-visible{
+  outline:2px solid color-mix(in oklab, var(--primary) 55%, var(--bg));
+  outline-offset:2px; border-radius:8px;
+}
+
+:root{
+  --bg:#ffffff; --bg-secondary:#f7f7f8; --surface-elevated:#efeff1; --border:#e5e5e7; --text:#111111;
+  --primary:#0077cc; --primary-hover:#0062a8;
+  --secondary:#005fa3; --secondary-hover:#004f88;
+  --highlight:#1a1a1a; --highlight-hover:#000000;
+  --success:#1f7a5c; --warning:#b58900; --error:#b54b4b;
+  --radius:14px; --shadow-sm:0 1px 2px rgba(0,0,0,.04); --shadow-md:0 6px 20px rgba(0,0,0,.08);
+  /* Azure ramp */
+  --primary-50:#e6f3ff; --primary-100:#cfe9ff; --primary-200:#a8d8ff;
+  --primary-300:#7dc5ff; --primary-400:#55b4ff; --primary-500:#33aaff;
+  --primary-600:#199de6; --primary-700:#0d86c4; --primary-800:#0a6c9e; --primary-900:#074a6b;
+  --focus: color-mix(in oklab, var(--primary) 55%, white);
+}
+:root[data-theme="dark"]{
+  --bg:#0f0f10; --bg-secondary:#161618; --surface-elevated:#1a1a1c; --border:#2a2a2e; --text:#f5f5f6;
+  --primary:#33aaff; --primary-hover:#199de6;
+  --secondary:#2680c2; --secondary-hover:#1f6da6;
+  --highlight:#2a2a2a; --highlight-hover:#3a3a3a;
+  --success:#2da181; --warning:#e0b341; --error:#d06a6a;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.25); --shadow-md:0 8px 28px rgba(0,0,0,.35);
+  --focus: color-mix(in oklab, var(--primary) 55%, black);
+}
+
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--text);
+  transition:background-color .22s ease,color .22s ease;
+}
+
+/* Focus ring for accessibility */
+:where(a,button,[role="button"],input,select,textarea):focus-visible{
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Disabled state for buttons */
+.btn[disabled], .btn:disabled {
+  opacity: .55; cursor: not-allowed; filter: saturate(.85);
+}
+
+a:not(.btn){ color: var(--primary); text-decoration: none; }
+a:not(.btn):hover{ color: var(--primary-hover); text-decoration: underline; }
+
+.border{border:1px solid var(--border)}
+.card{background:var(--bg-secondary); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow-md)}
+.btn{border:1px solid transparent; border-radius:10px; padding:.625rem .875rem; cursor:pointer; transition:.16s}
+.btn-primary{background:var(--primary); color:#fff}
+.btn-primary:hover{background:var(--primary-hover)}
+.btn-secondary{background:var(--secondary); color:#fff}
+.btn-secondary:hover{background:var(--secondary-hover)}
+.btn-graphite{background:var(--highlight); color:#fff}
+.btn-graphite:hover{background:var(--highlight-hover)}
