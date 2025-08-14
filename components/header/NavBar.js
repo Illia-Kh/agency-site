@@ -8,11 +8,11 @@ const links = [
   { href: '#contact', label: 'Контакты' },
 ];
 
-function NavBar({ open, onToggle, onClose, mobile }) {
+function NavBar({ onToggle, onClose, mobile }) {
   if (mobile) {
     return (
       <div className="space-y-1 px-4 py-3">
-        {links.map((link) => (
+        {links.map(link => (
           <a
             key={link.href}
             className="block rounded-lg px-3 py-2 text-sm text-[var(--text)] hover:bg-[var(--highlight)]"
@@ -32,7 +32,7 @@ function NavBar({ open, onToggle, onClose, mobile }) {
   return (
     <>
       <nav className="hidden items-center gap-6 md:flex">
-        {links.map((link) => (
+        {links.map(link => (
           <a
             key={link.href}
             className="text-sm text-[var(--text)] hover:text-[var(--primary)] transition"
@@ -48,7 +48,12 @@ function NavBar({ open, onToggle, onClose, mobile }) {
         className="md:hidden rounded-xl border border-[var(--border)] p-2 hover:bg-[var(--highlight)]"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          <path
+            d="M4 6h16M4 12h16M4 18h16"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
         </svg>
       </button>
     </>
