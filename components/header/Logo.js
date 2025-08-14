@@ -1,8 +1,8 @@
-"use client";
+'use client';
 // logo.js
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-const BRAND_ORANGE = "#FF7A00"; // постоянный бренд-оранжевый (не зависит от темы)
+const BRAND_ORANGE = '#FF7A00'; // постоянный бренд-оранжевый (не зависит от темы)
 
 export default function Logo() {
   // Theme state is only set on client to avoid hydration mismatch
@@ -10,21 +10,21 @@ export default function Logo() {
 
   useEffect(() => {
     const getTheme = () =>
-      document.documentElement.getAttribute("data-theme") || "light";
+      document.documentElement.getAttribute('data-theme') || 'light';
     setTheme(getTheme());
     const handler = () => setTheme(getTheme());
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
   }, []);
 
   const toggleTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
+    const next = theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
     setTheme(next);
   };
 
-  const isDark = theme === "dark";
+  const isDark = theme === 'dark';
 
   // Don't render until theme is known (client-only)
   if (theme === undefined) return null;
@@ -36,9 +36,9 @@ export default function Logo() {
         <div
           className="grid h-8 w-8 place-items-center rounded-xl transition border"
           style={{
-            background: "var(--highlight)",        // графит
-            borderColor: "var(--border)",
-            boxShadow: "var(--shadow-sm)",
+            background: 'var(--highlight)', // графит
+            borderColor: 'var(--border)',
+            boxShadow: 'var(--shadow-sm)',
           }}
           aria-hidden
         >
@@ -65,9 +65,9 @@ export default function Logo() {
         aria-label="Toggle theme"
         className="relative inline-grid h-8 w-8 place-items-center rounded-full border transition"
         style={{
-          background: "var(--bg-secondary)",
-          borderColor: "var(--border)",
-          boxShadow: "var(--shadow-sm)",
+          background: 'var(--bg-secondary)',
+          borderColor: 'var(--border)',
+          boxShadow: 'var(--shadow-sm)',
         }}
       >
         <LightBulbIcon lit={isDark} />
@@ -88,8 +88,8 @@ export default function Logo() {
 
 // SVG-иконка лампочки: нейтральная в обычном состоянии, оранжевая когда 'lit'
 function LightBulbIcon({ lit = false }) {
-  const stroke = lit ? BRAND_ORANGE : "var(--text)";
-  const fill = lit ? `${BRAND_ORANGE}` : "transparent";
+  const stroke = lit ? BRAND_ORANGE : 'var(--text)';
+  const fill = lit ? `${BRAND_ORANGE}` : 'transparent';
   return (
     <svg
       width="18"
@@ -97,11 +97,11 @@ function LightBulbIcon({ lit = false }) {
       viewBox="0 0 24 24"
       role="img"
       aria-hidden="true"
-      style={{ display: "block" }}
+      style={{ display: 'block' }}
     >
       <path
         d="M9 18h6v1a3 3 0 0 1-3 3h0a3 3 0 0 1-3-3v-1Z"
-        fill={lit ? `${BRAND_ORANGE}66` : "transparent"}
+        fill={lit ? `${BRAND_ORANGE}66` : 'transparent'}
         stroke={stroke}
         strokeWidth="1.5"
       />
