@@ -2,4 +2,18 @@
 @import "tailwindcss";
 @import "../styles/theme.css";
 
+/* System font fallbacks to replace Google Fonts */
+:root {
+  --font-geist-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono: "SF Mono", Monaco, Inconsolata, "Roboto Mono", Consolas, "Courier New", monospace;
+}
+
+/* Apply system fonts globally */
+body {
+  font-family: var(--font-geist-sans);
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-geist-mono);
+}
 
