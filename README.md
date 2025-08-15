@@ -21,23 +21,29 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 ## Infrastructure
 
 ### Font System
+
 This project uses **system fonts only** - no external font dependencies from Google Fonts or CDNs. Font families are defined in `app/globals.css` with system font stacks:
+
 - **Sans-serif**: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, etc.
 - **Monospace**: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, etc.
 
 ### Theme System
+
 The project uses a **single source of truth** for theming via `<html data-theme>`:
-- **No-FOUC initialization**: Theme is set before hydration in `app/layout.js` 
+
+- **No-FOUC initialization**: Theme is set before hydration in `app/layout.js`
 - **Theme toggle**: Integrated into Logo component (`components/header/Logo.js`)
 - **CSS Variables**: All styling uses CSS custom properties defined in `styles/theme.css`
 - **Supports**: Light/dark modes with system preference detection
 
 ### Tailwind CSS
+
 - **Content paths**: Configured to scan `./app/**/*`, `./components/**/*`, `./styles/**/*`
-- **CSS Variables**: Supports arbitrary values like `bg-[var(--primary)]` 
+- **CSS Variables**: Supports arbitrary values like `bg-[var(--primary)]`
 - **Import order**: Tailwind → custom styles via `app/globals.css` → `styles/theme.css`
 
 ### Line Endings
+
 - **Normalized**: `.gitattributes` enforces LF line endings across all files
 - **Prettier**: Configured with `endOfLine: "auto"` for cross-platform compatibility
 
@@ -67,7 +73,7 @@ The GitHub Actions workflow (`.github/workflows/ci.yml`) runs on **Node 18 & 20*
 
 1. **Install**: `npm ci` - Clean dependency installation
 2. **Lint**: `npm run lint` - ESLint code quality checks
-3. **Format**: `npm run format:check` - Prettier formatting verification  
+3. **Format**: `npm run format:check` - Prettier formatting verification
 4. **Build**: `npm run build` - Production build validation
 5. **Artifacts**: Uploads build files (.next) for Node 20.x runs
 
