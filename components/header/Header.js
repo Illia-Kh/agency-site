@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useState, useCallback } from 'react';
 import Logo from './Logo';
 import NavBar from './NavBar';
@@ -6,7 +6,7 @@ import CtaButton from './CtaButton';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const toggle = useCallback(() => setOpen((prev) => !prev), []);
+  const toggle = useCallback(() => setOpen(prev => !prev), []);
   const close = useCallback(() => setOpen(false), []);
 
   return (
