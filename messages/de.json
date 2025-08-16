@@ -24,8 +24,29 @@
     "cta": "Angebot erhalten",
     "howWeWork": "Wie wir arbeiten"
   },
+  "about": {
+    "title": "Über uns",
+    "description": "Wir bauen den gesamten Trichter: vom Website-Prototyp bis zur Traffic-Akquisition. Parallel richten wir Analytics und Berichterstattung ein.",
+    "sites": {
+      "title": "Websites",
+      "text": "Next.js, schnelles Laden, responsiv, SEO-Basis."
+    },
+    "tracking": {
+      "title": "Tracking",
+      "text": "Keitaro, Domains, SSL, Integrationen, Anti-Bot-Filter."
+    },
+    "traffic": {
+      "title": "Traffic",
+      "text": "Meta/Google, Medienplan, Kreative, Tests und Skalierung."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "text": "Benutzerdefinierte Dashboards, Attribution, LTV, Conversion-Trichter."
+    }
+  },
   "footer": {
     "contacts": "Kontakte",
+    "description": "Website-Entwicklung und -Promotion schlüsselfertig. Tschechien · EU",
     "copyright": "Alle Rechte vorbehalten."
   }
 }

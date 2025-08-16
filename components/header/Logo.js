@@ -2,14 +2,17 @@
 // logo.js
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-
-const LINKS = [
-  { href: '#about', label: 'О нас' },
-  { href: '#cases', label: 'Кейсы' },
-  { href: '#contact', label: 'Контакты' },
-];
+import { useTranslations } from 'next-intl';
 
 export default function Logo() {
+  const t = useTranslations('nav');
+
+  // Translated navigation links
+  const LINKS = [
+    { href: '#about', label: t('about') },
+    { href: '#cases', label: t('cases') },
+    { href: '#contact', label: t('contacts') },
+  ];
   // State for portal mounting
   const [isClient, setIsClient] = useState(false);
 
