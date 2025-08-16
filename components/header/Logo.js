@@ -2,12 +2,10 @@
 // logo.js
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-const BRAND_ORANGE = '#FF7A00'; // постоянный бренд-оранжевый (не зависит от темы)
-
 const LINKS = [
   { href: '#about', label: 'О нас' },
   { href: '#cases', label: 'Кейсы' },
-  { href: '#contact', label: 'Контакты' }
+  { href: '#contact', label: 'Контакты' },
 ];
 
 export default function Logo() {
@@ -34,10 +32,10 @@ export default function Logo() {
 
   // Delayed hover dropdown state for nav
   const [menuOpen, setMenuOpen] = useState(false);
-  const hoverTimer = useRef(null);      // delay to open (1s)
-  const closeTimer = useRef(null);      // small delay to close when leaving area
-  const containerRef = useRef(null);    // wrapper (logo + dropdown)
-  const panelRef = useRef(null);        // dropdown panel
+  const hoverTimer = useRef(null); // delay to open (1s)
+  const closeTimer = useRef(null); // small delay to close when leaving area
+  const containerRef = useRef(null); // wrapper (logo + dropdown)
+  const panelRef = useRef(null); // dropdown panel
 
   const clearTimer = () => {
     if (hoverTimer.current) {
@@ -57,17 +55,20 @@ export default function Logo() {
     // Delay so пользователь успевает переместить курсор на панель
     closeTimer.current = setTimeout(() => setMenuOpen(false), 350);
   };
-  const handleLeaveContainer = (e) => {
+  const handleLeaveContainer = e => {
     // Если ушли и не попадаем в панель – планируем закрытие
     if (!panelRef.current) return scheduleClose();
     const rel = e.relatedTarget;
     if (rel && panelRef.current.contains(rel)) return; // курсор уходит в панель
     scheduleClose();
   };
-  const handleEnterPanel = () => { clearClose(); };
-  const handleLeavePanel = (e) => {
+  const handleEnterPanel = () => {
+    clearClose();
+  };
+  const handleLeavePanel = e => {
     const rel = e.relatedTarget;
-    if (rel && containerRef.current && containerRef.current.contains(rel)) return; // возвращаемся к триггеру
+    if (rel && containerRef.current && containerRef.current.contains(rel))
+      return; // возвращаемся к триггеру
     scheduleClose();
   };
   const instantOpen = useCallback(() => {
@@ -92,12 +93,14 @@ export default function Logo() {
   // Outside click + ESC to close
   useEffect(() => {
     if (!menuOpen) return;
-    const onDocClick = (e) => {
+    const onDocClick = e => {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
         setMenuOpen(false);
       }
     };
-    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    const onKey = e => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
     document.addEventListener('mousedown', onDocClick);
     document.addEventListener('keydown', onKey);
     return () => {
@@ -116,7 +119,7 @@ export default function Logo() {
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeaveContainer}
       onFocus={instantOpen}
-      onBlur={(e) => {
+      onBlur={e => {
         if (!containerRef.current?.contains(e.relatedTarget)) scheduleClose();
       }}
     >
@@ -126,7 +129,10 @@ export default function Logo() {
         className="group inline-flex items-center gap-2 select-none"
         aria-haspopup="true"
         aria-expanded={menuOpen}
-        onClick={e => { e.preventDefault(); toggleImmediate(); }}
+        onClick={e => {
+          e.preventDefault();
+          toggleImmediate();
+        }}
       >
         <div
           className="grid h-8 w-8 place-items-center rounded-xl transition border"
