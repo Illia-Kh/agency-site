@@ -24,8 +24,29 @@
     "cta": "Get offer",
     "howWeWork": "How we work"
   },
+  "about": {
+    "title": "About us",
+    "description": "We build the entire funnel: from site prototype to traffic acquisition. In parallel, we set up analytics and reporting.",
+    "sites": {
+      "title": "Sites",
+      "text": "Next.js, fast loading, responsive, SEO base."
+    },
+    "tracking": {
+      "title": "Tracking",
+      "text": "Keitaro, domains, SSL, integrations, anti-bot filters."
+    },
+    "traffic": {
+      "title": "Traffic",
+      "text": "Meta/Google, media plan, creatives, tests and scaling."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "text": "Custom dashboards, attribution, LTV, conversion funnel."
+    }
+  },
   "footer": {
     "contacts": "Contacts",
+    "description": "Website development and promotion turnkey. Czech Republic · EU",
     "copyright": "All rights reserved."
   }
 }

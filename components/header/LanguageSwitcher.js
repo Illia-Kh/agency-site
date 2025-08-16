@@ -4,8 +4,9 @@ import { useRouter, usePathname } from 'next/navigation';
 
 const LANGUAGES = [
   { code: 'en', label: 'EN', name: 'English' },
+  { code: 'cs', label: 'CS', name: 'Čeština' },
+  { code: 'de', label: 'DE', name: 'Deutsch' },
   { code: 'ru', label: 'RU', name: 'Русский' },
-  { code: 'uk', label: 'UK', name: 'Українська' },
 ];
 
 export default function LanguageSwitcher({ currentLocale = 'en' }) {
@@ -53,7 +54,6 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '');
     const newPath = `/${langCode}${pathWithoutLocale || ''}`;
 
-    console.log('Language changed to:', langCode);
     router.push(newPath);
   };
 

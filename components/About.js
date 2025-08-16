@@ -1,4 +1,27 @@
+import { useTranslations } from 'next-intl';
+
 export default function About() {
+  const t = useTranslations('about');
+
+  const features = [
+    {
+      title: t('sites.title'),
+      text: t('sites.text'),
+    },
+    {
+      title: t('tracking.title'),
+      text: t('tracking.text'),
+    },
+    {
+      title: t('traffic.title'),
+      text: t('traffic.text'),
+    },
+    {
+      title: t('analytics.title'),
+      text: t('analytics.text'),
+    },
+  ];
+
   return (
     <section
       id="about"
@@ -7,33 +30,13 @@ export default function About() {
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         <div className="lg:col-span-1">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            О нас
+            {t('title')}
           </h2>
-          <p className="mt-3 max-w-sm text-neutral-400">
-            Мы строим воронку целиком: от прототипа сайта до закупки трафика.
-            Параллельно настраиваем аналитику и отчётность.
-          </p>
+          <p className="mt-3 max-w-sm text-neutral-400">{t('description')}</p>
         </div>
         <div className="lg:col-span-2">
           <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            {[
-              {
-                title: 'Сайты',
-                text: 'Next.js, быстрые загрузки, адаптив, SEO‑база.',
-              },
-              {
-                title: 'Трекинг',
-                text: 'Keitaro, домены, SSL, интеграции, антибот‑фильтры.',
-              },
-              {
-                title: 'Трафик',
-                text: 'Meta/Google, медиаплан, креативы, тесты и масштабирование.',
-              },
-              {
-                title: 'Поддержка',
-                text: 'Поддержка и развитие проекта после запуска.',
-              },
-            ].map(f => (
+            {features.map(f => (
               <div
                 key={f.title}
                 className="rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5"

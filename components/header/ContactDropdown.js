@@ -73,8 +73,8 @@ export default function ContactDropdown() {
     setIsOpen(!isOpen);
   };
 
-  const handleFormSubmit = formData => {
-    console.log('Contact form submitted:', formData);
+  const handleFormSubmit = () => {
+    // Form submission logic would go here
     setIsOpen(false); // Close dropdown after submit
     buttonRef.current?.focus(); // Return focus to button
   };
