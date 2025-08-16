@@ -58,5 +58,18 @@
     "contacts": "Kontakty",
     "description": "Vývoj a propagace webových stránek na klíč. Česká republika · EU",
     "copyright": "Všechna práva vyhrazena."
+  },
+  "gallery": {
+    "title": "Galerie / Případy",
+    "ctaText": "Chci takový →",
+    "cases": {
+      "clinic": "Landing kliniky",
+      "ecom": "eCom obchod",
+      "google": "Kampaň Google Ads",
+      "meta": "Kampaň Meta Ads",
+      "keitaro": "Dashboard Keitaro",
+      "whitepage": "WhitePage + SSL"
+    },
+    "details": "Podrobnosti"
   }
 }

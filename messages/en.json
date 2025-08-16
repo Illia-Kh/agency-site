@@ -58,5 +58,18 @@
     "contacts": "Contacts",
     "description": "Website development and promotion turnkey. Czech Republic · EU",
     "copyright": "All rights reserved."
+  },
+  "gallery": {
+    "title": "Gallery / Cases",
+    "ctaText": "I want one like this →",
+    "cases": {
+      "clinic": "Clinic Landing",
+      "ecom": "eCom Store",
+      "google": "Google Ads Campaign",
+      "meta": "Meta Ads Campaign",
+      "keitaro": "Keitaro Dashboard",
+      "whitepage": "WhitePage + SSL"
+    },
+    "details": "Details"
   }
 }

@@ -58,5 +58,18 @@
     "contacts": "Kontakte",
     "description": "Website-Entwicklung und -Promotion schlüsselfertig. Tschechien · EU",
     "copyright": "Alle Rechte vorbehalten."
+  },
+  "gallery": {
+    "title": "Galerie / Fälle",
+    "ctaText": "Ich möchte so einen →",
+    "cases": {
+      "clinic": "Klinik-Landing",
+      "ecom": "eCom-Shop",
+      "google": "Google Ads Kampagne",
+      "meta": "Meta Ads Kampagne",
+      "keitaro": "Keitaro Dashboard",
+      "whitepage": "WhitePage + SSL"
+    },
+    "details": "Details"
   }
 }

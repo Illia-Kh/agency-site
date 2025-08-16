@@ -17,12 +17,13 @@ The site supports 4 locales with complete translation coverage:
 
 - **EN** (English) - default locale
 - **CS** (Čeština) - Czech
-- **DE** (Deutsch) - German  
+- **DE** (Deutsch) - German
 - **RU** (Русский) - Russian
 
 ### Locale-prefixed Routing
 
 All routes are prefixed with locale codes:
+
 - `/en/` - English content
 - `/cs/` - Czech content
 - `/de/` - German content
@@ -31,6 +32,7 @@ All routes are prefixed with locale codes:
 ### Accept-Language Detection
 
 Custom middleware automatically detects preferred language from:
+
 1. Exact locale match (e.g., `cs` → `/cs/`)
 2. Base language match (e.g., `cs-CZ` → `/cs/`)
 3. Fallback to English (`en`) if no match
@@ -57,6 +59,7 @@ Theme persistence uses cookies instead of localStorage for SSR compatibility:
 ### Theme Toggle
 
 Integrated theme toggle in Logo component:
+
 - Updates `document.documentElement.dataset.theme`
 - Sets cookie `theme=${newTheme}; path=/; max-age=31536000`
 - Works consistently across locale switches
@@ -83,6 +86,7 @@ All styling uses CSS custom properties from `styles/theme.css`:
 **Location**: `components/header/Header.js`
 
 Sticky header with:
+
 - Logo with dropdown navigation
 - Contact dropdown
 - Language switcher
@@ -92,6 +96,7 @@ Sticky header with:
 **Location**: `components/header/Logo.js`
 
 **Features**:
+
 - Hover intent detection (24px movement threshold in 80ms)
 - 120ms open delay, 200ms close delay
 - Portal-based dropdown (no header height changes)
@@ -104,6 +109,7 @@ Sticky header with:
 **Location**: `components/header/LanguageSwitcher.js`
 
 **Features**:
+
 - Compact globe icon + current locale display
 - Dropdown with all available locales
 - Client-side navigation (preserves theme)
@@ -118,6 +124,7 @@ Portal-based contact form dropdown with form validation and i18n support.
 ### Theme-Aware Components
 
 All components follow the design system:
+
 - CSS variables only (no raw colors)
 - Light/dark theme compatibility
 - Consistent animation patterns
@@ -131,7 +138,7 @@ npm run dev          # Start dev server with Turbopack
 npm run build        # Production build
 npm run start        # Start production server
 
-# Code Quality  
+# Code Quality
 npm run lint         # Run ESLint
 npm run lint:fix     # Auto-fix ESLint issues
 npm run format       # Format with Prettier
@@ -157,7 +164,7 @@ components/
 ├── contact/
 │   └── ContactForm.js     # Reusable contact form
 ├── Hero.js                # Hero section
-├── About.js               # About section  
+├── About.js               # About section
 ├── Footer.js              # Footer with contacts
 └── Gallery.js             # Gallery component
 
@@ -183,9 +190,9 @@ Organized by namespace for scalability:
 ```json
 {
   "header": { "contact": "...", "language": "..." },
-  "nav": { "about": "...", "cases": "...", "contacts": "..." },  
+  "nav": { "about": "...", "cases": "...", "contacts": "..." },
   "hero": { "title": "...", "subtitle": "...", "cta": "..." },
-  "about": { "title": "...", "sites": { "title": "...", "text": "..." }},
+  "about": { "title": "...", "sites": { "title": "...", "text": "..." } },
   "contact": { "title": "...", "name": "...", "submit": "..." },
   "footer": { "contacts": "...", "copyright": "..." }
 }
@@ -216,22 +223,26 @@ async function ServerComponent() {
 ## Development Guidelines
 
 ### Theme Consistency
+
 - Always use CSS variables from `styles/theme.css`
 - Test components in both light and dark themes
 - Ensure proper contrast and accessibility
 
 ### Internationalization
+
 - All user-facing text must use `useTranslations`
 - Organize keys by logical namespaces
 - Provide translations for all supported locales
 
 ### Component Design
+
 - Follow existing animation patterns
 - Use portal for overlays to prevent layout shift
 - Implement proper focus management
 - Maintain consistent hover/interaction delays
 
 ### Code Quality
+
 - ESLint enforces Next.js best practices
 - Prettier ensures consistent formatting
 - Remove console statements in production builds
@@ -240,6 +251,7 @@ async function ServerComponent() {
 ## Deployment
 
 The project builds to static pages for all locales:
+
 - `/en`, `/cs`, `/de`, `/ru` routes pre-generated
 - Middleware handles locale detection at edge
 - Optimized bundle with shared chunks
@@ -248,7 +260,7 @@ The project builds to static pages for all locales:
 ## Contributing
 
 1. Follow existing code patterns and component structure
-2. Test theme persistence across locale switches  
+2. Test theme persistence across locale switches
 3. Ensure all text is internationalized
 4. Run `npm run lint` and `npm run format` before commits
 5. Verify build success with `npm run build`

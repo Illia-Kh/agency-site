@@ -58,5 +58,18 @@
     "contacts": "Контакты",
     "description": "Создание и продвижение сайтов под ключ. Чехия · EU",
     "copyright": "Все права защищены."
+  },
+  "gallery": {
+    "title": "Галерея / Кейсы",
+    "ctaText": "Хочу такой же →",
+    "cases": {
+      "clinic": "Лендинг клиники",
+      "ecom": "eCom магазин",
+      "google": "Кампания Google Ads",
+      "meta": "Кампания Meta Ads",
+      "keitaro": "Дашборд Keitaro",
+      "whitepage": "WhitePage + SSL"
+    },
+    "details": "Подробнее"
   }
 }
