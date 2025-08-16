@@ -1,0 +1,31 @@
+{
+  "header": {
+    "contact": "Contact us",
+    "language": "Language"
+  },
+  "nav": {
+    "about": "About",
+    "cases": "Cases",
+    "contacts": "Contact"
+  },
+  "contact": {
+    "title": "Leave a request",
+    "name": "Name",
+    "contact": "Telegram or email",
+    "message": "Briefly about the task",
+    "submit": "Submit",
+    "nameRequired": "Name is required",
+    "contactRequired": "Contact is required"
+  },
+  "hero": {
+    "title": "Site + tracker + advertising",
+    "subtitle": "Launch under key in 7-14 days",
+    "description": "We develop fast sites on Next.js, connect Keitaro/analytics and drive traffic from Meta/Google. Minimum bureaucracy — maximum results.",
+    "cta": "Get offer",
+    "howWeWork": "How we work"
+  },
+  "footer": {
+    "contacts": "Contacts",
+    "copyright": "All rights reserved."
+  }
+}
