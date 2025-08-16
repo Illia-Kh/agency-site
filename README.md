@@ -1,177 +1,193 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# IKH Agency Site
 
-## Getting Started
+A modern, internationalized agency website built with Next.js App Router, featuring SSR-safe theme persistence and comprehensive multi-language support.
 
-First, run the development server:
+## Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Next.js 15.4.5** with App Router
+- **next-intl** for internationalization with SSR support
+- **React 19** with modern hooks and features
+- **CSS Variables** design system with light/dark themes
+- **System fonts only** - no external dependencies
+- **Custom middleware** for locale detection and routing
+
+## Locales
+
+The site supports 4 locales with complete translation coverage:
+
+- **EN** (English) - default locale
+- **CS** (Čeština) - Czech
+- **DE** (Deutsch) - German  
+- **RU** (Русский) - Russian
+
+### Locale-prefixed Routing
+
+All routes are prefixed with locale codes:
+- `/en/` - English content
+- `/cs/` - Czech content
+- `/de/` - German content
+- `/ru/` - Russian content
+
+### Accept-Language Detection
+
+Custom middleware automatically detects preferred language from:
+1. Exact locale match (e.g., `cs` → `/cs/`)
+2. Base language match (e.g., `cs-CZ` → `/cs/`)
+3. Fallback to English (`en`) if no match
+
+### Adding a New Locale
+
+1. Create translation file: `messages/[locale].json`
+2. Add locale to `i18n.ts` locales array
+3. Add locale to `middleware.ts` locales array
+4. Add locale to `app/[locale]/layout.js` locales array
+5. Update `LanguageSwitcher.js` LANGUAGES array
+
+## Theme System
+
+### SSR-Safe Cookie Strategy
+
+Theme persistence uses cookies instead of localStorage for SSR compatibility:
+
+- **Cookie**: `theme=light|dark` with 1-year expiration
+- **SSR**: Theme read from cookie in `app/[locale]/layout.js`
+- **HTML**: `data-theme` attribute set on `<html>` element
+- **No Flash**: Theme applied before hydration, no FOUC
+
+### Theme Toggle
+
+Integrated theme toggle in Logo component:
+- Updates `document.documentElement.dataset.theme`
+- Sets cookie `theme=${newTheme}; path=/; max-age=31536000`
+- Works consistently across locale switches
+- Visual feedback with glowing bulb icon
+
+### Design System Variables
+
+All styling uses CSS custom properties from `styles/theme.css`:
+
+```css
+/* Core variables */
+--bg, --bg-secondary, --surface-elevated
+--border, --text, --primary, --on-primary
+--shadow-sm, --shadow-md
+--brand-orange, --white
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Rule**: Never use raw hex/rgb/hsl values - only CSS variables.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Components
 
-## Infrastructure
+### Header
 
-### Font System
+**Location**: `components/header/Header.js`
 
-This project uses **system fonts only** - no external font dependencies from Google Fonts or CDNs. Font families are defined in `app/globals.css` with system font stacks:
+Sticky header with:
+- Logo with dropdown navigation
+- Contact dropdown
+- Language switcher
 
-- **Sans-serif**: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, etc.
-- **Monospace**: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, etc.
+### Logo with Dropdown
 
-### Theme System
+**Location**: `components/header/Logo.js`
 
-The project uses a **single source of truth** for theming via `<html data-theme>`:
-
-- **No-FOUC initialization**: Theme is set before hydration in `app/layout.js`
-- **Theme toggle**: Integrated into Logo component (`components/header/Logo.js`)
-- **CSS Variables**: All styling uses CSS custom properties defined in `styles/theme.css`
-- **Supports**: Light/dark modes with system preference detection
-
-### Tailwind CSS
-
-- **Content paths**: Configured to scan `./app/**/*`, `./components/**/*`, `./styles/**/*`
-- **CSS Variables**: Supports arbitrary values like `bg-[var(--primary)]`
-- **Import order**: Tailwind → custom styles via `app/globals.css` → `styles/theme.css`
-
-### Line Endings
-
-- **Normalized**: `.gitattributes` enforces LF line endings across all files
-- **Prettier**: Configured with `endOfLine: "auto"` for cross-platform compatibility
-
-## Code Quality & Development
-
-This project includes automated code quality checks and CI/CD pipeline:
-
-### Available Scripts
-
-- `npm run dev` - Start development server with Turbopack
-- `npm run build` - Build production bundle
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint checks
-- `npm run lint:fix` - Auto-fix ESLint issues
-- `npm run format` - Format code with Prettier
-- `npm run format:check` - Check Prettier formatting
-
-### Code Quality Tools
-
-- **ESLint**: Configured with Next.js recommended rules + custom strict rules
-- **Prettier**: Enforces consistent code formatting
-- **GitHub Actions**: Automated CI pipeline that runs on PRs and main branch
-
-### CI Pipeline
-
-The GitHub Actions workflow (`.github/workflows/ci.yml`) runs on **Node 18 & 20** for PRs and main branch pushes:
-
-1. **Install**: `npm ci` - Clean dependency installation
-2. **Lint**: `npm run lint` - ESLint code quality checks
-3. **Format**: `npm run format:check` - Prettier formatting verification
-4. **Build**: `npm run build` - Production build validation
-5. **Artifacts**: Uploads build files (.next) for Node 20.x runs
-
-The pipeline ensures code quality, formatting consistency, and build stability.
-
-## Contact Dropdown & Language Switcher
-
-### Contact Dropdown
-
-The header now features a "Contact us" button that opens a dropdown with an integrated contact form. This replaces the previous CTA button and removes the need for the contact form in the footer.
-
-**Features:**
-
-- **Extracted Form Component**: `components/contact/ContactForm.js` - reusable contact form with validation
-- **Dropdown Integration**: `components/header/ContactDropdown.js` - handles dropdown state and form integration
-- **Form Validation**: Required fields (name, contact) with user-friendly error messages
-- **Accessibility**: Full ARIA support, focus trap, keyboard navigation (Tab, Esc, Enter)
-- **Form Submission**: Currently logs to console, ready for API integration
-
-**Usage:**
-
-```javascript
-import ContactForm from '@/components/contact/ContactForm';
-
-// Standalone form
-<ContactForm onSubmit={handleSubmit} />;
-
-// Or use the integrated dropdown (already in Header)
-import ContactDropdown from '@/components/header/ContactDropdown';
-```
+**Features**:
+- Hover intent detection (24px movement threshold in 80ms)
+- 120ms open delay, 200ms close delay
+- Portal-based dropdown (no header height changes)
+- Conditional rendering (null when closed)
+- Integrated theme toggle
+- i18n navigation links
 
 ### Language Switcher
 
-A compact language switcher with globe icon showing current language and dropdown for language selection.
-
-**Features:**
-
-- **UI Components**: Globe icon + current language code (EN/RU/UK)
-- **Language Options**: English, Русский, Українська
-- **Routing Integration**: Changes URL locale and reloads page content
-- **Accessibility**: ARIA roles, keyboard navigation
-- **Consistent Styling**: Matches Contact dropdown design patterns
-
 **Location**: `components/header/LanguageSwitcher.js`
 
-## i18n (Internationalization)
+**Features**:
+- Compact globe icon + current locale display
+- Dropdown with all available locales
+- Client-side navigation (preserves theme)
+- Accessible with ARIA roles and keyboard navigation
 
-The project supports multiple languages using **next-intl** with App Router.
+### Contact Dropdown
 
-### Supported Locales
+**Location**: `components/header/ContactDropdown.js`
 
-- **en** (English) - default
-- **ru** (Русский)
-- **uk** (Українська)
+Portal-based contact form dropdown with form validation and i18n support.
 
-### File Structure
+### Theme-Aware Components
+
+All components follow the design system:
+- CSS variables only (no raw colors)
+- Light/dark theme compatibility
+- Consistent animation patterns
+- Focus management with `--focus` variable
+
+## Scripts
+
+```bash
+# Development
+npm run dev          # Start dev server with Turbopack
+npm run build        # Production build
+npm run start        # Start production server
+
+# Code Quality  
+npm run lint         # Run ESLint
+npm run lint:fix     # Auto-fix ESLint issues
+npm run format       # Format with Prettier
+npm run format:check # Check Prettier formatting
+npm run type-check   # TypeScript validation
+```
+
+## Project Structure
 
 ```
-messages/
-├── en.json     # English translations
-├── ru.json     # Russian translations
-└── uk.json     # Ukrainian translations
-
 app/
-└── [locale]/   # Locale-based routing
-    ├── layout.js
-    └── page.js
+├── layout.js              # Root layout (minimal)
+├── [locale]/              # Locale-based routing
+│   ├── layout.js          # Locale layout (theme + i18n)
+│   └── page.js            # Home page
 
-middleware.ts   # Locale detection and routing
-i18n.ts        # next-intl configuration
+components/
+├── header/                # Header components
+│   ├── Header.js          # Main header
+│   ├── Logo.js            # Logo + dropdown + theme toggle
+│   ├── ContactDropdown.js # Contact form dropdown
+│   └── LanguageSwitcher.js # Language selection
+├── contact/
+│   └── ContactForm.js     # Reusable contact form
+├── Hero.js                # Hero section
+├── About.js               # About section  
+├── Footer.js              # Footer with contacts
+└── Gallery.js             # Gallery component
+
+messages/                  # Translation files
+├── en.json               # English
+├── cs.json               # Czech
+├── de.json               # German
+└── ru.json               # Russian
+
+styles/
+└── theme.css             # Design system variables
+
+middleware.ts             # Custom locale detection
+i18n.ts                  # next-intl configuration
 ```
 
-### Adding New Languages
+## Internationalization
 
-1. Create new message file: `messages/[locale].json`
-2. Add locale to `middleware.ts` locales array
-3. Add locale to `i18n.ts` locales array
-4. Update `LanguageSwitcher.js` LANGUAGES array
+### Translation Structure
 
-### Translation Keys
-
-Current translation structure:
+Organized by namespace for scalability:
 
 ```json
 {
-  "header": {
-    "contact": "Contact us",
-    "language": "Language"
-  },
-  "contact": {
-    "title": "Leave a request",
-    "name": "Name",
-    "submit": "Submit"
-  },
-  "nav": {
-    "about": "About",
-    "cases": "Cases"
-  }
+  "header": { "contact": "...", "language": "..." },
+  "nav": { "about": "...", "cases": "...", "contacts": "..." },  
+  "hero": { "title": "...", "subtitle": "...", "cta": "..." },
+  "about": { "title": "...", "sites": { "title": "...", "text": "..." }},
+  "contact": { "title": "...", "name": "...", "submit": "..." },
+  "footer": { "contacts": "...", "copyright": "..." }
 }
 ```
 
@@ -180,33 +196,59 @@ Current translation structure:
 ```javascript
 import { useTranslations } from 'next-intl';
 
-function MyComponent() {
-  const t = useTranslations('contact');
-  return <button>{t('submit')}</button>;
+function Component() {
+  const t = useTranslations('namespace');
+  return <h1>{t('key')}</h1>;
 }
 ```
 
-### Design System Compliance
+### Server Components
 
-All new components follow the existing design system:
+```javascript
+import { getTranslations } from 'next-intl/server';
 
-- **CSS Variables Only**: Uses `var(--primary)`, `var(--bg-secondary)`, etc. from `styles/theme.css`
-- **No Raw Colors**: No hex, rgb, or hsl values in component styles
-- **Theme Consistency**: Works with both light and dark themes
-- **Animation Patterns**: Matches existing dropdown animations (opacity + translateY)
-- **Focus Management**: Consistent with existing components
+async function ServerComponent() {
+  const t = await getTranslations('namespace');
+  return <h1>{t('key')}</h1>;
+}
+```
 
-## Learn More
+## Development Guidelines
 
-To learn more about Next.js, take a look at the following resources:
+### Theme Consistency
+- Always use CSS variables from `styles/theme.css`
+- Test components in both light and dark themes
+- Ensure proper contrast and accessibility
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Internationalization
+- All user-facing text must use `useTranslations`
+- Organize keys by logical namespaces
+- Provide translations for all supported locales
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Component Design
+- Follow existing animation patterns
+- Use portal for overlays to prevent layout shift
+- Implement proper focus management
+- Maintain consistent hover/interaction delays
 
-## Deploy on Vercel
+### Code Quality
+- ESLint enforces Next.js best practices
+- Prettier ensures consistent formatting
+- Remove console statements in production builds
+- Use semantic HTML and ARIA attributes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project builds to static pages for all locales:
+- `/en`, `/cs`, `/de`, `/ru` routes pre-generated
+- Middleware handles locale detection at edge
+- Optimized bundle with shared chunks
+- CSS variables ensure consistent theming
+
+## Contributing
+
+1. Follow existing code patterns and component structure
+2. Test theme persistence across locale switches  
+3. Ensure all text is internationalized
+4. Run `npm run lint` and `npm run format` before commits
+5. Verify build success with `npm run build`

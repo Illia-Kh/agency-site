@@ -35,7 +35,7 @@ export default function ContactForm({ onSubmit, className = '' }) {
   const handleSubmit = e => {
     e.preventDefault();
     if (validateForm()) {
-      console.log('Contact form submitted:', formData);
+      // Form submission logic would go here
       if (onSubmit) onSubmit(formData);
       // Reset form
       setFormData({ name: '', contact: '', message: '' });

@@ -54,7 +54,6 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '');
     const newPath = `/${langCode}${pathWithoutLocale || ''}`;
 
-    console.log('Language changed to:', langCode);
     router.push(newPath);
   };
 
