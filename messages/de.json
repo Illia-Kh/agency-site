@@ -22,7 +22,17 @@
     "subtitle": "Schlüsselfertige Einführung in 7-14 Tagen",
     "description": "Wir entwickeln schnelle Websites auf Next.js, verbinden Keitaro/Analytics und führen Traffic von Meta/Google. Minimum Bürokratie — maximum Ergebnisse.",
     "cta": "Angebot erhalten",
-    "howWeWork": "Wie wir arbeiten"
+    "howWeWork": "Wie wir arbeiten",
+    "features": {
+      "ssl": "SSL/https, Domain, Hosting",
+      "keitaro": "Keitaro + Integrationen",
+      "advertising": "Werbekonten-Setup",
+      "support": "Technischer Support"
+    },
+    "preview": {
+      "title": "Fall-Vorschau",
+      "subtitle": "Screenshot aus Werbekonto oder Client-Landing-Page"
+    }
   },
   "about": {
     "title": "Über uns",

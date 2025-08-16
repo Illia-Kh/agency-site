@@ -22,7 +22,17 @@
     "subtitle": "Launch under key in 7-14 days",
     "description": "We develop fast sites on Next.js, connect Keitaro/analytics and drive traffic from Meta/Google. Minimum bureaucracy — maximum results.",
     "cta": "Get offer",
-    "howWeWork": "How we work"
+    "howWeWork": "How we work",
+    "features": {
+      "ssl": "SSL/https, domain, hosting",
+      "keitaro": "Keitaro + integrations",
+      "advertising": "Advertising accounts setup",
+      "support": "Technical support"
+    },
+    "preview": {
+      "title": "Case preview",
+      "subtitle": "Screenshot from advertising account or client's landing page"
+    }
   },
   "about": {
     "title": "About us",
