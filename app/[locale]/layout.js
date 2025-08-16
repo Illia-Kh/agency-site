@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import '../globals.css';
 import Header from '@/components/header/Header';
 
-const locales = ['en', 'ru', 'uk'];
+const locales = ['en', 'cs', 'de'];
 
 export function generateStaticParams() {
   return locales.map(locale => ({ locale }));

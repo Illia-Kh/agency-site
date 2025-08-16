@@ -111,9 +111,9 @@ A compact language switcher with globe icon showing current language and dropdow
 
 **Features:**
 
-- **UI Components**: Globe icon + current language code (EN/RU/UK)
-- **Language Options**: English, Русский, Українська
-- **Routing Integration**: Changes URL locale and reloads page content
+- **UI Components**: Globe icon + current language code (EN/CS/DE)
+- **Language Options**: English, Czech, German
+- **Routing Integration**: Changes URL locale and reloads page content via middleware.ts
 - **Accessibility**: ARIA roles, keyboard navigation
 - **Consistent Styling**: Matches Contact dropdown design patterns
 
@@ -126,16 +126,16 @@ The project supports multiple languages using **next-intl** with App Router.
 ### Supported Locales
 
 - **en** (English) - default
-- **ru** (Русский)
-- **uk** (Українська)
+- **cs** (Czech)  
+- **de** (German)
 
 ### File Structure
 
 ```
 messages/
 ├── en.json     # English translations
-├── ru.json     # Russian translations
-└── uk.json     # Ukrainian translations
+├── cs.json     # Czech translations
+└── de.json     # German translations
 
 app/
 └── [locale]/   # Locale-based routing
@@ -146,45 +146,7 @@ middleware.ts   # Locale detection and routing
 i18n.ts        # next-intl configuration
 ```
 
-### Adding New Languages
-
-1. Create new message file: `messages/[locale].json`
-2. Add locale to `middleware.ts` locales array
-3. Add locale to `i18n.ts` locales array
-4. Update `LanguageSwitcher.js` LANGUAGES array
-
-### Translation Keys
-
-Current translation structure:
-
-```json
-{
-  "header": {
-    "contact": "Contact us",
-    "language": "Language"
-  },
-  "contact": {
-    "title": "Leave a request",
-    "name": "Name",
-    "submit": "Submit"
-  },
-  "nav": {
-    "about": "About",
-    "cases": "Cases"
-  }
-}
-```
-
-### Usage in Components
-
-```javascript
-import { useTranslations } from 'next-intl';
-
-function MyComponent() {
-  const t = useTranslations('contact');
-  return <button>{t('submit')}</button>;
-}
-```
+**Note**: Routing is locale-prefixed via middleware.ts which automatically detects and routes to /en, /cs, or /de.
 
 ### Design System Compliance
 
