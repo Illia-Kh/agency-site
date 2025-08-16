@@ -1,6 +1,14 @@
 'use client';
 // logo.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+
+const BRAND_ORANGE = '#FF7A00'; // постоянный бренд-оранжевый (не зависит от темы)
+
+const LINKS = [
+  { href: '#about', label: 'О нас' },
+  { href: '#cases', label: 'Кейсы' },
+  { href: '#contact', label: 'Контакты' }
+];
 
 export default function Logo() {
   // Theme state is only set on client to avoid hydration mismatch
@@ -24,13 +32,102 @@ export default function Logo() {
 
   const isDark = theme === 'dark';
 
+  // Delayed hover dropdown state for nav
+  const [menuOpen, setMenuOpen] = useState(false);
+  const hoverTimer = useRef(null);      // delay to open (1s)
+  const closeTimer = useRef(null);      // small delay to close when leaving area
+  const containerRef = useRef(null);    // wrapper (logo + dropdown)
+  const panelRef = useRef(null);        // dropdown panel
+
+  const clearTimer = () => {
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+      hoverTimer.current = null;
+    }
+  };
+
+  const HOVER_DELAY = 1000; // ms
+  const handleEnter = () => {
+    clearTimer();
+    clearClose();
+    hoverTimer.current = setTimeout(() => setMenuOpen(true), HOVER_DELAY);
+  };
+  const scheduleClose = () => {
+    clearClose();
+    // Delay so пользователь успевает переместить курсор на панель
+    closeTimer.current = setTimeout(() => setMenuOpen(false), 350);
+  };
+  const handleLeaveContainer = (e) => {
+    // Если ушли и не попадаем в панель – планируем закрытие
+    if (!panelRef.current) return scheduleClose();
+    const rel = e.relatedTarget;
+    if (rel && panelRef.current.contains(rel)) return; // курсор уходит в панель
+    scheduleClose();
+  };
+  const handleEnterPanel = () => { clearClose(); };
+  const handleLeavePanel = (e) => {
+    const rel = e.relatedTarget;
+    if (rel && containerRef.current && containerRef.current.contains(rel)) return; // возвращаемся к триггеру
+    scheduleClose();
+  };
+  const instantOpen = useCallback(() => {
+    clearTimer();
+    clearClose();
+    setMenuOpen(true);
+  }, []);
+
+  const toggleImmediate = () => {
+    clearTimer();
+    clearClose();
+    setMenuOpen(o => !o);
+  };
+
+  const clearClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  // Outside click + ESC to close
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDocClick = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    const onKey = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+    document.addEventListener('mousedown', onDocClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDocClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [menuOpen]);
+
   // Don't render until theme is known (client-only)
   if (theme === undefined) return null;
 
   return (
-    <div className="inline-flex items-center gap-3">
+    <div
+      ref={containerRef}
+      className="relative inline-flex items-center gap-3"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeaveContainer}
+      onFocus={instantOpen}
+      onBlur={(e) => {
+        if (!containerRef.current?.contains(e.relatedTarget)) scheduleClose();
+      }}
+    >
       {/* Блок-эмблема: графитовый квадрат со скруглением и оранжевым 'ИКХ' */}
-      <a href="#" className="group inline-flex items-center gap-2 select-none">
+      <a
+        href="#"
+        className="group inline-flex items-center gap-2 select-none"
+        aria-haspopup="true"
+        aria-expanded={menuOpen}
+        onClick={e => { e.preventDefault(); toggleImmediate(); }}
+      >
         <div
           className="grid h-8 w-8 place-items-center rounded-xl transition border"
           style={{
@@ -80,6 +177,30 @@ export default function Logo() {
           />
         )}
       </button>
+
+      {/* Dropdown nav (appears after 1s hover) */}
+      <div
+        ref={panelRef}
+        className={`absolute left-0 top-full mt-3 w-56 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] shadow-lg transition duration-300 origin-top-left transform ${menuOpen ? 'opacity-100 scale-100' : 'pointer-events-none opacity-0 scale-95'}`}
+        role="menu"
+        aria-hidden={!menuOpen}
+        onMouseEnter={handleEnterPanel}
+        onMouseLeave={handleLeavePanel}
+      >
+        <ul className="py-2">
+          {LINKS.map(l => (
+            <li key={l.href}>
+              <a
+                href={l.href}
+                className="block px-4 py-2 text-sm text-[var(--text)] hover:bg-[var(--surface-elevated)] rounded-lg"
+                onClick={() => setMenuOpen(false)}
+              >
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
