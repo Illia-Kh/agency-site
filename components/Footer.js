@@ -57,7 +57,7 @@ export default function Footer() {
               placeholder="Коротко о задаче"
             />
           </div>
-          <button className="mt-3 w-full rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[var(--primary-hover)] transition">
+          <button className="mt-3 w-full rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-[var(--white)] hover:bg-[var(--primary-hover)] transition">
             Отправить
           </button>
         </form>

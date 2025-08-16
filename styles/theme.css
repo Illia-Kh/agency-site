@@ -24,6 +24,8 @@
   --success: #1f7a5c;
   --warning: #b58900;
   --error: #b54b4b;
+  --brand-orange: #ff7a00;
+  --white: #ffffff;
   --radius: 14px;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.08);
@@ -55,6 +57,8 @@
   --success: #2da181;
   --warning: #e0b341;
   --error: #d06a6a;
+  --brand-orange: #ff7a00;
+  --white: #ffffff;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.35);
   --focus: color-mix(in oklab, var(--primary) 55%, black);
@@ -114,21 +118,21 @@ a:not(.btn):hover {
 }
 .btn-primary {
   background: var(--primary);
-  color: #fff;
+  color: var(--white);
 }
 .btn-primary:hover {
   background: var(--primary-hover);
 }
 .btn-secondary {
   background: var(--secondary);
-  color: #fff;
+  color: var(--white);
 }
 .btn-secondary:hover {
   background: var(--secondary-hover);
 }
 .btn-graphite {
   background: var(--highlight);
-  color: #fff;
+  color: var(--white);
 }
 .btn-graphite:hover {
   background: var(--highlight-hover);
