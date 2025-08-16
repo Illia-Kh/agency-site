@@ -1,0 +1,31 @@
+{
+  "header": {
+    "contact": "Kontaktieren Sie uns",
+    "language": "Sprache"
+  },
+  "nav": {
+    "about": "Über uns",
+    "cases": "Fälle",
+    "contacts": "Kontakt"
+  },
+  "contact": {
+    "title": "Anfrage hinterlassen",
+    "name": "Name",
+    "contact": "Telegram oder E-Mail",
+    "message": "Kurz über die Aufgabe",
+    "submit": "Senden",
+    "nameRequired": "Name ist erforderlich",
+    "contactRequired": "Kontakt ist erforderlich"
+  },
+  "hero": {
+    "title": "Website + Tracker + Werbung",
+    "subtitle": "Schlüsselfertige Einführung in 7-14 Tagen",
+    "description": "Wir entwickeln schnelle Websites auf Next.js, verbinden Keitaro/Analytics und führen Traffic von Meta/Google. Minimum Bürokratie — maximum Ergebnisse.",
+    "cta": "Angebot erhalten",
+    "howWeWork": "Wie wir arbeiten"
+  },
+  "footer": {
+    "contacts": "Kontakte",
+    "copyright": "Alle Rechte vorbehalten."
+  }
+}

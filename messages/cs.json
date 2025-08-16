@@ -1,0 +1,31 @@
+{
+  "header": {
+    "contact": "Kontaktujte nás",
+    "language": "Jazyk"
+  },
+  "nav": {
+    "about": "O nás",
+    "cases": "Případy",
+    "contacts": "Kontakt"
+  },
+  "contact": {
+    "title": "Zanechte žádost",
+    "name": "Jméno",
+    "contact": "Telegram nebo email",
+    "message": "Stručně o úkolu",
+    "submit": "Odeslat",
+    "nameRequired": "Jméno je povinné",
+    "contactRequired": "Kontakt je povinný"
+  },
+  "hero": {
+    "title": "Web + tracker + reklama",
+    "subtitle": "Spuštění na klíč za 7-14 dní",
+    "description": "Vyvíjíme rychlé weby na Next.js, připojujeme Keitaro/analytiku a vedeme provoz z Meta/Google. Minimum byrokracie — maximum výsledků.",
+    "cta": "Získat nabídku",
+    "howWeWork": "Jak pracujeme"
+  },
+  "footer": {
+    "contacts": "Kontakty",
+    "copyright": "Všechna práva vyhrazena."
+  }
+}
