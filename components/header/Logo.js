@@ -16,15 +16,33 @@ export default function Logo() {
     const getTheme = () =>
       document.documentElement.getAttribute('data-theme') || 'light';
     setTheme(getTheme());
+
+    // Listen for theme changes from other components
     const handler = () => setTheme(getTheme());
     window.addEventListener('storage', handler);
-    return () => window.removeEventListener('storage', handler);
+
+    // Also listen for manual attribute changes
+    const observer = new MutationObserver(() => {
+      setTheme(getTheme());
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+
+    return () => {
+      window.removeEventListener('storage', handler);
+      observer.disconnect();
+    };
   }, []);
 
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
+
+    // Set cookie with 1 year expiration
+    document.cookie = `theme=${next}; path=/; max-age=31536000; SameSite=Lax`;
+
     setTheme(next);
   };
 
