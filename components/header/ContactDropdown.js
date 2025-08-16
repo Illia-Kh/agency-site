@@ -1,8 +1,10 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import ContactForm from '../contact/ContactForm';
 
 export default function ContactDropdown() {
+  const t = useTranslations('header');
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -88,7 +90,7 @@ export default function ContactDropdown() {
         aria-expanded={isOpen}
         aria-label="Open contact form"
       >
-        Contact us
+        {t('contact')}
       </button>
 
       {/* Dropdown overlay */}

@@ -1,7 +1,9 @@
 'use client';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function ContactForm({ onSubmit, className = '' }) {
+  const t = useTranslations('contact');
   const [formData, setFormData] = useState({
     name: '',
     contact: '',
@@ -21,10 +23,10 @@ export default function ContactForm({ onSubmit, className = '' }) {
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name.trim()) {
-      newErrors.name = 'Имя обязательно';
+      newErrors.name = t('nameRequired');
     }
     if (!formData.contact.trim()) {
-      newErrors.contact = 'Контакт обязателен';
+      newErrors.contact = t('contactRequired');
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -46,7 +48,7 @@ export default function ContactForm({ onSubmit, className = '' }) {
       onSubmit={handleSubmit}
     >
       <label className="text-sm font-medium text-[var(--text)]">
-        Оставьте заявку
+        {t('title')}
       </label>
       <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div className="space-y-1">
@@ -57,7 +59,7 @@ export default function ContactForm({ onSubmit, className = '' }) {
             className={`rounded-xl bg-[var(--bg-secondary)] px-3 py-2 text-sm text-[var(--text)] outline-none ring-1 ring-[var(--border)] placeholder:text-[var(--text)]/60 ${
               errors.name ? 'ring-[var(--error)]' : ''
             }`}
-            placeholder="Имя"
+            placeholder={t('name')}
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? 'name-error' : undefined}
           />
@@ -75,7 +77,7 @@ export default function ContactForm({ onSubmit, className = '' }) {
             className={`rounded-xl bg-[var(--bg-secondary)] px-3 py-2 text-sm text-[var(--text)] outline-none ring-1 ring-[var(--border)] placeholder:text-[var(--text)]/60 ${
               errors.contact ? 'ring-[var(--error)]' : ''
             }`}
-            placeholder="Телеграм или email"
+            placeholder={t('contact')}
             aria-invalid={!!errors.contact}
             aria-describedby={errors.contact ? 'contact-error' : undefined}
           />
@@ -91,14 +93,14 @@ export default function ContactForm({ onSubmit, className = '' }) {
           onChange={handleInputChange}
           className="sm:col-span-2 rounded-xl bg-[var(--bg-secondary)] px-3 py-2 text-sm text-[var(--text)] outline-none ring-1 ring-[var(--border)] placeholder:text-[var(--text)]/60"
           rows={3}
-          placeholder="Коротко о задаче"
+          placeholder={t('message')}
         />
       </div>
       <button
         type="submit"
         className="mt-3 w-full rounded-xl bg-[var(--primary)] px-5 py-2.5 text-sm font-semibold text-[var(--white)] hover:bg-[var(--primary-hover)] transition"
       >
-        Отправить
+        {t('submit')}
       </button>
     </form>
   );

@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 const LANGUAGES = [
   { code: 'en', label: 'EN', name: 'English' },
@@ -7,11 +8,12 @@ const LANGUAGES = [
   { code: 'uk', label: 'UK', name: 'Українська' },
 ];
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ currentLocale = 'en' }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentLang, setCurrentLang] = useState('en');
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Close dropdown on outside click or Escape
   useEffect(() => {
@@ -44,14 +46,18 @@ export default function LanguageSwitcher() {
   };
 
   const handleLanguageChange = langCode => {
-    setCurrentLang(langCode);
     setIsOpen(false);
     buttonRef.current?.focus();
+
+    // Remove current locale from pathname and add new one
+    const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '');
+    const newPath = `/${langCode}${pathWithoutLocale || ''}`;
+
     console.log('Language changed to:', langCode);
-    // TODO: Implement actual language switching logic with next-intl
+    router.push(newPath);
   };
 
-  const currentLanguage = LANGUAGES.find(lang => lang.code === currentLang);
+  const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale);
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -90,12 +96,12 @@ export default function LanguageSwitcher() {
                 type="button"
                 onClick={() => handleLanguageChange(lang.code)}
                 className={`w-full px-4 py-2 text-left text-sm hover:bg-[var(--surface-elevated)] transition ${
-                  lang.code === currentLang
+                  lang.code === currentLocale
                     ? 'bg-[var(--surface-elevated)] text-[var(--primary)]'
                     : 'text-[var(--text)]'
                 }`}
                 role="option"
-                aria-selected={lang.code === currentLang}
+                aria-selected={lang.code === currentLocale}
               >
                 <span className="font-medium">{lang.label}</span>
                 <span className="ml-2 opacity-70">{lang.name}</span>
