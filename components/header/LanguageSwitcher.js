@@ -4,8 +4,8 @@ import { useRouter, usePathname } from 'next/navigation';
 
 const LANGUAGES = [
   { code: 'en', label: 'EN', name: 'English' },
-  { code: 'ru', label: 'RU', name: 'Русский' },
-  { code: 'uk', label: 'UK', name: 'Українська' },
+  { code: 'cs', label: 'CS', name: 'Czech' },
+  { code: 'de', label: 'DE', name: 'German' },
 ];
 
 export default function LanguageSwitcher({ currentLocale = 'en' }) {
