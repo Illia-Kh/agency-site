@@ -1,7 +1,7 @@
 export default function Hero() {
   return (
     <section className="relative isolate">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_50%_at_50%_0%,rgba(255,255,255,0.06),rgba(0,0,0,0))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_50%_at_50%_0%,color-mix(in_oklab,var(--bg)_6%,transparent),transparent)]" />
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:py-28">
         <div>
           <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl text-[var(--text)]">
@@ -18,7 +18,7 @@ export default function Hero() {
           <div className="mt-7 flex flex-wrap items-center gap-3">
             <a
               href="#contact"
-              className="rounded-xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white hover:bg-[var(--primary-hover)] transition"
+              className="rounded-xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-[var(--white)] hover:bg-[var(--primary-hover)] transition"
             >
               Получить предложение
             </a>
@@ -67,7 +67,7 @@ function Dot() {
       height="16"
       viewBox="0 0 24 24"
       fill="none"
-      className="text-white/70"
+      style={{ color: 'color-mix(in oklab, var(--text) 70%, transparent)' }}
     >
       <circle cx="12" cy="12" r="4" fill="currentColor" />
     </svg>

@@ -2,8 +2,6 @@
 // logo.js
 import { useState, useEffect } from 'react';
 
-const BRAND_ORANGE = '#FF7A00'; // постоянный бренд-оранжевый (не зависит от темы)
-
 export default function Logo() {
   // Theme state is only set on client to avoid hydration mismatch
   const [theme, setTheme] = useState(undefined);
@@ -45,7 +43,7 @@ export default function Logo() {
           {/* всегда оранжевый */}
           <span
             className="text-sm font-black tracking-wide"
-            style={{ color: BRAND_ORANGE }}
+            style={{ color: 'var(--brand-orange)' }}
           >
             IKH
           </span>
@@ -76,7 +74,7 @@ export default function Logo() {
           <span
             className="pointer-events-none absolute inset-0 rounded-full"
             style={{
-              boxShadow: `0 0 0 3px ${BRAND_ORANGE}33, 0 0 18px ${BRAND_ORANGE}55`,
+              boxShadow: `0 0 0 3px var(--brand-orange)33, 0 0 18px var(--brand-orange)55`,
             }}
             aria-hidden
           />
@@ -88,8 +86,8 @@ export default function Logo() {
 
 // SVG-иконка лампочки: нейтральная в обычном состоянии, оранжевая когда 'lit'
 function LightBulbIcon({ lit = false }) {
-  const stroke = lit ? BRAND_ORANGE : 'var(--text)';
-  const fill = lit ? `${BRAND_ORANGE}` : 'transparent';
+  const stroke = lit ? 'var(--brand-orange)' : 'var(--text)';
+  const fill = lit ? 'var(--brand-orange)' : 'transparent';
   return (
     <svg
       width="18"
@@ -101,7 +99,11 @@ function LightBulbIcon({ lit = false }) {
     >
       <path
         d="M9 18h6v1a3 3 0 0 1-3 3h0a3 3 0 0 1-3-3v-1Z"
-        fill={lit ? `${BRAND_ORANGE}66` : 'transparent'}
+        fill={
+          lit
+            ? 'color-mix(in oklab, var(--brand-orange) 40%, transparent)'
+            : 'transparent'
+        }
         stroke={stroke}
         strokeWidth="1.5"
       />
