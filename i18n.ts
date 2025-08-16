@@ -3,6 +3,7 @@ import { getRequestConfig } from 'next-intl/server';
 
 export const locales = ['en','cs','de'] as const;
 export type Locale = (typeof locales)[number];
+export const DEFAULT_LOCALE: Locale = 'en';
 
 export default getRequestConfig(async ({ locale }) => {
   // Validate that the incoming `locale` parameter is valid
