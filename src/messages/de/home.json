@@ -1,0 +1,52 @@
+{
+  "hero": {
+    "title": "Website + Tracker + Werbung",
+    "subtitle": "Schlüsselfertige Einführung in 7-14 Tagen",
+    "description": "Wir entwickeln schnelle Websites auf Next.js, verbinden Keitaro/Analytics und führen Traffic von Meta/Google. Minimum Bürokratie — maximum Ergebnisse.",
+    "cta": "Angebot erhalten",
+    "howWeWork": "Wie wir arbeiten",
+    "features": {
+      "ssl": "SSL/https, Domain, Hosting",
+      "keitaro": "Keitaro + Integrationen",
+      "advertising": "Werbekonten-Setup",
+      "support": "Technischer Support"
+    },
+    "preview": {
+      "title": "Fall-Vorschau",
+      "subtitle": "Screenshot aus Werbekonto oder Client-Landing-Page"
+    }
+  },
+  "about": {
+    "title": "Über uns",
+    "description": "Wir bauen den gesamten Trichter: vom Website-Prototyp bis zur Traffic-Akquisition. Parallel richten wir Analytics und Berichterstattung ein.",
+    "sites": {
+      "title": "Websites",
+      "text": "Next.js, schnelles Laden, responsiv, SEO-Basis."
+    },
+    "tracking": {
+      "title": "Tracking",
+      "text": "Keitaro, Domains, SSL, Integrationen, Anti-Bot-Filter."
+    },
+    "traffic": {
+      "title": "Traffic",
+      "text": "Meta/Google, Medienplan, Kreative, Tests und Skalierung."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "text": "Benutzerdefinierte Dashboards, Attribution, LTV, Conversion-Trichter."
+    }
+  },
+  "gallery": {
+    "title": "Galerie / Fälle",
+    "ctaText": "Ich möchte so einen →",
+    "cases": {
+      "clinic": "Klinik-Landing",
+      "ecom": "eCom-Shop",
+      "google": "Google Ads Kampagne",
+      "meta": "Meta Ads Kampagne",
+      "keitaro": "Keitaro Dashboard",
+      "whitepage": "WhitePage + SSL"
+    },
+    "details": "Details"
+  }
+}

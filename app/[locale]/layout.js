@@ -1,21 +1,22 @@
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import '../globals.css';
 import Header from '@/components/header/Header';
+import { loadAllMessages } from '@/src/i18n/message-loader';
+import { SUPPORTED_LOCALES } from '@/src/i18n/i18n.config';
 
-const locales = ['en', 'cs', 'de', 'ru'];
+export const revalidate = 0;
 
 export function generateStaticParams() {
-  return locales.map(locale => ({ locale }));
+  return SUPPORTED_LOCALES.map(locale => ({ locale }));
 }
 
 export default async function LocaleLayout({ children, params }) {
   const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale)) {
+  if (!SUPPORTED_LOCALES.includes(locale)) {
     notFound();
   }
 
@@ -24,14 +25,13 @@ export default async function LocaleLayout({ children, params }) {
   const themeCookie = cookieStore.get('theme');
   const theme = themeCookie?.value || 'light';
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
+  // Load messages using the new message loader
+  const { locale: normalizedLocale, messages } = await loadAllMessages(locale);
 
   return (
-    <html data-theme={theme} suppressHydrationWarning>
+    <html lang={normalizedLocale} data-theme={theme} suppressHydrationWarning>
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased selection:bg-white/10">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={normalizedLocale} messages={messages}>
           <Header locale={locale} />
           {children}
         </NextIntlClientProvider>
