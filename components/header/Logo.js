@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 export default function Logo() {
   const t = useTranslations('nav');
+  const th = useTranslations('header'); // for header-specific translations
 
   // Translated navigation links
   const LINKS = [
@@ -25,7 +26,7 @@ export default function Logo() {
 
   useEffect(() => {
     const getTheme = () =>
-      document.documentElement.getAttribute('data-theme') || 'light';
+      document.documentElement.getAttribute('data-theme') || 'dark';
     setTheme(getTheme());
 
     // Listen for theme changes from other components
@@ -246,9 +247,9 @@ export default function Logo() {
           </span>
         </div>
 
-        {/* Надпись Agency — нашим Azure */}
+        {/* Agency text in proper locale */}
         <span className="text-sm font-semibold tracking-wide text-[var(--primary)]">
-          Agency
+          {th('agency')}
         </span>
       </a>
 
