@@ -1,15 +1,16 @@
 # IKH Agency Site
 
-A modern, internationalized agency website built with Next.js App Router, featuring SSR-safe theme persistence and comprehensive multi-language support.
+A modern, internationalized agency website built with Next.js App Router 15, featuring hydration-safe SSR, theme persistence across locale changes, and complete multi-language support.
 
-## Stack
+## Stack (2025)
 
-- **Next.js 15.4.5** with App Router
-- **next-intl** for internationalization with SSR support
-- **React 19** with modern hooks and features
-- **CSS Variables** design system with light/dark themes
-- **System fonts only** - no external dependencies
-- **Custom middleware** for locale detection and routing
+- **Next.js 15.4.5** with App Router for SSR/SSG optimization
+- **next-intl 4.3** for type-safe internationalization with SSR support
+- **React 19** with concurrent features and modern hooks
+- **CSS Variables** design system with seamless light/dark theme transitions  
+- **Portal-based dropdowns** preventing layout shifts and header jumping
+- **Custom middleware** for intelligent locale detection and routing
+- **Cookie-based theme persistence** preventing FOUC across navigation
 
 ## Locales
 
@@ -45,39 +46,41 @@ Custom middleware automatically detects preferred language from:
 4. Add locale to `app/[locale]/layout.js` locales array
 5. Update `LanguageSwitcher.js` LANGUAGES array
 
-## Theme System
+## Theme System (2025)
 
 ### SSR-Safe Cookie Strategy
 
-Theme persistence uses cookies instead of localStorage for SSR compatibility:
+Theme persistence uses cookies with hydration-safe SSR rendering:
 
-- **Cookie**: `theme=light|dark` with 1-year expiration
-- **SSR**: Theme read from cookie in `app/[locale]/layout.js`
-- **HTML**: `data-theme` attribute set on `<html>` element
-- **No Flash**: Theme applied before hydration, no FOUC
+- **Cookie**: `theme=light|dark` with 1-year expiration (defaults to `dark`)
+- **SSR**: Theme read from cookie in `app/[locale]/layout.js` and applied to `<html>`
+- **HTML**: `data-theme` attribute set on `<html>` element before hydration
+- **No Flash**: Theme applied server-side, preventing FOUC on any navigation
+- **Locale Persistence**: Theme maintained across language switches
 
 ### Theme Toggle
 
-Integrated theme toggle in Logo component:
+Integrated theme toggle in Logo component with immediate feedback:
 
-- Updates `document.documentElement.dataset.theme`
-- Sets cookie `theme=${newTheme}; path=/; max-age=31536000`
-- Works consistently across locale switches
-- Visual feedback with glowing bulb icon
+- Updates `document.documentElement.dataset.theme` instantly
+- Sets persistent cookie `theme=${newTheme}; path=/; max-age=31536000`
+- Works consistently across locale switches and page navigation
+- Visual feedback with animated glowing bulb icon
+- Accessible with proper ARIA labels
 
 ### Design System Variables
 
-All styling uses CSS custom properties from `styles/theme.css`:
+All styling uses CSS custom properties from `styles/theme.css` with automatic theme switching:
 
 ```css
-/* Core variables */
+/* Core color variables */
 --bg, --bg-secondary, --surface-elevated
---border, --text, --primary, --on-primary
---shadow-sm, --shadow-md
+--border, --text, --primary, --primary-hover
+--shadow-sm, --shadow-md, --focus
 --brand-orange, --white
 ```
 
-**Rule**: Never use raw hex/rgb/hsl values - only CSS variables.
+**2025 Rule**: Never use raw hex/rgb/hsl values - only CSS variables for consistent theming.
 
 ## Components
 
@@ -97,12 +100,13 @@ Sticky header with:
 
 **Features**:
 
-- Hover intent detection (24px movement threshold in 80ms)
-- 120ms open delay, 200ms close delay
-- Portal-based dropdown (no header height changes)
-- Conditional rendering (null when closed)
-- Integrated theme toggle
-- i18n navigation links
+- Hover intent detection (24px movement threshold in 80ms to prevent accidental opens)
+- Smart delays: 120ms open delay, 200ms close delay for stable UX
+- **Portal-based dropdown** to `document.body` with `position: fixed` (prevents header height changes)
+- Conditional rendering (returns `null` when closed, not `visibility: hidden`)
+- Integrated theme toggle with visual feedback and glow animation
+- i18n navigation links with proper translations
+- Accessible with ARIA roles and keyboard navigation
 
 ### Language Switcher
 
@@ -111,11 +115,24 @@ Sticky header with:
 **Features**:
 
 - Compact globe icon + current locale display
-- Dropdown with all available locales
-- Client-side navigation (preserves theme)
+- **Portal-based dropdown** with fixed positioning (no header jumping)
+- URL-only navigation (preserves theme, no body/html class manipulation)
+- Client-side routing with `router.replace()` to prevent history pollution
+- Loading state with visual feedback during route change
 - Accessible with ARIA roles and keyboard navigation
 
 ### Contact Dropdown
+
+**Location**: `components/header/ContactDropdown.js`
+
+**Features**:
+
+- **Portal-based form dropdown** with fixed positioning
+- Dynamic position calculation for proper alignment
+- Focus trap implementation for accessibility
+- Form integration with ContactForm component
+- Outside click and Escape key handling
+- Proper focus management (returns to button on close)
 
 **Location**: `components/header/ContactDropdown.js`
 
@@ -146,55 +163,56 @@ npm run format:check # Check Prettier formatting
 npm run type-check   # TypeScript validation
 ```
 
-## Project Structure
+## Project Structure (2025)
 
 ```
 app/
-├── layout.js              # Root layout (minimal)
+├── layout.js              # Root layout (minimal wrapper)
 ├── [locale]/              # Locale-based routing
-│   ├── layout.js          # Locale layout (theme + i18n)
+│   ├── layout.js          # Locale layout (HTML/body + theme + i18n)
 │   └── page.js            # Home page
 
 components/
-├── header/                # Header components
+├── header/                # Header components with portal dropdowns
 │   ├── Header.js          # Main header
 │   ├── Logo.js            # Logo + dropdown + theme toggle
-│   ├── ContactDropdown.js # Contact form dropdown
-│   └── LanguageSwitcher.js # Language selection
+│   ├── ContactDropdown.js # Portal-based contact form dropdown
+│   └── LanguageSwitcher.js # Portal-based language selection
 ├── contact/
 │   └── ContactForm.js     # Reusable contact form
 ├── Hero.js                # Hero section
-├── About.js               # About section
+├── About.js               # About section  
 ├── Footer.js              # Footer with contacts
 └── Gallery.js             # Gallery component
 
-messages/                  # Translation files
-├── en.json               # English
-├── cs.json               # Czech
-├── de.json               # German
-└── ru.json               # Russian
+messages/                  # Complete translation files
+├── en.json               # English (default)
+├── cs.json               # Czech (Čeština)
+├── de.json               # German (Deutsch)
+└── ru.json               # Russian (Русский)
 
 styles/
-└── theme.css             # Design system variables
+└── theme.css             # CSS variables design system
 
-middleware.ts             # Custom locale detection
-i18n.ts                  # next-intl configuration
+middleware.ts             # Custom locale detection with fallbacks
+i18n.ts                  # next-intl configuration with validation
 ```
 
-## Internationalization
+## Internationalization (2025)
 
 ### Translation Structure
 
-Organized by namespace for scalability:
+Organized by logical namespaces with complete coverage:
 
 ```json
 {
-  "header": { "contact": "...", "language": "..." },
+  "header": { "contact": "...", "language": "...", "agency": "..." },
   "nav": { "about": "...", "cases": "...", "contacts": "..." },
-  "hero": { "title": "...", "subtitle": "...", "cta": "..." },
-  "about": { "title": "...", "sites": { "title": "...", "text": "..." } },
-  "contact": { "title": "...", "name": "...", "submit": "..." },
-  "footer": { "contacts": "...", "copyright": "..." }
+  "hero": { "title": "...", "subtitle": "...", "cta": "...", "features": {...} },
+  "about": { "title": "...", "sites": {...}, "tracking": {...}, "traffic": {...}, "analytics": {...} },
+  "contact": { "title": "...", "name": "...", "submit": "...", "validation": {...} },
+  "footer": { "contacts": "...", "copyright": "...", "companyName": "...", "email": "...", "telegram": "..." },
+  "gallery": { "title": "...", "ctaText": "...", "cases": {...}, "details": "..." }
 }
 ```
 
@@ -234,33 +252,98 @@ async function ServerComponent() {
 - Organize keys by logical namespaces
 - Provide translations for all supported locales
 
-### Component Design
+### Component Design (2025)
 
-- Follow existing animation patterns
-- Use portal for overlays to prevent layout shift
-- Implement proper focus management
-- Maintain consistent hover/interaction delays
+- Follow existing animation patterns with consistent timing
+- **Always use portals** for dropdowns/overlays to prevent layout shift  
+- Implement proper focus management and keyboard navigation
+- Maintain consistent hover/interaction delays (120ms open, 200ms close)
+- Ensure conditional rendering (null when closed) for performance
 
 ### Code Quality
 
-- ESLint enforces Next.js best practices
+- ESLint enforces Next.js 15 and React 19 best practices
 - Prettier ensures consistent formatting
-- Remove console statements in production builds
-- Use semantic HTML and ARIA attributes
+- Remove console statements in production builds (dev warnings OK)
+- Use semantic HTML and ARIA attributes for accessibility
+- Test in both light and dark themes
 
-## Deployment
+## Scripts
 
-The project builds to static pages for all locales:
+```bash
+# Development server with Turbopack
+npm run dev
 
-- `/en`, `/cs`, `/de`, `/ru` routes pre-generated
-- Middleware handles locale detection at edge
-- Optimized bundle with shared chunks
-- CSS variables ensure consistent theming
+# Production build with static generation
+npm run build  
 
-## Contributing
+# Start production server
+npm run start
 
-1. Follow existing code patterns and component structure
-2. Test theme persistence across locale switches
-3. Ensure all text is internationalized
-4. Run `npm run lint` and `npm run format` before commits
-5. Verify build success with `npm run build`
+# Lint with Next.js ESLint
+npm run lint
+npm run lint:fix
+
+# Format with Prettier
+npm run format
+npm run format:check
+
+# Type checking (if using TypeScript)
+npm run type-check
+```
+
+## Development Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:3000/en (or /cs, /de, /ru)
+```
+
+The development server includes:
+- Hot reload with Turbopack
+- SSR theme persistence testing  
+- i18n route generation for all locales
+- Real-time translation error warnings (dev only)
+
+## Deployment (2025)
+
+The project builds to optimized static pages:
+
+- **Static Generation**: `/en`, `/cs`, `/de`, `/ru` routes pre-generated at build time
+- **Edge Middleware**: Handles locale detection with Accept-Language fallbacks
+- **Bundle Optimization**: Shared chunks between locales, tree-shaking
+- **Theme Consistency**: CSS variables ensure consistent theming across routes
+- **No Hydration Issues**: SSR-safe theme application prevents FOUC
+
+Build output example:
+```
+Route (app)                    Size  First Load JS
+├── /en                       159 B    114 kB
+├── /cs                       159 B    114 kB  
+├── /de                       159 B    114 kB
+└── /ru                       159 B    114 kB
+Middleware                           44.4 kB
+```
+
+## Contributing (2025)
+
+1. **Setup**: `npm install && npm run dev`
+2. **Code Style**: Follow existing patterns, run `npm run lint:fix && npm run format`
+3. **Theme Testing**: Test both light/dark themes across all locales
+4. **i18n Coverage**: Ensure all text uses `useTranslations()` with proper namespaces
+5. **Portal Usage**: Use portals for all dropdowns/overlays (prevents header jumping)
+6. **Build Verification**: Run `npm run build` to verify static generation works
+7. **Accessibility**: Test keyboard navigation and screen reader compatibility
+
+### Key Rules
+
+- Never use raw colors - only CSS variables
+- All dropdowns must use portals with fixed positioning  
+- Theme must persist across locale changes
+- No hydration mismatches (avoid client-only logic in SSR components)
+- Complete translation coverage for all 4 locales
