@@ -21,7 +21,7 @@ export default async function LocaleLayout({ children, params }) {
   // Read theme from cookie for SSR-safe theme persistence
   const cookieStore = await cookies();
   const themeCookie = cookieStore.get('theme');
-  const theme = themeCookie?.value || 'light';
+  const theme = themeCookie?.value || 'dark'; // Default to dark theme
 
   // Get messages for the current locale
   const messages = await getMessages();
@@ -29,7 +29,15 @@ export default async function LocaleLayout({ children, params }) {
   return (
     <html lang={locale} data-theme={theme} suppressHydrationWarning>
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased selection:bg-white/10">
-        <NextIntlClientProvider messages={messages} locale={locale}>
+        <NextIntlClientProvider
+          messages={messages}
+          locale={locale}
+          onError={error => {
+            if (process.env.NODE_ENV === 'development') {
+              console.warn('[i18n]', error.code, error.message);
+            }
+          }}
+        >
           <Header locale={locale} />
           {children}
         </NextIntlClientProvider>

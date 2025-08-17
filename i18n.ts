@@ -6,7 +6,8 @@ const locales = ['en', 'cs', 'de', 'ru'];
 
 // Export constants for use in other modules
 export const DEFAULT_LOCALE = 'en';
-export const isSupportedLocale = (locale: string): boolean => locales.includes(locale);
+export const isSupportedLocale = (locale: string): boolean =>
+  locales.includes(locale);
 export { locales };
 
 export default getRequestConfig(async ({ locale }) => {
