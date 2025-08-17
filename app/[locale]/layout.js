@@ -24,14 +24,13 @@ export default async function LocaleLayout({ children, params }) {
   const themeCookie = cookieStore.get('theme');
   const theme = themeCookie?.value || 'light';
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
+  // Get messages for the current locale
   const messages = await getMessages();
 
   return (
-    <html data-theme={theme} suppressHydrationWarning>
+    <html lang={locale} data-theme={theme} suppressHydrationWarning>
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased selection:bg-white/10">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <Header locale={locale} />
           {children}
         </NextIntlClientProvider>

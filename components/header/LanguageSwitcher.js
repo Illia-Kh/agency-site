@@ -11,6 +11,7 @@ const LANGUAGES = [
 
 export default function LanguageSwitcher({ currentLocale = 'en' }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isChanging, setIsChanging] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const router = useRouter();
@@ -43,18 +44,29 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
   }, [isOpen]);
 
   const handleToggle = () => {
+    if (isChanging) return;
     setIsOpen(!isOpen);
   };
 
   const handleLanguageChange = langCode => {
+    if (isChanging || langCode === currentLocale) return;
+
+    setIsChanging(true);
     setIsOpen(false);
-    buttonRef.current?.focus();
 
     // Remove current locale from pathname and add new one
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '');
     const newPath = `/${langCode}${pathWithoutLocale || ''}`;
 
-    router.push(newPath);
+    // Use replace to avoid history stack issues and reduce flash
+    router.replace(newPath);
+
+    // Reset changing state after a brief delay
+    // The state will reset when component re-renders with new locale
+    setTimeout(() => {
+      setIsChanging(false);
+      buttonRef.current?.focus();
+    }, 100);
   };
 
   const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale);
@@ -65,20 +77,24 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
         ref={buttonRef}
         type="button"
         onClick={handleToggle}
-        className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--surface-elevated)] transition"
+        disabled={isChanging}
+        className={`inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--surface-elevated)] transition-all duration-200 ${
+          isChanging ? 'opacity-75 cursor-wait' : ''
+        }`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label="Select language"
+        aria-live="polite"
       >
         <GlobeIcon />
-        <span>{currentLanguage?.label}</span>
+        <span>{isChanging ? '...' : currentLanguage?.label}</span>
         <ChevronIcon isOpen={isOpen} />
       </button>
 
       {/* Dropdown */}
       <div
-        className={`absolute right-0 top-full mt-2 w-40 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] transition-all duration-150 origin-top-right ${
-          isOpen
+        className={`absolute right-0 top-full mt-2 w-40 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] transition-all duration-200 origin-top-right ${
+          isOpen && !isChanging
             ? 'opacity-100 scale-100 translate-y-0'
             : 'opacity-0 scale-95 translate-y-1 pointer-events-none'
         }`}
@@ -87,7 +103,7 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
         }}
         role="listbox"
         aria-label="Language options"
-        aria-hidden={!isOpen}
+        aria-hidden={!isOpen || isChanging}
       >
         <ul className="py-2">
           {LANGUAGES.map(lang => (
@@ -95,11 +111,12 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
               <button
                 type="button"
                 onClick={() => handleLanguageChange(lang.code)}
-                className={`w-full px-4 py-2 text-left text-sm hover:bg-[var(--surface-elevated)] transition ${
+                disabled={isChanging}
+                className={`w-full px-4 py-2 text-left text-sm hover:bg-[var(--surface-elevated)] transition-colors duration-150 ${
                   lang.code === currentLocale
                     ? 'bg-[var(--surface-elevated)] text-[var(--primary)]'
                     : 'text-[var(--text)]'
-                }`}
+                } ${isChanging ? 'opacity-50 cursor-wait' : ''}`}
                 role="option"
                 aria-selected={lang.code === currentLocale}
               >
