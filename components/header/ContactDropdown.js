@@ -1,20 +1,54 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import ContactForm from '../contact/ContactForm';
 
 export default function ContactDropdown() {
   const t = useTranslations('common');
   const [isOpen, setIsOpen] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    right: 0,
+  });
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
+
+  // Client-side mounting check
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Update dropdown position when opened
+  const updateDropdownPosition = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY + 12, // 12px gap
+        right: window.innerWidth - rect.right - window.scrollX,
+      });
+    }
+  };
+
+  const handleToggle = () => {
+    if (!isOpen) {
+      updateDropdownPosition();
+    }
+    setIsOpen(!isOpen);
+  };
 
   // Close dropdown on outside click or Escape
   useEffect(() => {
     if (!isOpen) return;
 
     const handleOutsideClick = e => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -69,10 +103,6 @@ export default function ContactDropdown() {
     };
   }, [isOpen]);
 
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-  };
-
   const handleFormSubmit = () => {
     // Form submission logic would go here
     setIsOpen(false); // Close dropdown after submit
@@ -80,7 +110,7 @@ export default function ContactDropdown() {
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       <button
         ref={buttonRef}
         type="button"
@@ -93,27 +123,32 @@ export default function ContactDropdown() {
         {t('header.contact')}
       </button>
 
-      {/* Dropdown overlay */}
-      <div
-        className={`absolute right-0 top-full mt-3 w-80 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] transition-all duration-150 origin-top-right ${
-          isOpen
-            ? 'opacity-100 scale-100 translate-y-0'
-            : 'opacity-0 scale-95 translate-y-1 pointer-events-none'
-        }`}
-        style={{
-          boxShadow: 'var(--shadow-md)',
-        }}
-        role="dialog"
-        aria-labelledby="contact-form-title"
-        aria-hidden={!isOpen}
-      >
-        <div className="p-4">
-          <ContactForm
-            onSubmit={handleFormSubmit}
-            className="border-0 bg-transparent p-0"
-          />
-        </div>
-      </div>
+      {/* Dropdown overlay - portalized */}
+      {isOpen &&
+        isClient &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            ref={dropdownRef}
+            className="fixed w-80 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] transition-all duration-150 origin-top-right opacity-100 scale-100 z-50"
+            style={{
+              top: dropdownPosition.top,
+              right: dropdownPosition.right,
+              boxShadow: 'var(--shadow-md)',
+            }}
+            role="dialog"
+            aria-labelledby="contact-form-title"
+            aria-hidden={false}
+          >
+            <div className="p-4">
+              <ContactForm
+                onSubmit={handleFormSubmit}
+                className="border-0 bg-transparent p-0"
+              />
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

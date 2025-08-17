@@ -1,7 +1,8 @@
 {
   "header": {
     "contact": "Kontaktujte nás",
-    "language": "Jazyk"
+    "language": "Jazyk",
+    "agency": "Agentura"
   },
   "nav": {
     "about": "O nás",
@@ -57,7 +58,10 @@
   "footer": {
     "contacts": "Kontakty",
     "description": "Vývoj a propagace webových stránek na klíč. Česká republika · EU",
-    "copyright": "Všechna práva vyhrazena."
+    "copyright": "Všechna práva vyhrazena.",
+    "companyName": "IKH Agency",
+    "email": "hello@example.com",
+    "telegram": "Telegram"
   },
   "gallery": {
     "title": "Galerie / Případy",

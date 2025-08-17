@@ -1,7 +1,8 @@
 {
   "header": {
     "contact": "Contact us",
-    "language": "Language"
+    "language": "Language",
+    "agency": "Agency"
   },
   "nav": {
     "about": "About",
@@ -57,7 +58,10 @@
   "footer": {
     "contacts": "Contacts",
     "description": "Website development and promotion turnkey. Czech Republic · EU",
-    "copyright": "All rights reserved."
+    "copyright": "All rights reserved.",
+    "companyName": "IKH Agency",
+    "email": "hello@example.com",
+    "telegram": "Telegram"
   },
   "gallery": {
     "title": "Gallery / Cases",

@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter, usePathname } from 'next/navigation';
 
 const LANGUAGES = [
@@ -11,17 +12,44 @@ const LANGUAGES = [
 
 export default function LanguageSwitcher({ currentLocale = 'en' }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isChanging, setIsChanging] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    right: 0,
+  });
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  // Client-side mounting check
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Update dropdown position when opened
+  const updateDropdownPosition = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY + 8, // 8px gap
+        right: window.innerWidth - rect.right - window.scrollX,
+      });
+    }
+  };
 
   // Close dropdown on outside click or Escape
   useEffect(() => {
     if (!isOpen) return;
 
     const handleOutsideClick = e => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target)
+      ) {
         setIsOpen(false);
       }
     };
@@ -43,73 +71,98 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
   }, [isOpen]);
 
   const handleToggle = () => {
+    if (isChanging) return;
+    if (!isOpen) {
+      updateDropdownPosition();
+    }
     setIsOpen(!isOpen);
   };
 
   const handleLanguageChange = langCode => {
+    if (isChanging || langCode === currentLocale) return;
+
+    setIsChanging(true);
     setIsOpen(false);
-    buttonRef.current?.focus();
 
     // Remove current locale from pathname and add new one
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '');
     const newPath = `/${langCode}${pathWithoutLocale || ''}`;
 
-    router.push(newPath);
+    // Use replace to avoid history stack issues and reduce flash
+    router.replace(newPath);
+
+    // Reset changing state after a brief delay
+    // The state will reset when component re-renders with new locale
+    setTimeout(() => {
+      setIsChanging(false);
+      buttonRef.current?.focus();
+    }, 100);
   };
 
   const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       <button
         ref={buttonRef}
         type="button"
         onClick={handleToggle}
-        className="inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--surface-elevated)] transition"
+        disabled={isChanging}
+        className={`inline-flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] px-3 py-2 text-sm font-medium text-[var(--text)] hover:bg-[var(--surface-elevated)] transition-all duration-200 ${
+          isChanging ? 'opacity-75 cursor-wait' : ''
+        }`}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label="Select language"
+        aria-live="polite"
       >
         <GlobeIcon />
-        <span>{currentLanguage?.label}</span>
+        <span>{isChanging ? '...' : currentLanguage?.label}</span>
         <ChevronIcon isOpen={isOpen} />
       </button>
 
-      {/* Dropdown */}
-      <div
-        className={`absolute right-0 top-full mt-2 w-40 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] transition-all duration-150 origin-top-right ${
-          isOpen
-            ? 'opacity-100 scale-100 translate-y-0'
-            : 'opacity-0 scale-95 translate-y-1 pointer-events-none'
-        }`}
-        style={{
-          boxShadow: 'var(--shadow-md)',
-        }}
-        role="listbox"
-        aria-label="Language options"
-        aria-hidden={!isOpen}
-      >
-        <ul className="py-2">
-          {LANGUAGES.map(lang => (
-            <li key={lang.code}>
-              <button
-                type="button"
-                onClick={() => handleLanguageChange(lang.code)}
-                className={`w-full px-4 py-2 text-left text-sm hover:bg-[var(--surface-elevated)] transition ${
-                  lang.code === currentLocale
-                    ? 'bg-[var(--surface-elevated)] text-[var(--primary)]'
-                    : 'text-[var(--text)]'
-                }`}
-                role="option"
-                aria-selected={lang.code === currentLocale}
-              >
-                <span className="font-medium">{lang.label}</span>
-                <span className="ml-2 opacity-70">{lang.name}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Dropdown - portalized */}
+      {isOpen &&
+        !isChanging &&
+        isClient &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            ref={dropdownRef}
+            className="fixed w-40 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] transition-all duration-200 origin-top-right opacity-100 scale-100 z-50"
+            style={{
+              top: dropdownPosition.top,
+              right: dropdownPosition.right,
+              boxShadow: 'var(--shadow-md)',
+            }}
+            role="listbox"
+            aria-label="Language options"
+            aria-hidden={false}
+          >
+            <ul className="py-2">
+              {LANGUAGES.map(lang => (
+                <li key={lang.code}>
+                  <button
+                    type="button"
+                    onClick={() => handleLanguageChange(lang.code)}
+                    disabled={isChanging}
+                    className={`w-full px-4 py-2 text-left text-sm hover:bg-[var(--surface-elevated)] transition-colors duration-150 ${
+                      lang.code === currentLocale
+                        ? 'bg-[var(--surface-elevated)] text-[var(--primary)]'
+                        : 'text-[var(--text)]'
+                    } ${isChanging ? 'opacity-50 cursor-wait' : ''}`}
+                    role="option"
+                    aria-selected={lang.code === currentLocale}
+                  >
+                    <span className="font-medium">{lang.label}</span>
+                    <span className="ml-2 opacity-70">{lang.name}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }
