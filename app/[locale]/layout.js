@@ -1,23 +1,21 @@
 import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import '../globals.css';
 import Header from '@/components/header/Header';
 
-import { locales, isSupportedLocale } from '../../i18n';
-
+const locales = ['en', 'cs', 'de', 'ru'];
 
 export function generateStaticParams() {
-  return SUPPORTED_LOCALES.map(locale => ({ locale }));
+  return locales.map(locale => ({ locale }));
 }
 
 export default async function LocaleLayout({ children, params }) {
   const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
-
-  if (!SUPPORTED_LOCALES.includes(locale)) {
-
+  if (!locales.includes(locale)) {
     notFound();
   }
 
@@ -26,14 +24,12 @@ export default async function LocaleLayout({ children, params }) {
   const themeCookie = cookieStore.get('theme');
   const theme = themeCookie?.value || 'dark'; // Default to dark theme
 
-
-  const { locale: normalizedLocale, messages } = await loadAllMessages(locale);
+  const messages = await getMessages();
 
   return (
-    <html lang={normalizedLocale} data-theme={theme} suppressHydrationWarning>
+    <html lang={locale} data-theme={theme} suppressHydrationWarning>
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased selection:bg-white/10">
-        <NextIntlClientProvider locale={normalizedLocale} messages={messages}>
- 
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <Header locale={locale} />
           {children}
         </NextIntlClientProvider>

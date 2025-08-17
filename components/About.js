@@ -1,24 +1,25 @@
+'use client';
 import { useTranslations } from 'next-intl';
 
 export default function About() {
-  const t = useTranslations('home');
+  const t = useTranslations('about');
 
   const features = [
     {
-      title: t('about.sites.title'),
-      text: t('about.sites.text'),
+      title: t('sites.title'),
+      text: t('sites.text'),
     },
     {
-      title: t('about.tracking.title'),
-      text: t('about.tracking.text'),
+      title: t('tracking.title'),
+      text: t('tracking.text'),
     },
     {
-      title: t('about.traffic.title'),
-      text: t('about.traffic.text'),
+      title: t('traffic.title'),
+      text: t('traffic.text'),
     },
     {
-      title: t('about.analytics.title'),
-      text: t('about.analytics.text'),
+      title: t('analytics.title'),
+      text: t('analytics.text'),
     },
   ];
 
@@ -30,10 +31,10 @@ export default function About() {
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-3">
         <div className="lg:col-span-1">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            {t('about.title')}
+            {t('title')}
           </h2>
-          <p className="mt-3 max-w-sm text-neutral-400">
-            {t('about.description')}
+          <p className="mt-3 max-w-sm text-[var(--text)] opacity-70">
+            {t('description')}
           </p>
         </div>
         <div className="lg:col-span-2">
