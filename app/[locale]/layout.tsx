@@ -1,9 +1,9 @@
-import {NextIntlClientProvider} from 'next-intl';
-import {cookies} from 'next/headers';
-import {DEFAULT_LOCALE, isSupportedLocale, locales, messagesMap} from '../../i18n';
+import { NextIntlClientProvider } from 'next-intl';
+import { cookies } from 'next/headers';
+import { isSupportedLocale, locales, messagesMap } from '../../i18n';
 import Header from '../../components/header/Header';
 import '../globals.css';
-import type {ReactNode} from 'react';
+import type { ReactNode } from 'react';
 
 export function generateStaticParams() {
   return locales.map(locale => ({ locale }));
@@ -14,7 +14,10 @@ interface LocaleLayoutProps {
   params: Promise<{ locale: string }>;
 }
 
-export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
+export default async function LocaleLayout({
+  children,
+  params,
+}: LocaleLayoutProps) {
   const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
@@ -28,7 +31,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const theme = themeCookie?.value || 'light';
 
   // Get messages for the current locale
-  const messages = messagesMap[locale as keyof typeof messagesMap];
+  const messages = await messagesMap[locale]();
 
   return (
     <html lang={locale} data-theme={theme} suppressHydrationWarning>
