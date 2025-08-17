@@ -33,16 +33,16 @@ export default function Hero() {
           </div>
           <ul className="mt-6 grid grid-cols-2 gap-4 text-sm text-[var(--text)] opacity-70 sm:max-w-md">
             <li className="flex items-center gap-2">
-              <Dot /> SSL/https, домен, хостинг
+              <Dot /> {t('features.ssl')}
             </li>
             <li className="flex items-center gap-2">
-              <Dot /> Keitaro + интеграции
+              <Dot /> {t('features.keitaro')}
             </li>
             <li className="flex items-center gap-2">
-              <Dot /> Настройка рекламных кабинетов
+              <Dot /> {t('features.advertising')}
             </li>
             <li className="flex items-center gap-2">
-              <Dot /> Техническая поддержка
+              <Dot /> {t('features.support')}
             </li>
           </ul>
         </div>
@@ -50,11 +50,11 @@ export default function Hero() {
           <div className="aspect-video w-full overflow-hidden rounded-xl bg-[var(--surface-elevated)]">
             {/* Placeholder for future gallery/shot */}
             <div className="flex h-full items-center justify-center text-[var(--text)] opacity-60">
-              Превью кейса
+              {t('preview.title')}
             </div>
           </div>
           <div className="mt-3 text-xs text-[var(--text)] opacity-70">
-            Скрин из рекламного кабинета или лендинга клиента
+            {t('preview.subtitle')}
           </div>
         </div>
       </div>
