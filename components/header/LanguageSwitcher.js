@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, startTransition } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -88,15 +88,22 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
     const pathWithoutLocale = pathname.replace(/^\/[a-z]{2}/, '');
     const newPath = `/${langCode}${pathWithoutLocale || ''}`;
 
-    // Use replace to avoid history stack issues and reduce flash
-    router.replace(newPath);
+    // Use startTransition for smoother transitions and router.replace to avoid flicker
+    startTransition(() => {
+      router.replace(newPath);
+    });
 
-    // Reset changing state after a brief delay
-    // The state will reset when component re-renders with new locale
+    // Reset changing state after transition, but don't lose focus
     setTimeout(() => {
       setIsChanging(false);
-      buttonRef.current?.focus();
-    }, 100);
+      // Don't focus if user clicked away during transition
+      if (
+        document.activeElement === document.body ||
+        document.activeElement === buttonRef.current
+      ) {
+        buttonRef.current?.focus();
+      }
+    }, 150);
   };
 
   const currentLanguage = LANGUAGES.find(lang => lang.code === currentLocale);
@@ -117,7 +124,9 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
         aria-live="polite"
       >
         <GlobeIcon />
-        <span>{isChanging ? '...' : currentLanguage?.label}</span>
+        <span className="min-w-[1.5rem] text-center">
+          {isChanging ? '...' : currentLanguage?.label}
+        </span>
         <ChevronIcon isOpen={isOpen} />
       </button>
 

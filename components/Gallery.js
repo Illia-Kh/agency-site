@@ -1,15 +1,15 @@
 import { useTranslations } from 'next-intl';
 
 export default function Gallery() {
-  const t = useTranslations('home');
+  const t = useTranslations('gallery');
 
   const items = [
-    { id: 1, caption: t('gallery.cases.clinic'), alt: 'Case 1' },
-    { id: 2, caption: t('gallery.cases.ecom'), alt: 'Case 2' },
-    { id: 3, caption: t('gallery.cases.google'), alt: 'Case 3' },
-    { id: 4, caption: t('gallery.cases.meta'), alt: 'Case 4' },
-    { id: 5, caption: t('gallery.cases.keitaro'), alt: 'Case 5' },
-    { id: 6, caption: t('gallery.cases.whitepage'), alt: 'Case 6' },
+    { id: 1, caption: t('cases.clinic'), alt: 'Case 1' },
+    { id: 2, caption: t('cases.ecom'), alt: 'Case 2' },
+    { id: 3, caption: t('cases.google'), alt: 'Case 3' },
+    { id: 4, caption: t('cases.meta'), alt: 'Case 4' },
+    { id: 5, caption: t('cases.keitaro'), alt: 'Case 5' },
+    { id: 6, caption: t('cases.whitepage'), alt: 'Case 6' },
   ];
   return (
     <section
@@ -18,13 +18,13 @@ export default function Gallery() {
     >
       <div className="mb-6 flex items-end justify-between">
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
-          {t('gallery.title')}
+          {t('title')}
         </h2>
         <a
           href="#contact"
           className="text-sm text-[var(--primary)] hover:text-[var(--primary-hover)]"
         >
-          {t('gallery.ctaText')}
+          {t('ctaText')}
         </a>
       </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -40,7 +40,7 @@ export default function Gallery() {
             <figcaption className="flex items-center justify-between px-4 py-3 text-sm text-[var(--text)]">
               <span>{it.caption}</span>
               <span className="opacity-60 group-hover:opacity-100">
-                {t('gallery.details')}
+                {t('details')}
               </span>
             </figcaption>
           </figure>

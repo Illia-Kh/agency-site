@@ -7,7 +7,7 @@ A modern, internationalized agency website built with Next.js App Router 15, fea
 - **Next.js 15.4.5** with App Router for SSR/SSG optimization
 - **next-intl 4.3** for type-safe internationalization with SSR support
 - **React 19** with concurrent features and modern hooks
-- **CSS Variables** design system with seamless light/dark theme transitions  
+- **CSS Variables** design system with seamless light/dark theme transitions
 - **Portal-based dropdowns** preventing layout shifts and header jumping
 - **Custom middleware** for intelligent locale detection and routing
 - **Cookie-based theme persistence** preventing FOUC across navigation
@@ -181,7 +181,7 @@ components/
 ├── contact/
 │   └── ContactForm.js     # Reusable contact form
 ├── Hero.js                # Hero section
-├── About.js               # About section  
+├── About.js               # About section
 ├── Footer.js              # Footer with contacts
 └── Gallery.js             # Gallery component
 
@@ -255,7 +255,7 @@ async function ServerComponent() {
 ### Component Design (2025)
 
 - Follow existing animation patterns with consistent timing
-- **Always use portals** for dropdowns/overlays to prevent layout shift  
+- **Always use portals** for dropdowns/overlays to prevent layout shift
 - Implement proper focus management and keyboard navigation
 - Maintain consistent hover/interaction delays (120ms open, 200ms close)
 - Ensure conditional rendering (null when closed) for performance
@@ -275,7 +275,7 @@ async function ServerComponent() {
 npm run dev
 
 # Production build with static generation
-npm run build  
+npm run build
 
 # Start production server
 npm run start
@@ -305,8 +305,9 @@ npm run dev
 ```
 
 The development server includes:
+
 - Hot reload with Turbopack
-- SSR theme persistence testing  
+- SSR theme persistence testing
 - i18n route generation for all locales
 - Real-time translation error warnings (dev only)
 
@@ -321,10 +322,11 @@ The project builds to optimized static pages:
 - **No Hydration Issues**: SSR-safe theme application prevents FOUC
 
 Build output example:
+
 ```
 Route (app)                    Size  First Load JS
 ├── /en                       159 B    114 kB
-├── /cs                       159 B    114 kB  
+├── /cs                       159 B    114 kB
 ├── /de                       159 B    114 kB
 └── /ru                       159 B    114 kB
 Middleware                           44.4 kB
@@ -343,7 +345,7 @@ Middleware                           44.4 kB
 ### Key Rules
 
 - Never use raw colors - only CSS variables
-- All dropdowns must use portals with fixed positioning  
+- All dropdowns must use portals with fixed positioning
 - Theme must persist across locale changes
 - No hydration mismatches (avoid client-only logic in SSR components)
 - Complete translation coverage for all 4 locales

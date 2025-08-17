@@ -1,9 +1,11 @@
 import createMiddleware from 'next-intl/middleware';
-import { SUPPORTED_LOCALES, FALLBACK_LOCALE } from './src/i18n/i18n.config';
+
+const locales = ['en', 'cs', 'de', 'ru'];
+const defaultLocale = 'en';
 
 export default createMiddleware({
-  locales: SUPPORTED_LOCALES as unknown as string[],
-  defaultLocale: FALLBACK_LOCALE,
+  locales,
+  defaultLocale,
   localeDetection: true,
 });
 

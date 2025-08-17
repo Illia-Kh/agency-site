@@ -6,13 +6,13 @@ import { useTranslations } from 'next-intl';
 
 export default function Logo() {
   const t = useTranslations('nav');
-  const th = useTranslations('header'); // for header-specific translations
+  const th = useTranslations('header');
 
   // Translated navigation links
   const LINKS = [
-    { href: '#about', label: t('nav.about') },
-    { href: '#cases', label: t('nav.cases') },
-    { href: '#contact', label: t('nav.contacts') },
+    { href: '#about', label: t('about') },
+    { href: '#cases', label: t('cases') },
+    { href: '#contact', label: t('contacts') },
   ];
   // State for portal mounting
   const [isClient, setIsClient] = useState(false);
@@ -221,7 +221,7 @@ export default function Logo() {
       {/* Блок-эмблема: графитовый квадрат со скруглением и оранжевым 'ИКХ' */}
       <a
         href="#"
-        className="group inline-flex items-center gap-2 select-none"
+        className="group inline-flex items-center gap-2 select-none min-w-[6rem]"
         aria-haspopup="true"
         aria-expanded={menuOpen}
         onClick={e => {
@@ -230,7 +230,7 @@ export default function Logo() {
         }}
       >
         <div
-          className="grid h-8 w-8 place-items-center rounded-xl transition border"
+          className="flex-shrink-0 grid h-8 w-8 place-items-center rounded-xl transition border"
           style={{
             background: 'var(--highlight)', // графит
             borderColor: 'var(--border)',
@@ -247,8 +247,8 @@ export default function Logo() {
           </span>
         </div>
 
-        {/* Agency text in proper locale */}
-        <span className="text-sm font-semibold tracking-wide text-[var(--primary)]">
+        {/* Agency text in proper locale with fixed width */}
+        <span className="text-sm font-semibold tracking-wide text-[var(--primary)] whitespace-nowrap">
           {th('agency')}
         </span>
       </a>
@@ -259,7 +259,7 @@ export default function Logo() {
         onClick={toggleTheme}
         aria-pressed={isDark}
         aria-label="Toggle theme"
-        className="relative inline-grid h-8 w-8 place-items-center rounded-full border transition"
+        className="relative flex-shrink-0 inline-grid h-8 w-8 place-items-center rounded-full border transition"
         style={{
           background: 'var(--bg-secondary)',
           borderColor: 'var(--border)',
