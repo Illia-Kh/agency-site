@@ -1,0 +1,52 @@
+{
+  "hero": {
+    "title": "Site + tracker + advertising",
+    "subtitle": "Launch under key in 7-14 days",
+    "description": "We develop fast sites on Next.js, connect Keitaro/analytics and drive traffic from Meta/Google. Minimum bureaucracy — maximum results.",
+    "cta": "Get offer",
+    "howWeWork": "How we work",
+    "features": {
+      "ssl": "SSL/https, domain, hosting",
+      "keitaro": "Keitaro + integrations",
+      "advertising": "Advertising accounts setup",
+      "support": "Technical support"
+    },
+    "preview": {
+      "title": "Case preview",
+      "subtitle": "Screenshot from advertising account or client's landing page"
+    }
+  },
+  "about": {
+    "title": "About us",
+    "description": "We build the entire funnel: from site prototype to traffic acquisition. In parallel, we set up analytics and reporting.",
+    "sites": {
+      "title": "Sites",
+      "text": "Next.js, fast loading, responsive, SEO base."
+    },
+    "tracking": {
+      "title": "Tracking",
+      "text": "Keitaro, domains, SSL, integrations, anti-bot filters."
+    },
+    "traffic": {
+      "title": "Traffic",
+      "text": "Meta/Google, media plan, creatives, tests and scaling."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "text": "Custom dashboards, attribution, LTV, conversion funnel."
+    }
+  },
+  "gallery": {
+    "title": "Gallery / Cases",
+    "ctaText": "I want one like this →",
+    "cases": {
+      "clinic": "Clinic Landing",
+      "ecom": "eCom Store",
+      "google": "Google Ads Campaign",
+      "meta": "Meta Ads Campaign",
+      "keitaro": "Keitaro Dashboard",
+      "whitepage": "WhitePage + SSL"
+    },
+    "details": "Details"
+  }
+}

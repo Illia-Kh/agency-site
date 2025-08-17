@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 export default function Hero() {
-  const t = useTranslations('hero');
+  const t = useTranslations('home');
 
   return (
     <section className="relative isolate">
@@ -9,40 +9,40 @@ export default function Hero() {
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:py-28">
         <div>
           <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl text-[var(--text)]">
-            {t('title')}
+            {t('hero.title')}
             <span className="block text-[var(--text)] opacity-70">
-              {t('subtitle')}
+              {t('hero.subtitle')}
             </span>
           </h1>
           <p className="mt-5 max-w-xl text-base text-[var(--text)] opacity-80">
-            {t('description')}
+            {t('hero.description')}
           </p>
           <div className="mt-7 flex flex-wrap items-center gap-3">
             <a
               href="#contact"
               className="rounded-xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-[var(--white)] hover:bg-[var(--primary-hover)] transition"
             >
-              {t('cta')}
+              {t('hero.cta')}
             </a>
             <a
               href="#about"
               className="rounded-xl border border-[var(--border)] px-5 py-3 text-sm font-semibold text-[var(--text)] hover:bg-[var(--bg-secondary)] transition"
             >
-              {t('howWeWork')}
+              {t('hero.howWeWork')}
             </a>
           </div>
           <ul className="mt-6 grid grid-cols-2 gap-4 text-sm text-[var(--text)] opacity-70 sm:max-w-md">
             <li className="flex items-center gap-2">
-              <Dot /> {t('features.ssl')}
+              <Dot /> {t('hero.features.ssl')}
             </li>
             <li className="flex items-center gap-2">
-              <Dot /> {t('features.keitaro')}
+              <Dot /> {t('hero.features.keitaro')}
             </li>
             <li className="flex items-center gap-2">
-              <Dot /> {t('features.advertising')}
+              <Dot /> {t('hero.features.advertising')}
             </li>
             <li className="flex items-center gap-2">
-              <Dot /> {t('features.support')}
+              <Dot /> {t('hero.features.support')}
             </li>
           </ul>
         </div>
@@ -50,11 +50,11 @@ export default function Hero() {
           <div className="aspect-video w-full overflow-hidden rounded-xl bg-[var(--surface-elevated)]">
             {/* Placeholder for future gallery/shot */}
             <div className="flex h-full items-center justify-center text-[var(--text)] opacity-60">
-              {t('preview.title')}
+              {t('hero.preview.title')}
             </div>
           </div>
           <div className="mt-3 text-xs text-[var(--text)] opacity-70">
-            {t('preview.subtitle')}
+            {t('hero.preview.subtitle')}
           </div>
         </div>
       </div>

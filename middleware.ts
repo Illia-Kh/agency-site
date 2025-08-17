@@ -1,17 +1,12 @@
 import createMiddleware from 'next-intl/middleware';
+import { SUPPORTED_LOCALES, FALLBACK_LOCALE } from './src/i18n/i18n.config';
 
 export default createMiddleware({
-  // A list of all locales that are supported
-  locales: ['en', 'cs', 'de', 'ru'],
-
-  // Used when no locale matches
-  defaultLocale: 'en',
-
-  // Always use locale prefix
-  localePrefix: 'always',
+  locales: SUPPORTED_LOCALES as unknown as string[],
+  defaultLocale: FALLBACK_LOCALE,
+  localeDetection: true,
 });
 
 export const config = {
-  // Match only internationalized pathnames
-  matcher: ['/((?!_next|api|.*\\..*).*)'],
+  matcher: ['/((?!_next|.*\\..*).*)'],
 };
