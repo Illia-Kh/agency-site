@@ -33,7 +33,9 @@ export default function About() {
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             {t('title')}
           </h2>
-          <p className="mt-3 max-w-sm text-neutral-400">{t('description')}</p>
+          <p className="mt-3 max-w-sm text-[var(--text)] opacity-70">
+            {t('description')}
+          </p>
         </div>
         <div className="lg:col-span-2">
           <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2">

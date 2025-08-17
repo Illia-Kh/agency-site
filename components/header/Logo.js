@@ -49,7 +49,8 @@ export default function Logo() {
   }, []);
 
   const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
+    const currentTheme = theme || 'dark';
+    const next = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
 
     // Set cookie with 1 year expiration
@@ -57,8 +58,6 @@ export default function Logo() {
 
     setTheme(next);
   };
-
-  const isDark = theme === 'dark';
 
   // Delayed hover dropdown state for nav
   const [menuOpen, setMenuOpen] = useState(false);
@@ -204,8 +203,9 @@ export default function Logo() {
     };
   }, [menuOpen]);
 
-  // Don't render until theme is known (client-only)
-  if (theme === undefined) return null;
+  // Don't render until theme is known (client-only), but provide fallback
+  const themeToUse = theme || 'dark'; // Default theme fallback
+  const isDark = themeToUse === 'dark';
 
   return (
     <div
