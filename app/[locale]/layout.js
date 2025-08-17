@@ -4,8 +4,7 @@ import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import '../globals.css';
 import Header from '@/components/header/Header';
-
-const locales = ['en', 'cs', 'de', 'ru'];
+import { locales, isSupportedLocale } from '@/i18n';
 
 export function generateStaticParams() {
   return locales.map(locale => ({ locale }));
@@ -15,7 +14,7 @@ export default async function LocaleLayout({ children, params }) {
   const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale)) {
+  if (!isSupportedLocale(locale)) {
     notFound();
   }
 
