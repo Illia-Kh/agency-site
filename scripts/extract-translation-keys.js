@@ -18,11 +18,18 @@ const files = fs.readdirSync(baseDir).filter(f => f.endsWith('.json'));
 const keys = new Set();
 
 for (const file of files) {
-  const content = JSON.parse(fs.readFileSync(path.join(baseDir, file), 'utf-8'));
+  const content = JSON.parse(
+    fs.readFileSync(path.join(baseDir, file), 'utf-8')
+  );
   walk(content, file.replace(/\.json$/, ''), []).forEach(k => keys.add(k));
 }
 
-const out = `// AUTO-GENERATED. DO NOT EDIT.\ndeclare module 'i18n-keys' {\n  export type TranslationKey =\n${[...keys].sort().map(k => `    | '${k}'`).join('\n')};\n}\n`;
+const out = `// AUTO-GENERATED. DO NOT EDIT.\ndeclare module 'i18n-keys' {\n  export type TranslationKey =\n${[
+  ...keys,
+]
+  .sort()
+  .map(k => `    | '${k}'`)
+  .join('\n')};\n}\n`;
 
 const target = path.join(process.cwd(), 'src/i18n/key-types.generated.d.ts');
 fs.writeFileSync(target, out, 'utf-8');

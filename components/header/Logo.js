@@ -9,9 +9,9 @@ export default function Logo() {
 
   // Translated navigation links
   const LINKS = [
-    { href: '#about', label: t('about') },
-    { href: '#cases', label: t('cases') },
-    { href: '#contact', label: t('contacts') },
+    { href: '#about', label: t('nav.about') },
+    { href: '#cases', label: t('nav.cases') },
+    { href: '#contact', label: t('nav.contacts') },
   ];
   // State for portal mounting
   const [isClient, setIsClient] = useState(false);

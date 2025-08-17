@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import ContactForm from '../contact/ContactForm';
 
 export default function ContactDropdown() {
-  const t = useTranslations('header');
+  const t = useTranslations('common');
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
@@ -90,7 +90,7 @@ export default function ContactDropdown() {
         aria-expanded={isOpen}
         aria-label="Open contact form"
       >
-        {t('contact')}
+        {t('header.contact')}
       </button>
 
       {/* Dropdown overlay */}
