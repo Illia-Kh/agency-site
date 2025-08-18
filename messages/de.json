@@ -1,7 +1,8 @@
 {
   "header": {
     "contact": "Kontaktieren Sie uns",
-    "language": "Sprache"
+    "language": "Sprache",
+    "agency": "Agentur"
   },
   "nav": {
     "about": "Über uns",
@@ -57,7 +58,10 @@
   "footer": {
     "contacts": "Kontakte",
     "description": "Website-Entwicklung und -Promotion schlüsselfertig. Tschechien · EU",
-    "copyright": "Alle Rechte vorbehalten."
+    "copyright": "Alle Rechte vorbehalten.",
+    "companyName": "IKH Agency",
+    "email": "hello@example.com",
+    "telegram": "Telegram"
   },
   "gallery": {
     "title": "Galerie / Fälle",

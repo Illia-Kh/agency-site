@@ -1,22 +1,28 @@
 import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
-import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
+import { isSupportedLocale, locales, messagesMap } from '../../i18n';
+import Header from '../../components/header/Header';
 import '../globals.css';
-import Header from '@/components/header/Header';
-
-const locales = ['en', 'cs', 'de', 'ru'];
+import type { ReactNode } from 'react';
 
 export function generateStaticParams() {
   return locales.map(locale => ({ locale }));
 }
 
-export default async function LocaleLayout({ children, params }) {
+interface LocaleLayoutProps {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}
+
+export default async function LocaleLayout({
+  children,
+  params,
+}: LocaleLayoutProps) {
   const { locale } = await params;
 
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale)) {
-    notFound();
+  if (!isSupportedLocale(locale)) {
+    throw new Error(`Unsupported locale: ${locale}`);
   }
 
   // Read theme from cookie for SSR-safe theme persistence
@@ -24,14 +30,13 @@ export default async function LocaleLayout({ children, params }) {
   const themeCookie = cookieStore.get('theme');
   const theme = themeCookie?.value || 'light';
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
-  const messages = await getMessages();
+  // Get messages for the current locale
+  const messages = await messagesMap[locale]();
 
   return (
-    <html data-theme={theme} suppressHydrationWarning>
+    <html lang={locale} data-theme={theme} suppressHydrationWarning>
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased selection:bg-white/10">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <Header locale={locale} />
           {children}
         </NextIntlClientProvider>
