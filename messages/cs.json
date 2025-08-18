@@ -33,6 +33,40 @@
     "preview": {
       "title": "Náhled případu",
       "subtitle": "Screenshot z reklamního účtu nebo klientovy stránky"
+    },
+    "benefits": {
+      "turnkey": {
+        "title": "Na klíč a bez starostí",
+        "text": "Doména, hosting, SSL, bílá stránka, vše spustíme sami."
+      },
+      "analytics": {
+        "title": "Keitaro + analytika",
+        "text": "Nastavíme sledování, vidíte skutečné zdroje leadů."
+      },
+      "advertising": {
+        "title": "Reklama Meta/Google",
+        "text": "Založíme účty a spustíme provoz správně."
+      },
+      "quickStart": {
+        "title": "Rychlý start 7–14 dní",
+        "text": "Nenatahujeme termíny, fixujeme etapy."
+      },
+      "minimal": {
+        "title": "Minimum byrokracie — maximum výsledku",
+        "text": "Pouze potřebná schválení."
+      },
+      "support": {
+        "title": "Technická podpora na startu",
+        "text": "Neopouštíme, pomáháme odchytit 'dětské nemoci'."
+      },
+      "reports": {
+        "title": "Transparentní reporty",
+        "text": "Jasná čísla: leady, náklady, návratnost."
+      },
+      "scalability": {
+        "title": "Škálovatelnost",
+        "text": "Růst rozpočtu bez ztráty kontroly."
+      }
     }
   },
   "about": {

@@ -1,0 +1,40 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#ffffff"/>
+  
+  <!-- Browser window frame -->
+  <rect x="100" y="150" width="1400" height="700" fill="#f7f7f8" rx="12"/>
+  <rect x="100" y="150" width="1400" height="50" fill="#e5e5e7" rx="12 12 0 0"/>
+  
+  <!-- Browser controls -->
+  <circle cx="130" cy="175" r="8" fill="#ff5f57"/>
+  <circle cx="155" cy="175" r="8" fill="#ffbd2e"/>
+  <circle cx="180" cy="175" r="8" fill="#28ca42"/>
+  
+  <!-- URL bar -->
+  <rect x="250" y="160" width="1000" height="30" fill="white" rx="8"/>
+  <text x="270" y="180" fill="#666" font-family="Arial, sans-serif" font-size="14">
+    https://client-landing.example.com
+  </text>
+  
+  <!-- Landing page content -->
+  <rect x="150" y="250" width="1300" height="80" fill="#0077cc" rx="8"/>
+  <text x="800" y="300" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="32" font-weight="bold">
+    Premium Landing Page
+  </text>
+  
+  <text x="800" y="380" text-anchor="middle" fill="#111" font-family="Arial, sans-serif" font-size="24">
+    Next.js • Fast Loading • Mobile Optimized
+  </text>
+  
+  <!-- CTA Button -->
+  <rect x="650" y="420" width="300" height="60" fill="#ff7a00" rx="8"/>
+  <text x="800" y="460" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">
+    Get Started Today
+  </text>
+  
+  <!-- Features -->
+  <text x="400" y="550" fill="#666" font-family="Arial, sans-serif" font-size="16">✓ SSL Certificate</text>
+  <text x="400" y="580" fill="#666" font-family="Arial, sans-serif" font-size="16">✓ Keitaro Integration</text>
+  <text x="850" y="550" fill="#666" font-family="Arial, sans-serif" font-size="16">✓ Analytics Setup</text>
+  <text x="850" y="580" fill="#666" font-family="Arial, sans-serif" font-size="16">✓ Mobile Ready</text>
+</svg>

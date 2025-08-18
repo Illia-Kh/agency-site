@@ -1,0 +1,24 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="900" fill="#0f0f10"/>
+  <rect x="50" y="50" width="1500" height="800" fill="#161618" rx="20"/>
+  <text x="800" y="200" text-anchor="middle" fill="#0077cc" font-family="Arial, sans-serif" font-size="52" font-weight="bold">
+    Analytics Growth
+  </text>
+  <text x="800" y="250" text-anchor="middle" fill="#f7f7f8" font-family="Arial, sans-serif" font-size="24">
+    Lead Conversion Dashboard
+  </text>
+  
+  <!-- Chart bars -->
+  <rect x="300" y="400" width="80" height="150" fill="#0077cc" rx="4"/>
+  <rect x="420" y="350" width="80" height="200" fill="#0077cc" rx="4"/>
+  <rect x="540" y="300" width="80" height="250" fill="#005fa3" rx="4"/>
+  <rect x="660" y="250" width="80" height="300" fill="#005fa3" rx="4"/>
+  <rect x="780" y="200" width="80" height="350" fill="#ff7a00" rx="4"/>
+  <rect x="900" y="180" width="80" height="370" fill="#ff7a00" rx="4"/>
+  <rect x="1020" y="160" width="80" height="390" fill="#ff7a00" rx="4"/>
+  <rect x="1140" y="120" width="80" height="430" fill="#ff7a00" rx="4"/>
+  
+  <text x="800" y="600" text-anchor="middle" fill="#f7f7f8" font-family="Arial, sans-serif" font-size="18">
+    +340% Lead Growth in 30 Days
+  </text>
+</svg>
