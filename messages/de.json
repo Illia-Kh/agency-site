@@ -33,6 +33,40 @@
     "preview": {
       "title": "Fall-Vorschau",
       "subtitle": "Screenshot aus Werbekonto oder Client-Landing-Page"
+    },
+    "benefits": {
+      "turnkey": {
+        "title": "Schlüsselfertig und sorgenfrei",
+        "text": "Domain, Hosting, SSL, weiße Seite, wir starten alles selbst."
+      },
+      "analytics": {
+        "title": "Keitaro + Analytics",
+        "text": "Wir richten Tracking ein, Sie sehen echte Lead-Quellen."
+      },
+      "advertising": {
+        "title": "Meta/Google Werbung",
+        "text": "Wir richten Konten ein und starten Traffic korrekt."
+      },
+      "quickStart": {
+        "title": "Schneller Start 7–14 Tage",
+        "text": "Wir strecken keine Fristen, fixieren Etappen."
+      },
+      "minimal": {
+        "title": "Minimale Bürokratie — maximale Ergebnisse",
+        "text": "Nur notwendige Genehmigungen."
+      },
+      "support": {
+        "title": "Technischer Support beim Start",
+        "text": "Wir lassen nicht im Stich, helfen 'Kinderkrankheiten' zu fangen."
+      },
+      "reports": {
+        "title": "Transparente Berichte",
+        "text": "Klare Zahlen: Leads, Kosten, ROI."
+      },
+      "scalability": {
+        "title": "Skalierbarkeit",
+        "text": "Budget-Wachstum ohne Kontrollverlust."
+      }
     }
   },
   "about": {

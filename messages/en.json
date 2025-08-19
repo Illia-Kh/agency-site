@@ -33,6 +33,40 @@
     "preview": {
       "title": "Case preview",
       "subtitle": "Screenshot from advertising account or client's landing page"
+    },
+    "benefits": {
+      "turnkey": {
+        "title": "Turnkey and hassle-free",
+        "text": "Domain, hosting, SSL, white page, we launch everything ourselves."
+      },
+      "analytics": {
+        "title": "Keitaro + analytics",
+        "text": "We set up tracking, you see real lead sources."
+      },
+      "advertising": {
+        "title": "Meta/Google advertising",
+        "text": "We set up accounts and launch traffic correctly."
+      },
+      "quickStart": {
+        "title": "Quick start 7–14 days",
+        "text": "We don't stretch deadlines, we fix stages."
+      },
+      "minimal": {
+        "title": "Minimum bureaucracy — maximum results",
+        "text": "Only necessary approvals."
+      },
+      "support": {
+        "title": "Technical support at launch",
+        "text": "We don't abandon, we help catch 'growing pains'."
+      },
+      "reports": {
+        "title": "Transparent reports",
+        "text": "Clear numbers: leads, cost, ROI."
+      },
+      "scalability": {
+        "title": "Scalability",
+        "text": "Budget growth without losing control."
+      }
     }
   },
   "about": {

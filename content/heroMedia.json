@@ -1,0 +1,23 @@
+[
+  {
+    "id": "i-ads-manager",
+    "type": "image",
+    "src": "/media/hero/ads-manager-poster.svg",
+    "duration": 10,
+    "alt": "Кейс: запуск рекламных кампаний Meta с трекингом Keitaro"
+  },
+  {
+    "id": "i-analytics-growth",
+    "type": "image", 
+    "src": "/media/hero/analytics-growth-poster.svg",
+    "duration": 10,
+    "alt": "Кейс: рост заявок по данным Keitaro и CRM"
+  },
+  {
+    "id": "i-landing-preview",
+    "type": "image",
+    "src": "/media/hero/landing-preview.svg",
+    "duration": 10,
+    "alt": "Превью лендинга клиента на Next.js"
+  }
+]
