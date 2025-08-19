@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import ContactForm from '../contact/ContactForm';
+import StandardButton from '../ui/StandardButton';
 
 export default function ContactDropdown() {
   const t = useTranslations('header');
@@ -81,17 +82,15 @@ export default function ContactDropdown() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button
+      <StandardButton
         ref={buttonRef}
-        type="button"
         onClick={handleToggle}
-        className="rounded-xl border border-transparent bg-[var(--primary)] px-4 py-2 text-sm font-semibold text-[var(--white)] hover:bg-[var(--primary-hover)] transition"
         aria-haspopup="dialog"
         aria-expanded={isOpen}
         aria-label="Open contact form"
       >
         {t('contact')}
-      </button>
+      </StandardButton>
 
       {/* Dropdown overlay */}
       <div
