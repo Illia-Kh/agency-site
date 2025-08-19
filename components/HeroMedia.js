@@ -72,7 +72,7 @@ export default function HeroMedia() {
         }
       };
     }
-  }, [currentIndex, isVisible, isPaused, isVideo]);
+  }, [currentIndex, isVisible, isPaused, isVideo, currentItem.duration]);
 
   // Handle video play/pause based on visibility
   useEffect(() => {

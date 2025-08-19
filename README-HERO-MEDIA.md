@@ -1,12 +1,12 @@
 # Hero Media CDN Setup Guide
 
-This guide explains how to set up and manage media files for the hero section's auto-playing gallery.
+> Complete guide for setting up and managing media files for the hero section's auto-playing gallery.
 
-## Overview
+## 🎯 Overview
 
 The hero section features an auto-playing media gallery that cycles through case studies and project showcases. Media files are defined in `content/heroMedia.json` and should be hosted on a CDN for optimal performance.
 
-## Media Manifest Structure
+## 📋 Media Manifest Structure
 
 ```json
 [
@@ -21,89 +21,99 @@ The hero section features an auto-playing media gallery that cycles through case
 ]
 ```
 
-## Recommended CDN Options
+## 🚀 Recommended CDN Options
 
-### Option 1: Vercel Blob + CDN (Recommended for Next.js)
+### Option 1: Vercel Blob + CDN (Recommended)
 
-- **Pros**: Native integration, automatic optimization, global CDN
-- **Setup**:
-  ```bash
-  npm install @vercel/blob
-  ```
-- **Configuration**: Set `BLOB_READ_WRITE_TOKEN` in environment variables
-- **URL Pattern**: `https://xyz123.public.blob.vercel-storage.com/hero/filename.ext`
+**Best for Next.js projects with native integration**
+
+- ✅ Native integration with automatic optimization
+- ✅ Global CDN with excellent performance
+- ✅ Simple setup and management
+
+```bash
+npm install @vercel/blob
+```
+
+Set `BLOB_READ_WRITE_TOKEN` in environment variables.  
+**URL Pattern**: `https://xyz123.public.blob.vercel-storage.com/hero/filename.ext`
 
 ### Option 2: Cloudflare R2 + CDN
 
-- **Pros**: Cost-effective, excellent global performance, custom domains
-- **Setup**:
-  1. Create R2 bucket: `hero-media`
-  2. Configure public access policy
-  3. Set up custom domain: `media.yourdomain.com`
-- **URL Pattern**: `https://media.yourdomain.com/hero/filename.ext`
+**Best for cost-effectiveness and custom domains**
+
+- ✅ Cost-effective with excellent global performance
+- ✅ Custom domain support
+- ✅ Robust API and management tools
+
+1. Create R2 bucket: `hero-media`
+2. Configure public access policy
+3. Set up custom domain: `media.yourdomain.com`
+
+**URL Pattern**: `https://media.yourdomain.com/hero/filename.ext`
 
 ### Option 3: BunnyCDN
 
-- **Pros**: Affordable, fast, excellent for video streaming
-- **Setup**:
-  1. Create storage zone: `agency-hero-media`
-  2. Create pull zone linked to storage
-  3. Enable smart caching
-- **URL Pattern**: `https://your-pull-zone.b-cdn.net/hero/filename.ext`
+**Best for video streaming and budget optimization**
 
-## Media Requirements
+- ✅ Affordable pricing
+- ✅ Excellent video streaming capabilities
+- ✅ Fast global delivery
 
-### Images
+1. Create storage zone: `agency-hero-media`
+2. Create pull zone linked to storage
+3. Configure caching rules
 
-- **Format**: WebP with JPEG fallback, or SVG for graphics
-- **Dimensions**: 1600×900 (16:9 aspect ratio)
-- **Size**: ≤ 300-400 KB per image
-- **Optimization**: Use next/image compatible formats
+**URL Pattern**: `https://yourpullzone.b-cdn.net/hero/filename.ext`
 
-### Videos (Future)
+## 📊 Media Requirements
 
-- **Format**: H.264/MP4 primary, WebM/VP9 secondary
-- **Dimensions**: 1600×900 or 1920×1080 (16:9 aspect ratio)
-- **Duration**: 8-12 seconds maximum
-- **Size**: ≤ 4-6 MB per video
-- **Audio**: Muted (remove audio track entirely)
-- **Poster**: Required thumbnail image (WebP/JPEG)
+### Image Specifications
 
-### File Naming Convention
+- **Format**: WebP (fallback to JPEG)
+- **Size**: 1920x1080px (16:9 aspect ratio)
+- **Quality**: 85% compression for optimal balance
+- **File Size**: Under 500KB per image
 
-- Use kebab-case: `analytics-dashboard-v1.webp`
-- Include version numbers for cache busting
-- Descriptive names that match content
+### Video Specifications (Future Support)
 
-## Deployment Steps
+- **Format**: WebM (H.264 fallback)
+- **Resolution**: 1920x1080px maximum
+- **Duration**: 10-15 seconds maximum
+- **File Size**: Under 2MB per video
+
+## 🛠️ Quick Setup
 
 ### 1. Prepare Media Files
 
 ```bash
-# Optimize images
-npx @squoosh/cli --webp '{"quality":85}' source-images/*.jpg
-
-# Create fallback JPEGs
-npx @squoosh/cli --mozjpeg '{"quality":80}' source-images/*.jpg
+# Optimize images (example with ImageMagick)
+magick input.jpg -resize 1920x1080^ -gravity center -extent 1920x1080 -quality 85 -format webp output.webp
 ```
 
 ### 2. Upload to CDN
 
-```bash
-# Example for Cloudflare R2
-aws s3 cp ./media/hero/ s3://your-bucket/hero/ --recursive \
-  --endpoint-url https://your-account.r2.cloudflarestorage.com
-```
+Upload optimized files to your chosen CDN provider.
 
 ### 3. Update heroMedia.json
 
-Replace placeholder URLs with actual CDN URLs:
-
 ```json
-{
-  "src": "https://your-cdn.com/hero/analytics-dashboard-v1.webp",
-  "alt": "Analytics dashboard showing 340% lead growth"
-}
+[
+  {
+    "id": "analytics-dashboard",
+    "type": "image",
+    "src": "https://your-cdn.com/hero/analytics-dashboard.webp",
+    "duration": 8,
+    "alt": "Analytics dashboard showing conversion metrics and traffic growth"
+  },
+  {
+    "id": "ad-campaign-setup",
+    "type": "image",
+    "src": "https://your-cdn.com/hero/ad-campaign-setup.webp",
+    "duration": 10,
+    "alt": "Meta and Google Ads campaign setup interface"
+  }
+]
 ```
 
 ### 4. Set Cache Headers
@@ -112,18 +122,18 @@ Configure your CDN to serve proper cache headers:
 
 ```
 Cache-Control: public, max-age=31536000, immutable
-Content-Type: image/webp (or appropriate MIME type)
+Content-Type: image/webp
 ```
 
-## Performance Optimizations
+## ⚡ Performance Optimizations
 
 ### Preloading Strategy
 
-- First image: `loading="eager"` and high priority
-- Subsequent images: Preload next item only
-- Use IntersectionObserver to pause when out of viewport
+- **First image**: `loading="eager"` and high priority
+- **Subsequent images**: Preload next item only
+- **Viewport optimization**: Use IntersectionObserver to pause when out of viewport
 
-### Image Optimization
+### Next.js Configuration
 
 ```javascript
 // next.config.js
@@ -135,39 +145,30 @@ module.exports = {
 };
 ```
 
-### Video Optimization (Future)
+## ♿ Accessibility Considerations
 
-```html
-<video preload="metadata" muted playsinline poster="poster.webp">
-  <source src="video.webm" type="video/webm" />
-  <source src="video.mp4" type="video/mp4" />
-</video>
-```
+- ✅ Provide meaningful `alt` text for all media
+- ✅ Support `prefers-reduced-motion` to disable autoplay
+- ✅ Ensure keyboard navigation works for dot indicators
+- ✅ Use ARIA labels for interactive elements
 
-## Accessibility Considerations
-
-- Provide meaningful `alt` text for all media
-- Support `prefers-reduced-motion` to disable autoplay
-- Ensure keyboard navigation works for dot indicators
-- Use ARIA labels for interactive elements
-
-## Content Guidelines
+## 🎨 Content Guidelines
 
 ### Image Content Ideas
 
-1. **Analytics Dashboard**: Show growth metrics, conversion funnels
+1. **Analytics Dashboard**: Growth metrics, conversion funnels
 2. **Ad Campaign Setup**: Meta/Google Ads interface mockups
 3. **Landing Page Preview**: Client website examples
 4. **Keitaro Dashboard**: Tracking and attribution screenshots
 
 ### Content Requirements
 
-- No real client data (use anonymized/mock data)
-- Brand-neutral (avoid platform logos)
-- High contrast, readable at small sizes
-- Consistent visual style matching site theme
+- ❌ No real client data (use anonymized/mock data)
+- ❌ Brand-neutral (avoid platform logos)
+- ✅ High contrast, readable at small sizes
+- ✅ Consistent visual style matching site theme
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 ### Common Issues
 
@@ -186,16 +187,16 @@ module.exports = {
 - [ ] Keyboard navigation functional
 - [ ] Alt text present and descriptive
 
-## Monitoring
+## 📈 Monitoring
 
 Track CDN performance metrics:
 
-- Cache hit ratio (target: >95%)
-- Average response time (target: <100ms)
-- Bandwidth usage
-- Error rates
+- **Cache hit ratio** (target: >95%)
+- **Average response time** (target: <100ms)
+- **Bandwidth usage**
+- **Error rates**
 
-Use tools like:
+**Recommended tools**:
 
 - Google PageSpeed Insights
 - WebPageTest
