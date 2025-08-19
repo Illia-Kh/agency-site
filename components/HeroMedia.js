@@ -114,7 +114,7 @@ export default function HeroMedia() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-video rounded-2xl border border-[var(--border)] overflow-hidden bg-[var(--surface-elevated)]"
+      className="relative w-full aspect-video md:aspect-video lg:aspect-[9/16] max-h-[80vh] rounded-2xl border border-[var(--border)] overflow-hidden bg-[var(--surface-elevated)]"
       role="region"
       aria-label="Media gallery"
     >
@@ -133,7 +133,7 @@ export default function HeroMedia() {
               ref={videoRef}
               src={currentItem.src}
               poster={currentItem.poster}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               muted
               playsInline
               preload="metadata"
@@ -148,7 +148,7 @@ export default function HeroMedia() {
             <img
               src={currentItem.src}
               alt={currentItem.alt}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           )}
         </motion.div>
