@@ -2,6 +2,7 @@
 import { useTranslations } from 'next-intl';
 import HeroMedia from './HeroMedia';
 import HeroBenefitCard from './HeroBenefitCard';
+import StandardButton from './ui/StandardButton';
 
 export default function Hero() {
   const t = useTranslations('hero');
@@ -12,14 +13,15 @@ export default function Hero() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12 min-h-[80vh] lg:min-h-[85vh]">
           {/* Left column - Content */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
+          <div className="lg:col-span-6 flex flex-col justify-center max-w-[580px]">
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl text-[var(--text)]">
               {t('title')}
-              <span className="block text-[var(--text)] opacity-70 mt-2">
+              <br />
+              <span className="text-[var(--text)] opacity-70">
                 {t('subtitle')}
               </span>
             </h1>
-            <p className="mt-6 max-w-2xl text-lg text-[var(--text)] opacity-80 leading-relaxed">
+            <p className="mt-3 max-w-2xl text-[15px] text-[var(--text)] opacity-60 leading-relaxed">
               {t('description')}
             </p>
 
@@ -28,18 +30,8 @@ export default function Hero() {
 
             {/* CTA Buttons - Unified style */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <a
-                href="#contact"
-                className="rounded-xl border-2 border-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--white)] bg-[var(--primary)] hover:bg-transparent hover:text-[var(--primary)] transition-all duration-200"
-              >
-                {t('cta')}
-              </a>
-              <a
-                href="#about"
-                className="rounded-xl border-2 border-[var(--primary)] px-6 py-3 text-sm font-semibold text-[var(--primary)] bg-transparent hover:bg-[var(--primary)] hover:text-[var(--white)] transition-all duration-200"
-              >
-                {t('howWeWork')}
-              </a>
+              <StandardButton href="#contact">{t('cta')}</StandardButton>
+              <StandardButton href="#about">{t('howWeWork')}</StandardButton>
             </div>
 
             {/* Static features list - keeping original for fallback */}
@@ -60,7 +52,7 @@ export default function Hero() {
           </div>
 
           {/* Right column - Media Gallery */}
-          <div className="lg:col-span-5 flex items-center justify-center">
+          <div className="lg:col-span-6 flex items-center justify-center self-center mt-4 lg:mt-6">
             <div className="w-full max-w-lg">
               <HeroMedia />
             </div>

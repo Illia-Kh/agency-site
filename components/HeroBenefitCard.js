@@ -78,7 +78,7 @@ export default function HeroBenefitCard() {
   return (
     <div
       ref={containerRef}
-      className="mt-6 h-24 overflow-hidden"
+      className="mt-2 h-20 overflow-hidden"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       role="region"
@@ -95,11 +95,11 @@ export default function HeroBenefitCard() {
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="h-full"
         >
-          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-4 h-full flex flex-col justify-center">
-            <h3 className="text-sm font-semibold text-[var(--text)] mb-1 line-clamp-1">
+          <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 h-full flex flex-col justify-center">
+            <h3 className="text-base font-semibold text-[var(--text)] mb-1 line-clamp-1">
               {t(`${currentBenefit}.title`)}
             </h3>
-            <p className="text-xs text-[var(--text)] opacity-80 line-clamp-2 leading-relaxed">
+            <p className="text-sm text-[var(--text)] opacity-80 line-clamp-2 leading-relaxed">
               {t(`${currentBenefit}.text`)}
             </p>
           </div>
