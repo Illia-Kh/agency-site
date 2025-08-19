@@ -8,7 +8,7 @@ const locales = ['en', 'cs', 'de', 'ru'] as const;
 export const DEFAULT_LOCALE = 'en';
 export { locales };
 
-export type Locale = typeof locales[number];
+export type Locale = (typeof locales)[number];
 
 export function isSupportedLocale(locale: string): locale is Locale {
   return locales.includes(locale as Locale);

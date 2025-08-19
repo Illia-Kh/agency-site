@@ -155,15 +155,15 @@ export default function HeroMedia() {
       </AnimatePresence>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-4 right-4 flex gap-2">
+      <div className="absolute bottom-4 right-4 flex gap-1">
         {heroMediaData.map((_, index) => (
           <button
             key={index}
             onClick={() => handleDotClick(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] ${
+            className={`w-2 h-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] ${
               index === currentIndex
-                ? 'bg-[var(--primary)]'
-                : 'border-2 border-[var(--primary)] bg-transparent'
+                ? 'bg-[var(--primary)] opacity-90 scale-110'
+                : 'bg-[var(--white)] opacity-40'
             }`}
             aria-label={`Go to slide ${index + 1}`}
             aria-pressed={index === currentIndex}
