@@ -11,9 +11,9 @@ export default function Hero() {
     <section className="relative isolate">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_50%_at_50%_0%,color-mix(in_oklab,var(--bg)_6%,transparent),transparent)]" />
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
-        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12 min-h-[80vh] lg:min-h-[85vh]">
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-5 lg:gap-12 min-h-[80vh] lg:min-h-[85vh]">
           {/* Left column - Content */}
-          <div className="lg:col-span-6 flex flex-col justify-center max-w-[580px]">
+          <div className="lg:col-span-3 flex flex-col justify-center max-w-[580px]">
             <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl text-[var(--text)]">
               {t('title')}
               <br />
@@ -52,8 +52,8 @@ export default function Hero() {
           </div>
 
           {/* Right column - Media Gallery */}
-          <div className="lg:col-span-6 flex items-center justify-center self-center mt-4 lg:mt-6">
-            <div className="w-full max-w-lg">
+          <div className="lg:col-span-2 flex items-center justify-center self-center mt-4 lg:mt-6">
+            <div className="w-full lg:max-w-[680px]">
               <HeroMedia />
             </div>
           </div>

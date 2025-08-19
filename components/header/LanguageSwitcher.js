@@ -2,6 +2,7 @@
 import { useState, useRef, useEffect, startTransition } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter, usePathname } from 'next/navigation';
+import StandardButton from '@/components/ui/StandardButton';
 
 const LANGUAGES = [
   { code: 'en', label: 'EN', name: 'English' },
@@ -110,14 +111,11 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
 
   return (
     <div className="relative">
-      <button
+      <StandardButton
         ref={buttonRef}
-        type="button"
         onClick={handleToggle}
         disabled={isChanging}
-        className={`inline-flex items-center justify-center gap-2 h-11 px-6 rounded-full border border-[var(--primary)] bg-transparent text-sm font-semibold text-[var(--white)] transition-all duration-200 hover:bg-[var(--primary)]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent ${
-          isChanging ? 'cursor-wait' : ''
-        }`}
+        className={isChanging ? 'cursor-wait' : ''}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label="Select language"
@@ -128,7 +126,7 @@ export default function LanguageSwitcher({ currentLocale = 'en' }) {
           {isChanging ? '...' : currentLanguage?.label}
         </span>
         <ChevronIcon isOpen={isOpen} />
-      </button>
+      </StandardButton>
 
       {/* Dropdown - portalized */}
       {isOpen &&
