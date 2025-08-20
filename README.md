@@ -1,32 +1,191 @@
 # IKH Agency Site
 
-A modern, internationalized agency website built with Next.js App Router 15, featuring hydration-safe SSR, theme persistence across locale changes, and complete multi-language support.
+A modern, multilingual agency website built with Next.js 15 (App Router), React 19, Tailwind CSS, and Framer Motion. Features an automated media pipeline for hero section content and complete internationalization support.
 
-## Stack (2025)
+## 🚀 Quick Start
 
-- **Next.js 15.4.5** with App Router for SSR/SSG optimization
-- **next-intl 4.3** for type-safe internationalization with SSR support
-- **React 19** with concurrent features and modern hooks
-- **CSS Variables** design system with seamless light/dark theme transitions
-- **Portal-based dropdowns** preventing layout shifts and header jumping
-- **Custom middleware** for intelligent locale detection and routing
-- **Cookie-based theme persistence** preventing FOUC across navigation
+```bash
+# Install dependencies
+npm install
 
-## Locales
+# Start development server
+npm run dev
 
-The site supports 4 locales with complete translation coverage:
+# Build for production
+npm run build
 
-- **EN** (English) - default locale
-- **CS** (Čeština) - Czech
-- **DE** (Deutsch) - German
-- **RU** (Русский) - Russian
+# Start production server
+npm start
+```
+
+## 📁 Project Structure (2025)
+
+```
+agency-site/
+├── app/                      # Next.js App Router
+│   └── [locale]/            # Internationalized routing
+├── components/              # React components
+│   ├── header/             # Header components (nav, language switcher)
+│   ├── HeroMedia.js        # Auto-playing media gallery
+│   └── ...
+├── content/                # Content and data
+│   └── heroMedia.json      # Auto-generated media manifest
+├── messages/               # Internationalization files
+│   ├── en.json             # English (Default)
+│   ├── cs.json             # Czech (Čeština)
+│   ├── de.json             # German (Deutsch)
+│   └── ru.json             # Russian (Русский)
+├── public/
+│   └── media/
+│       └── hero/
+│           ├── _raw/       # Raw media files (input)
+│           └── _out/       # Processed media (output)
+├── scripts/
+│   ├── media-build.ts      # Media pipeline automation
+│   └── extract-translation-keys.js
+├── styles/
+│   └── theme.css           # CSS variables design system
+├── middleware.ts           # Custom locale detection with fallbacks
+└── i18n.ts                # next-intl configuration with validation
+```
+
+## 🎬 Hero Media Pipeline
+
+### Overview
+
+Automated media processing pipeline that converts raw video/image files into optimized 9:16 vertical format for the hero section gallery.
+
+### Features
+
+- **Automatic Processing**: Drop files in `_raw/` → script converts and organizes automatically
+- **Video Support**: MP4 + WebM outputs with poster generation
+- **Image Support**: WebP conversion with center crop
+- **Smart Caching**: SHA1-based incremental processing
+- **Slug Generation**: Automatic kebab-case naming with conflict resolution
+- **Watch Mode**: Real-time processing during development
+
+### Setup & Usage
+
+#### 1. Add Media Files
+
+Place your source files in `public/media/hero/_raw/`:
+
+**Supported formats:**
+- **Videos**: `.mp4`, `.mov`, `.mkv`, `.webm`
+- **Images**: `.jpg`, `.jpeg`, `.png`, `.webp`
+
+#### 2. Process Media
+
+```bash
+# One-time processing
+npm run media:build
+
+# Watch mode (processes changes automatically)
+npm run media:watch
+```
+
+#### 3. Automatic Output
+
+The script automatically:
+- Converts videos to 1080×1920 (9:16), 30fps, no audio
+- Generates MP4 (H.264) + WebM (VP9) + WebP poster
+- Converts images to 1080×1920 WebP with center crop
+- Creates organized folders in `_out/`
+- Updates `content/heroMedia.json`
+
+### Media Processing Rules
+
+#### Video Conversion
+- **Target**: 1080×1920 (9:16 aspect ratio)
+- **Frame Rate**: 30fps
+- **Duration**: Max 8 seconds (longer videos are trimmed)
+- **Audio**: Removed automatically
+- **Outputs**: 
+  - MP4: H.264, CRF 23, preset veryslow
+  - WebM: VP9, CRF 32, row-mt enabled
+  - Poster: First frame as WebP
+
+#### Image Conversion
+- **Target**: 1080×1920 (9:16 aspect ratio)  
+- **Crop**: Center crop (object-cover behavior)
+- **Output**: WebP, quality 85
+
+#### Caching System
+- **Cache File**: `public/media/hero/_out/_cache.json`
+- **Tracking**: SHA1 hash, modification time, file size
+- **Incremental**: Only processes changed/new files
+
+### Generated Structure
+
+```
+public/media/hero/_out/
+├── _cache.json
+├── analytics-dashboard/
+│   ├── analytics-dashboard.mp4
+│   ├── analytics-dashboard.webm
+│   └── analytics-dashboard.webp
+└── landing-preview/
+    └── landing-preview.webp
+```
+
+### JSON Manifest Format
+
+`content/heroMedia.json` is auto-generated:
+
+```json
+[
+  {
+    "id": "analytics-dashboard",
+    "type": "video",
+    "mp4": "/media/hero/_out/analytics-dashboard/analytics-dashboard.mp4",
+    "webm": "/media/hero/_out/analytics-dashboard/analytics-dashboard.webm", 
+    "poster": "/media/hero/_out/analytics-dashboard/analytics-dashboard.webp",
+    "duration": 8,
+    "alt": "Analytics Dashboard"
+  },
+  {
+    "id": "landing-preview", 
+    "type": "image",
+    "src": "/media/hero/_out/landing-preview/landing-preview.webp",
+    "duration": 6,
+    "alt": "Landing Preview"
+  }
+]
+```
+
+## 🌍 Internationalization (2025)
+
+### Translation Structure
+
+Organized by logical namespaces with complete coverage:
+
+```json
+{
+  "header": { "contact": "...", "language": "...", "agency": "..." },
+  "nav": { "about": "...", "cases": "...", "contacts": "..." },
+  "hero": { "title": "...", "subtitle": "...", "cta": "...", "features": {...} },
+  "about": { "title": "...", "sites": {...}, "tracking": {...}, "traffic": {...}, "analytics": {...} },
+  "contact": { "title": "...", "name": "...", "submit": "...", "validation": {...} },
+  "footer": { "contacts": "...", "copyright": "...", "companyName": "...", "email": "...", "telegram": "..." },
+  "gallery": { "title": "...", "ctaText": "...", "cases": {...}, "details": "..." }
+}
+```
+
+### Supported Locales
+
+| Locale | Language | Status |
+|--------|----------|--------|
+| `en` | English | Default ✅ |
+| `cs` | Czech (Čeština) | Complete ✅ |
+| `de` | German (Deutsch) | Complete ✅ |
+| `ru` | Russian (Русский) | Complete ✅ |
 
 ### Locale-prefixed Routing
 
 All routes are prefixed with locale codes:
 
 - `/en/` - English content
-- `/cs/` - Czech content
+- `/cs/` - Czech content  
 - `/de/` - German content
 - `/ru/` - Russian content
 
@@ -46,7 +205,7 @@ Custom middleware automatically detects preferred language from:
 4. Add locale to `app/[locale]/layout.js` locales array
 5. Update `LanguageSwitcher.js` LANGUAGES array
 
-## Theme System (2025)
+## 🎨 Theme System (2025)
 
 ### SSR-Safe Cookie Strategy
 
@@ -70,73 +229,54 @@ Integrated theme toggle in Logo component with immediate feedback:
 
 ### Design System Variables
 
-All styling uses CSS custom properties from `styles/theme.css` with automatic theme switching:
+CSS variables enable seamless theme transitions:
 
 ```css
-/* Core color variables */
---bg, --bg-secondary, --surface-elevated
---border, --text, --primary, --primary-hover
---shadow-sm, --shadow-md, --focus
---brand-orange, --white
+:root[data-theme="light"] {
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --border: #e2e8f0;
+  --primary: #3b82f6;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --border: #334155;
+  --primary: #60a5fa;
+}
 ```
 
-**2025 Rule**: Never use raw hex/rgb/hsl values - only CSS variables for consistent theming.
+## ⚡ Stack (2025)
 
-## Components
+- **Next.js 15.4.5** with App Router for SSR/SSG optimization
+- **next-intl 4.3** for type-safe internationalization with SSR support
+- **React 19** with concurrent features and modern hooks
+- **CSS Variables** design system with seamless light/dark theme transitions
+- **Portal-based dropdowns** preventing layout shifts and header jumping
+- **Custom middleware** for intelligent locale detection and routing
+- **Cookie-based theme persistence** preventing FOUC across navigation
 
-### Header
+## 🧩 Components
 
-**Location**: `components/header/Header.js`
+### HeroMediaCarousel
 
-Sticky header with:
+Auto-playing media gallery with:
+- **Aspect Ratio**: 9:16 vertical format
+- **Video Support**: MP4/WebM with autoplay and loop
+- **Image Support**: WebP with lazy loading
+- **Navigation**: Dot indicators with click support
+- **Accessibility**: Pause on `prefers-reduced-motion`
+- **Performance**: IntersectionObserver for viewport-based control
+- **Responsive**: Max height constraints and proper scaling
 
-- Logo with dropdown navigation
-- Contact dropdown
-- Language switcher
+### LanguageSwitcher
 
-### Logo with Dropdown
-
-**Location**: `components/header/Logo.js`
-
-**Features**:
-
-- Hover intent detection (24px movement threshold in 80ms to prevent accidental opens)
-- Smart delays: 120ms open delay, 200ms close delay for stable UX
-- **Portal-based dropdown** to `document.body` with `position: fixed` (prevents header height changes)
-- Conditional rendering (returns `null` when closed, not `visibility: hidden`)
-- Integrated theme toggle with visual feedback and glow animation
-- i18n navigation links with proper translations
-- Accessible with ARIA roles and keyboard navigation
-
-### Language Switcher
-
-**Location**: `components/header/LanguageSwitcher.js`
-
-**Features**:
-
-- Compact globe icon + current locale display
-- **Portal-based dropdown** with fixed positioning (no header jumping)
-- URL-only navigation (preserves theme, no body/html class manipulation)
-- Client-side routing with `router.replace()` to prevent history pollution
-- Loading state with visual feedback during route change
-- Accessible with ARIA roles and keyboard navigation
-
-### Contact Dropdown
-
-**Location**: `components/header/ContactDropdown.js`
-
-**Features**:
-
-- **Portal-based form dropdown** with fixed positioning
-- Dynamic position calculation for proper alignment
-- Focus trap implementation for accessibility
-- Form integration with ContactForm component
-- Outside click and Escape key handling
-- Proper focus management (returns to button on close)
-
-**Location**: `components/header/ContactDropdown.js`
-
-Portal-based contact form dropdown with form validation and i18n support.
+Portal-based dropdown with:
+- **No Layout Shift**: Portal rendering prevents header jumping
+- **Smooth Transitions**: Loading states and animation feedback
+- **Keyboard Support**: Full accessibility with arrow navigation
+- **Focus Management**: Proper focus restoration after selection
 
 ### Theme-Aware Components
 
@@ -147,171 +287,7 @@ All components follow the design system:
 - Consistent animation patterns
 - Focus management with `--focus` variable
 
-## Scripts
-
-```bash
-# Development
-npm run dev          # Start dev server with Turbopack
-npm run build        # Production build
-npm run start        # Start production server
-
-# Code Quality
-npm run lint         # Run ESLint
-npm run lint:fix     # Auto-fix ESLint issues
-npm run format       # Format with Prettier
-npm run format:check # Check Prettier formatting
-npm run type-check   # TypeScript validation
-```
-
-## Project Structure (2025)
-
-```
-app/
-├── layout.js              # Root layout (minimal wrapper)
-├── [locale]/              # Locale-based routing
-│   ├── layout.js          # Locale layout (HTML/body + theme + i18n)
-│   └── page.js            # Home page
-
-components/
-├── header/                # Header components with portal dropdowns
-│   ├── Header.js          # Main header
-│   ├── Logo.js            # Logo + dropdown + theme toggle
-│   ├── ContactDropdown.js # Portal-based contact form dropdown
-│   └── LanguageSwitcher.js # Portal-based language selection
-├── contact/
-│   └── ContactForm.js     # Reusable contact form
-├── Hero.js                # Hero section
-├── About.js               # About section
-├── Footer.js              # Footer with contacts
-└── Gallery.js             # Gallery component
-
-messages/                  # Complete translation files
-├── en.json               # English (default)
-├── cs.json               # Czech (Čeština)
-├── de.json               # German (Deutsch)
-└── ru.json               # Russian (Русский)
-
-styles/
-└── theme.css             # CSS variables design system
-
-middleware.ts             # Custom locale detection with fallbacks
-i18n.ts                  # next-intl configuration with validation
-```
-
-## Internationalization (2025)
-
-### Translation Structure
-
-Organized by logical namespaces with complete coverage:
-
-```json
-{
-  "header": { "contact": "...", "language": "...", "agency": "..." },
-  "nav": { "about": "...", "cases": "...", "contacts": "..." },
-  "hero": { "title": "...", "subtitle": "...", "cta": "...", "features": {...} },
-  "about": { "title": "...", "sites": {...}, "tracking": {...}, "traffic": {...}, "analytics": {...} },
-  "contact": { "title": "...", "name": "...", "submit": "...", "validation": {...} },
-  "footer": { "contacts": "...", "copyright": "...", "companyName": "...", "email": "...", "telegram": "..." },
-  "gallery": { "title": "...", "ctaText": "...", "cases": {...}, "details": "..." }
-}
-```
-
-### Usage in Components
-
-```javascript
-import { useTranslations } from 'next-intl';
-
-function Component() {
-  const t = useTranslations('namespace');
-  return <h1>{t('key')}</h1>;
-}
-```
-
-### Server Components
-
-```javascript
-import { getTranslations } from 'next-intl/server';
-
-async function ServerComponent() {
-  const t = await getTranslations('namespace');
-  return <h1>{t('key')}</h1>;
-}
-```
-
-## Development Guidelines
-
-### Theme Consistency
-
-- Always use CSS variables from `styles/theme.css`
-- Test components in both light and dark themes
-- Ensure proper contrast and accessibility
-
-### Internationalization
-
-- All user-facing text must use `useTranslations`
-- Organize keys by logical namespaces
-- Provide translations for all supported locales
-
-### Component Design (2025)
-
-- Follow existing animation patterns with consistent timing
-- **Always use portals** for dropdowns/overlays to prevent layout shift
-- Implement proper focus management and keyboard navigation
-- Maintain consistent hover/interaction delays (120ms open, 200ms close)
-- Ensure conditional rendering (null when closed) for performance
-
-### Code Quality
-
-- ESLint enforces Next.js 15 and React 19 best practices
-- Prettier ensures consistent formatting
-- Remove console statements in production builds (dev warnings OK)
-- Use semantic HTML and ARIA attributes for accessibility
-- Test in both light and dark themes
-
-## Scripts
-
-```bash
-# Development server with Turbopack
-npm run dev
-
-# Production build with static generation
-npm run build
-
-# Start production server
-npm run start
-
-# Lint with Next.js ESLint
-npm run lint
-npm run lint:fix
-
-# Format with Prettier
-npm run format
-npm run format:check
-
-# Type checking (if using TypeScript)
-npm run type-check
-```
-
-## Development Setup
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Open http://localhost:3000/en (or /cs, /de, /ru)
-```
-
-The development server includes:
-
-- Hot reload with Turbopack
-- SSR theme persistence testing
-- i18n route generation for all locales
-- Real-time translation error warnings (dev only)
-
-## Deployment (2025)
+## 🚀 Deployment (2025)
 
 The project builds to optimized static pages:
 
@@ -332,20 +308,76 @@ Route (app)                    Size  First Load JS
 Middleware                           44.4 kB
 ```
 
-## Contributing (2025)
+## 📋 Development Commands
 
-1. **Setup**: `npm install && npm run dev`
-2. **Code Style**: Follow existing patterns, run `npm run lint:fix && npm run format`
-3. **Theme Testing**: Test both light/dark themes across all locales
-4. **i18n Coverage**: Ensure all text uses `useTranslations()` with proper namespaces
-5. **Portal Usage**: Use portals for all dropdowns/overlays (prevents header jumping)
-6. **Build Verification**: Run `npm run build` to verify static generation works
-7. **Accessibility**: Test keyboard navigation and screen reader compatibility
+```bash
+# Development
+npm run dev              # Start dev server with Turbopack
+npm run build           # Production build
+npm run start           # Start production server
 
-### Key Rules
+# Code Quality
+npm run lint            # ESLint check
+npm run lint:fix        # ESLint auto-fix
+npm run format          # Prettier format
+npm run format:check    # Prettier check
+npm run type-check      # TypeScript check
 
-- Never use raw colors - only CSS variables
-- All dropdowns must use portals with fixed positioning
-- Theme must persist across locale changes
-- No hydration mismatches (avoid client-only logic in SSR components)
-- Complete translation coverage for all 4 locales
+# Media Pipeline
+npm run media:build     # Process all media files
+npm run media:watch     # Watch and process changes
+
+# Internationalization
+npm run i18n:gen        # Generate translation key types
+```
+
+## 🔧 Configuration Files
+
+- **next.config.mjs**: Next.js configuration
+- **tailwind.config.js**: Tailwind CSS setup
+- **tsconfig.json**: TypeScript configuration
+- **i18n.ts**: Internationalization settings
+- **middleware.ts**: Custom locale detection
+
+## 📋 Requirements
+
+- **Node.js**: 18+ 
+- **FFmpeg**: Required for video processing
+- **FFprobe**: Required for video duration detection
+
+### Installing FFmpeg
+
+```bash
+# macOS (Homebrew)
+brew install ffmpeg
+
+# Ubuntu/Debian
+sudo apt update && sudo apt install ffmpeg
+
+# Windows (Chocolatey)
+choco install ffmpeg
+
+# Or download from: https://ffmpeg.org/download.html
+```
+
+## 🚨 Important Notes
+
+### Media Pipeline
+- **Manual editing**: Never edit `content/heroMedia.json` manually - it's auto-generated
+- **Cache**: Delete `public/media/hero/_out/_cache.json` to force re-processing
+- **Performance**: Large video files will take time to process
+- **Dependencies**: Requires FFmpeg and FFprobe in system PATH
+
+### Development
+- **Theme Testing**: Test both light/dark themes during development
+- **Locale Testing**: Verify all locales render correctly
+- **Media Testing**: Test with actual video/image files in pipeline
+
+### Production
+- **Static Generation**: All routes are pre-generated at build time
+- **CDN Ready**: Optimized for deployment with CDN caching
+- **Performance**: Bundle size optimized with shared chunks
+
+---
+
+Built with ❤️ using modern web technologies. For questions or contributions, please check the repository issues.
