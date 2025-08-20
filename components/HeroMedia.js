@@ -72,7 +72,7 @@ export default function HeroMedia() {
         }
       };
     }
-  }, [currentIndex, isVisible, isPaused, isVideo]);
+  }, [currentIndex, isVisible, isPaused, isVideo, currentItem.duration]);
 
   // Handle video play/pause based on visibility
   useEffect(() => {
@@ -114,7 +114,7 @@ export default function HeroMedia() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-video md:aspect-video lg:aspect-[9/16] max-h-[80vh] rounded-2xl border border-[var(--border)] overflow-hidden bg-[var(--surface-elevated)]"
+      className="relative w-full aspect-[9/16] max-h-[80vh] self-center rounded-2xl ring-1 ring-azure/40 bg-black/30 overflow-hidden"
       role="region"
       aria-label="Media gallery"
     >
@@ -131,11 +131,11 @@ export default function HeroMedia() {
           {isVideo ? (
             <video
               ref={videoRef}
-              src={currentItem.src}
-              poster={currentItem.poster}
-              className="w-full h-full object-contain"
+              className="h-full w-full object-cover"
               muted
               playsInline
+              autoPlay
+              loop
               preload="metadata"
               aria-label={currentItem.alt}
               onLoadedData={() => {
@@ -143,12 +143,20 @@ export default function HeroMedia() {
                   videoRef.current.play().catch(() => {});
                 }
               }}
-            />
+            >
+              {currentItem.webm && (
+                <source src={currentItem.webm} type="video/webm" />
+              )}
+              {currentItem.mp4 && (
+                <source src={currentItem.mp4} type="video/mp4" />
+              )}
+            </video>
           ) : (
             <img
               src={currentItem.src}
               alt={currentItem.alt}
-              className="w-full h-full object-contain"
+              className="h-full w-full object-cover"
+              loading="lazy"
             />
           )}
         </motion.div>
@@ -180,12 +188,13 @@ export default function HeroMedia() {
           <div key={item.id} className="hidden">
             {item.type === 'video' ? (
               <video
-                src={item.src}
-                poster={item.poster}
                 preload={isNextItem ? 'metadata' : 'none'}
                 muted
                 playsInline
-              />
+              >
+                {item.webm && <source src={item.webm} type="video/webm" />}
+                {item.mp4 && <source src={item.mp4} type="video/mp4" />}
+              </video>
             ) : (
               <img
                 src={item.src}
