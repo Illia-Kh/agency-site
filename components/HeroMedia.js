@@ -1,12 +1,11 @@
 'use client';
-/* eslint-disable @next/next/no-img-element */
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 // iPhone frame SVG component
 const IPhoneFrame = ({ children }) => (
-  <div className="relative hidden md:block">
+  <div className="relative hidden min-[765px]:block">
     <svg
       width="360"
       height="640"
@@ -64,17 +63,16 @@ const IPhoneFrame = ({ children }) => (
 );
 
 export default function HeroMedia({ items = [] }) {
-  const t = useTranslations('hero.media');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const containerRef = useRef(null);
+  const videoRef = useRef(null);
   const timerRef = useRef(null);
   const observerRef = useRef(null);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
 
   const currentItem = items.length > 0 ? items[currentIndex] : null;
+  const isVideo = currentItem?.type === 'video';
 
   // IntersectionObserver for auto-play/pause
   useEffect(() => {
@@ -119,6 +117,19 @@ export default function HeroMedia({ items = [] }) {
     };
   }, [currentIndex, isVisible, isPaused, items.length]);
 
+  // Handle video play/pause based on visibility
+  useEffect(() => {
+    if (videoRef.current && isVideo) {
+      if (isVisible && !isPaused) {
+        videoRef.current.play().catch(() => {
+          // Handle autoplay failure
+        });
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isVisible, isPaused, isVideo, currentIndex]);
+
   // Respect prefers-reduced-motion
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -150,101 +161,72 @@ export default function HeroMedia({ items = [] }) {
     }
   };
 
-  // Swipe gesture handlers
-  const handleTouchStart = e => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchMove = e => {
-    touchEndX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    const swipeDistance = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 50;
-
-    if (Math.abs(swipeDistance) > minSwipeDistance) {
-      if (swipeDistance > 0) {
-        // Swipe left - next slide
-        setCurrentIndex(prev => (prev + 1) % items.length);
-      } else {
-        // Swipe right - previous slide
-        setCurrentIndex(prev => (prev - 1 + items.length) % items.length);
-      }
-
-      // Reset timer
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    }
-  };
-
   const fadeVariants = {
     initial: { opacity: 0, scale: 1.02 },
     animate: { opacity: 1, scale: 1 },
     exit: { opacity: 0, scale: 0.98 },
   };
 
+  const MediaContent = ({ className }) => (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentIndex}
+        variants={fadeVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className={`absolute inset-0 ${className}`}
+      >
+        {isVideo ? (
+          <video
+            ref={videoRef}
+            src={currentItem.src}
+            poster={currentItem.poster}
+            className="w-full h-full object-cover"
+            muted
+            playsInline
+            autoPlay
+            loop
+            controls={false}
+            aria-label={currentItem.altKey}
+          />
+        ) : (
+          <Image
+            src={currentItem.src}
+            alt={currentItem.altKey}
+            fill
+            className="object-cover"
+            priority={currentIndex === 0}
+            loading={currentIndex === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+            sizes="(max-width: 765px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        )}
+      </motion.div>
+    </AnimatePresence>
+  );
+
   return (
     <div
       ref={containerRef}
       className="relative w-full aspect-[9/16] max-h-[45vh] md:max-h-[80vh] cursor-pointer"
       role="region"
-      aria-label={t('region')}
+      aria-label="Hero media"
       onClick={handleContainerClick}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
     >
-      {/* Desktop: iPhone frame */}
-      <div className="hidden md:block">
+      {/* Desktop: iPhone frame for ≥765px */}
+      <div className="hidden min-[765px]:block h-full">
         <IPhoneFrame>
           <div className="w-full h-full overflow-hidden bg-[var(--surface-elevated)]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                variants={fadeVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="absolute inset-0"
-              >
-                <img
-                  src={currentItem.src}
-                  alt={t(currentItem.altKey) || currentItem.altKey}
-                  className="w-full h-full object-cover"
-                  loading={currentIndex === 0 ? 'eager' : 'lazy'}
-                  decoding="async"
-                />
-              </motion.div>
-            </AnimatePresence>
+            <MediaContent />
           </div>
         </IPhoneFrame>
       </div>
 
-      {/* Mobile: no frame */}
-      <div className="md:hidden w-full h-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            variants={fadeVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            className="absolute inset-0"
-          >
-            <img
-              src={currentItem.src}
-              alt={t(currentItem.altKey) || currentItem.altKey}
-              className="w-full h-full object-cover"
-              loading={currentIndex === 0 ? 'eager' : 'lazy'}
-              decoding="async"
-            />
-          </motion.div>
-        </AnimatePresence>
+      {/* Mobile: no frame for <765px */}
+      <div className="min-[765px]:hidden w-full h-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)]">
+        <MediaContent />
       </div>
 
       {/* Dot indicators */}
@@ -267,19 +249,31 @@ export default function HeroMedia({ items = [] }) {
         ))}
       </div>
 
-      {/* Preload next image */}
+      {/* Preload next media */}
       {items.map((item, index) => {
         if (index === currentIndex) return null;
         const isNextItem = index === (currentIndex + 1) % items.length;
 
         return (
           <div key={index} className="hidden">
-            <img
-              src={item.src}
-              alt={t(item.altKey) || item.altKey}
-              loading={isNextItem ? 'eager' : 'lazy'}
-              decoding="async"
-            />
+            {item.type === 'video' ? (
+              <video
+                src={item.src}
+                poster={item.poster}
+                preload={isNextItem ? 'metadata' : 'none'}
+                muted
+                playsInline
+              />
+            ) : (
+              <Image
+                src={item.src}
+                alt={item.altKey}
+                width={100}
+                height={100}
+                loading={isNextItem ? 'eager' : 'lazy'}
+                decoding="async"
+              />
+            )}
           </div>
         );
       })}
