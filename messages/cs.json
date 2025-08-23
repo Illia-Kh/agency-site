@@ -78,22 +78,26 @@
   },
   "about": {
     "title": "O nás",
-    "description": "Budujeme celý prodejní trychtýř: od prototypu webu až po získávání provozu. Paralelně nastavujeme analytiku a reportování.",
+    "description": "Bereme na sebe celý online cyklus: od prototypu a vývoje webu až po reklamu, sledování a analytiku. Mluvíme jednoduše, pracujeme rychle a transparentně: cílem jsou skutečné poptávky a prodeje, ne \"fajfky\" v reportech. Dáte úkol — sestavíme srozumitelný systém z webu, reklamy a dat.",
     "sites": {
       "title": "Weby",
-      "text": "Next.js, rychlé načítání, responzivní, SEO základ."
+      "text": "Rychlé responzivní weby a landing pages: design, vývoj, SEO základ a rychlost načítání.",
+      "link": "https://developer.mozilla.org/en-US/docs/Learn_web_development"
     },
     "tracking": {
       "title": "Sledování",
-      "text": "Keitaro, domény, SSL, integrace, anti-bot filtry."
+      "text": "Správný sběr dat: domény, SSL, pixely, UTM a ochrana před boty.",
+      "link": "https://en.wikipedia.org/wiki/Web_tracking"
     },
     "traffic": {
       "title": "Provoz",
-      "text": "Meta/Google, mediální plán, kreativy, testy a škálování."
+      "text": "Spouštíme a škálujeme reklamu: mediální plán, kreativy, testy v Meta a Google.",
+      "link": "https://en.wikipedia.org/wiki/Online_advertising"
     },
     "analytics": {
       "title": "Analytika",
-      "text": "Vlastní dashboardy, atribuce, LTV, konverzní trychtýř."
+      "text": "Jasné reporty a atribuce: dashboardy, trychtýře, LTV a body růstu.",
+      "link": "https://en.wikipedia.org/wiki/Web_analytics"
     }
   },
   "footer": {

@@ -1,5 +1,4 @@
 'use client';
-import { useLayoutEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import HeroMedia from './HeroMedia';
 import HeroBenefitCard from './HeroBenefitCard';
@@ -8,36 +7,15 @@ import heroMediaData from '@/content/heroMedia.json';
 
 export default function Hero({ heroMediaItems = [] }) {
   const t = useTranslations('hero');
-  const [heroHeight, setHeroHeight] = useState(null);
-
-  useLayoutEffect(() => {
-    const measure = () => {
-      const headerEl = document.querySelector('header');
-      const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
-      setHeroHeight(`calc(100vh - ${headerH}px)`);
-    };
-    measure();
-    const headerEl = document.querySelector('header');
-    let ro;
-    if (headerEl && 'ResizeObserver' in window) {
-      ro = new ResizeObserver(measure);
-      ro.observe(headerEl);
-    }
-    window.addEventListener('resize', measure);
-    return () => {
-      window.removeEventListener('resize', measure);
-      if (ro) ro.disconnect();
-    };
-  }, []);
 
   return (
     <section className="relative isolate">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_50%_at_50%_0%,color-mix(in_oklab,var(--bg)_6%,transparent),transparent)]" />
       <div
-        className="mx-auto max-w-7xl px-4 sm:px-6 py-8 lg:py-0"
-        style={heroHeight ? { minHeight: heroHeight } : { minHeight: '80vh' }}
+        className="mx-auto max-w-7xl px-4 sm:px-6 py-0 flex items-center"
+        style={{ minHeight: 'calc(100dvh - var(--header-h))' }}
       >
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-5 lg:gap-12 min-h-full">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-5 lg:gap-12 w-full">
           {/* Left column - Content */}
           <div className="lg:col-span-3 flex flex-col justify-center max-w-[580px] order-2 lg:order-1">
             <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl text-[var(--text)]">

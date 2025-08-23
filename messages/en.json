@@ -79,22 +79,26 @@
   },
   "about": {
     "title": "About us",
-    "description": "We build the entire funnel: from site prototype to traffic acquisition. In parallel, we set up analytics and reporting.",
+    "description": "We take over the entire online cycle: from site prototype and development to advertising, tracking and analytics. We speak simply, work quickly and transparently: the goal is real leads and sales, not \"checkmarks\" in reports. You give the task — we assemble an understandable system from the site, advertising and data.",
     "sites": {
       "title": "Sites",
-      "text": "Next.js, fast loading, responsive, SEO base."
+      "text": "Fast responsive sites and landing pages: design, development, SEO base and loading speed.",
+      "link": "https://developer.mozilla.org/en-US/docs/Learn_web_development"
     },
     "tracking": {
       "title": "Tracking",
-      "text": "Keitaro, domains, SSL, integrations, anti-bot filters."
+      "text": "Correct data collection: domains, SSL, pixels, UTM and bot protection.",
+      "link": "https://en.wikipedia.org/wiki/Web_tracking"
     },
     "traffic": {
       "title": "Traffic",
-      "text": "Meta/Google, media plan, creatives, tests and scaling."
+      "text": "Launch and scale advertising: media plan, creatives, tests in Meta and Google.",
+      "link": "https://en.wikipedia.org/wiki/Online_advertising"
     },
     "analytics": {
       "title": "Analytics",
-      "text": "Custom dashboards, attribution, LTV, conversion funnel."
+      "text": "Clear reports and attribution: dashboards, funnels, LTV and growth points.",
+      "link": "https://en.wikipedia.org/wiki/Web_analytics"
     }
   },
   "footer": {
