@@ -41,6 +41,7 @@
       "landing-preview": "Náhled klientovy landing page na Next.js"
     },
     "benefits": {
+      "readMore": "Zjistit více o našich výhodách",
       "turnkey": {
         "title": "Na klíč a bez starostí",
         "text": "Doména, hosting, SSL, bílá stránka, vše spustíme sami."
