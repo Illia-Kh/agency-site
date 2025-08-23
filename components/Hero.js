@@ -34,59 +34,48 @@ export default function Hero({ heroMediaItems = [] }) {
     <section className="relative isolate">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(80%_50%_at_50%_0%,color-mix(in_oklab,var(--bg)_6%,transparent),transparent)]" />
       <div
-        className="mx-auto max-w-7xl px-4 sm:px-6 py-0"
-        style={heroHeight ? { height: heroHeight } : undefined}
+        className="mx-auto max-w-7xl px-4 sm:px-6 py-8 lg:py-0"
+        style={heroHeight ? { minHeight: heroHeight } : { minHeight: '80vh' }}
       >
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-5 lg:gap-12 h-full">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-5 lg:gap-12 min-h-full">
           {/* Left column - Content */}
-          <div className="lg:col-span-3 flex flex-col justify-center max-w-[580px]">
-            <h1 className="text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl text-[var(--text)]">
+          <div className="lg:col-span-3 flex flex-col justify-center max-w-[580px] order-2 lg:order-1">
+            <h1 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl text-[var(--text)]">
               {t('title')}
               <br />
               <span className="text-[var(--text)] opacity-70">
                 {t('subtitle')}
               </span>
             </h1>
-            <p className="mt-3 max-w-2xl text-[15px] text-[var(--text)] opacity-60 leading-relaxed">
+            <p className="mt-4 max-w-2xl text-sm sm:text-[15px] text-[var(--text)] opacity-60 leading-relaxed">
               {t('description')}
             </p>
 
-            {/* Auto-rotating benefit cards - visible on desktop */}
-            <div className="md:block hidden">
+            {/* CTA Buttons - Mobile optimized */}
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4">
+              <StandardButton
+                href="#contact"
+                className="w-full sm:w-auto text-center"
+              >
+                {t('cta')}
+              </StandardButton>
+              <StandardButton
+                href="#about"
+                className="w-full sm:w-auto text-center"
+              >
+                {t('howWeWork')}
+              </StandardButton>
+            </div>
+
+            {/* Benefits - Use HeroBenefitCard for interactive content, fallback to static features */}
+            <div className="mt-6 sm:mt-8">
               <HeroBenefitCard />
             </div>
-
-            {/* CTA Buttons - Unified style */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <StandardButton href="#contact">{t('cta')}</StandardButton>
-              <StandardButton href="#about">{t('howWeWork')}</StandardButton>
-            </div>
-
-            {/* Auto-rotating benefit cards - mobile placement (after buttons) */}
-            <div className="md:hidden block">
-              <HeroBenefitCard />
-            </div>
-
-            {/* Static features list - keeping original for fallback */}
-            <ul className="mt-8 grid grid-cols-2 gap-4 text-sm text-[var(--text)] opacity-70 sm:max-w-md">
-              <li className="flex items-center gap-2">
-                <Dot /> {t('features.ssl')}
-              </li>
-              <li className="flex items-center gap-2">
-                <Dot /> {t('features.keitaro')}
-              </li>
-              <li className="flex items-center gap-2">
-                <Dot /> {t('features.advertising')}
-              </li>
-              <li className="flex items-center gap-2">
-                <Dot /> {t('features.support')}
-              </li>
-            </ul>
           </div>
 
           {/* Right column - Media Gallery */}
-          <div className="lg:col-span-2 flex items-center justify-center self-center">
-            <div className="w-full lg:max-w-[680px]">
+          <div className="lg:col-span-2 flex items-center justify-center order-1 lg:order-2">
+            <div className="w-full max-w-xs sm:max-w-sm lg:max-w-[680px]">
               <HeroMedia
                 items={
                   heroMediaItems && heroMediaItems.length
@@ -99,19 +88,5 @@ export default function Hero({ heroMediaItems = [] }) {
         </div>
       </div>
     </section>
-  );
-}
-
-function Dot() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      style={{ color: 'color-mix(in oklab, var(--text) 70%, transparent)' }}
-    >
-      <circle cx="12" cy="12" r="4" fill="currentColor" />
-    </svg>
   );
 }
