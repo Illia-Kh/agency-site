@@ -71,6 +71,7 @@ Automated media processing pipeline that converts raw video/image files into opt
 Place your source files in `public/media/hero/_raw/`:
 
 **Supported formats:**
+
 - **Videos**: `.mp4`, `.mov`, `.mkv`, `.webm`
 - **Images**: `.jpg`, `.jpeg`, `.png`, `.webp`
 
@@ -87,6 +88,7 @@ npm run media:watch
 #### 3. Automatic Output
 
 The script automatically:
+
 - Converts videos to 1080×1920 (9:16), 30fps, no audio
 - Generates MP4 (H.264) + WebM (VP9) + WebP poster
 - Converts images to 1080×1920 WebP with center crop
@@ -96,21 +98,24 @@ The script automatically:
 ### Media Processing Rules
 
 #### Video Conversion
+
 - **Target**: 1080×1920 (9:16 aspect ratio)
 - **Frame Rate**: 30fps
 - **Duration**: Max 8 seconds (longer videos are trimmed)
 - **Audio**: Removed automatically
-- **Outputs**: 
+- **Outputs**:
   - MP4: H.264, CRF 23, preset veryslow
   - WebM: VP9, CRF 32, row-mt enabled
   - Poster: First frame as WebP
 
 #### Image Conversion
-- **Target**: 1080×1920 (9:16 aspect ratio)  
+
+- **Target**: 1080×1920 (9:16 aspect ratio)
 - **Crop**: Center crop (object-cover behavior)
 - **Output**: WebP, quality 85
 
 #### Caching System
+
 - **Cache File**: `public/media/hero/_out/_cache.json`
 - **Tracking**: SHA1 hash, modification time, file size
 - **Incremental**: Only processes changed/new files
@@ -138,13 +143,13 @@ public/media/hero/_out/
     "id": "analytics-dashboard",
     "type": "video",
     "mp4": "/media/hero/_out/analytics-dashboard/analytics-dashboard.mp4",
-    "webm": "/media/hero/_out/analytics-dashboard/analytics-dashboard.webm", 
+    "webm": "/media/hero/_out/analytics-dashboard/analytics-dashboard.webm",
     "poster": "/media/hero/_out/analytics-dashboard/analytics-dashboard.webp",
     "duration": 8,
     "alt": "Analytics Dashboard"
   },
   {
-    "id": "landing-preview", 
+    "id": "landing-preview",
     "type": "image",
     "src": "/media/hero/_out/landing-preview/landing-preview.webp",
     "duration": 6,
@@ -173,19 +178,19 @@ Organized by logical namespaces with complete coverage:
 
 ### Supported Locales
 
-| Locale | Language | Status |
-|--------|----------|--------|
-| `en` | English | Default ✅ |
-| `cs` | Czech (Čeština) | Complete ✅ |
-| `de` | German (Deutsch) | Complete ✅ |
-| `ru` | Russian (Русский) | Complete ✅ |
+| Locale | Language          | Status      |
+| ------ | ----------------- | ----------- |
+| `en`   | English           | Default ✅  |
+| `cs`   | Czech (Čeština)   | Complete ✅ |
+| `de`   | German (Deutsch)  | Complete ✅ |
+| `ru`   | Russian (Русский) | Complete ✅ |
 
 ### Locale-prefixed Routing
 
 All routes are prefixed with locale codes:
 
 - `/en/` - English content
-- `/cs/` - Czech content  
+- `/cs/` - Czech content
 - `/de/` - German content
 - `/ru/` - Russian content
 
@@ -232,14 +237,14 @@ Integrated theme toggle in Logo component with immediate feedback:
 CSS variables enable seamless theme transitions:
 
 ```css
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   --bg: #ffffff;
   --surface: #f8fafc;
   --border: #e2e8f0;
   --primary: #3b82f6;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --bg: #0f172a;
   --surface: #1e293b;
   --border: #334155;
@@ -262,6 +267,7 @@ CSS variables enable seamless theme transitions:
 ### HeroMediaCarousel
 
 Auto-playing media gallery with:
+
 - **Aspect Ratio**: 9:16 vertical format
 - **Video Support**: MP4/WebM with autoplay and loop
 - **Image Support**: WebP with lazy loading
@@ -273,6 +279,7 @@ Auto-playing media gallery with:
 ### LanguageSwitcher
 
 Portal-based dropdown with:
+
 - **No Layout Shift**: Portal rendering prevents header jumping
 - **Smooth Transitions**: Loading states and animation feedback
 - **Keyboard Support**: Full accessibility with arrow navigation
@@ -341,7 +348,7 @@ npm run i18n:gen        # Generate translation key types
 
 ## 📋 Requirements
 
-- **Node.js**: 18+ 
+- **Node.js**: 18+
 - **FFmpeg**: Required for video processing
 - **FFprobe**: Required for video duration detection
 
@@ -363,17 +370,20 @@ choco install ffmpeg
 ## 🚨 Important Notes
 
 ### Media Pipeline
+
 - **Manual editing**: Never edit `content/heroMedia.json` manually - it's auto-generated
 - **Cache**: Delete `public/media/hero/_out/_cache.json` to force re-processing
 - **Performance**: Large video files will take time to process
 - **Dependencies**: Requires FFmpeg and FFprobe in system PATH
 
 ### Development
+
 - **Theme Testing**: Test both light/dark themes during development
 - **Locale Testing**: Verify all locales render correctly
 - **Media Testing**: Test with actual video/image files in pipeline
 
 ### Production
+
 - **Static Generation**: All routes are pre-generated at build time
 - **CDN Ready**: Optimized for deployment with CDN caching
 - **Performance**: Bundle size optimized with shared chunks

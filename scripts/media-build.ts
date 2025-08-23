@@ -86,7 +86,7 @@ class MediaBuilder {
     return {
       mtimeMs: stats.mtimeMs,
       size: stats.size,
-      sha1: this.getFileHash(filePath)
+      sha1: this.getFileHash(filePath),
     };
   }
 
@@ -105,7 +105,7 @@ class MediaBuilder {
       finalSlug = `${slug}-${counter}`;
       counter++;
     }
-    
+
     existingSlugs.add(finalSlug);
     return finalSlug;
   }
@@ -120,13 +120,13 @@ class MediaBuilder {
   private async runFFmpeg(args: string[]): Promise<void> {
     return new Promise((resolve, reject) => {
       const ffmpeg = spawn('ffmpeg', args, { stdio: 'pipe' });
-      
+
       let stderr = '';
-      ffmpeg.stderr?.on('data', (data) => {
+      ffmpeg.stderr?.on('data', data => {
         stderr += data.toString();
       });
 
-      ffmpeg.on('close', (code) => {
+      ffmpeg.on('close', code => {
         if (code === 0) {
           resolve();
         } else {
@@ -134,7 +134,7 @@ class MediaBuilder {
         }
       });
 
-      ffmpeg.on('error', (error) => {
+      ffmpeg.on('error', error => {
         reject(new Error(`Failed to start FFmpeg: ${error.message}`));
       });
     });
@@ -142,23 +142,31 @@ class MediaBuilder {
 
   private async getVideoDuration(inputPath: string): Promise<number> {
     return new Promise((resolve, reject) => {
-      const ffprobe = spawn('ffprobe', [
-        '-v', 'error',
-        '-show_entries', 'format=duration',
-        '-of', 'csv=p=0',
-        inputPath
-      ], { stdio: 'pipe' });
+      const ffprobe = spawn(
+        'ffprobe',
+        [
+          '-v',
+          'error',
+          '-show_entries',
+          'format=duration',
+          '-of',
+          'csv=p=0',
+          inputPath,
+        ],
+        { stdio: 'pipe' }
+      );
 
       let stdout = '';
-      ffprobe.stdout?.on('data', (data) => {
+      ffprobe.stdout?.on('data', data => {
         stdout += data.toString();
       });
 
-      ffprobe.on('close', (code) => {
+      ffprobe.on('close', code => {
         if (code === 0) {
           const duration = parseFloat(stdout.trim());
           // Clamp duration between 6-10 seconds, default to 8 if longer than 15s
-          const clampedDuration = duration > 15 ? 8 : Math.max(6, Math.min(10, Math.round(duration)));
+          const clampedDuration =
+            duration > 15 ? 8 : Math.max(6, Math.min(10, Math.round(duration)));
           resolve(clampedDuration);
         } else {
           resolve(8); // Default fallback
@@ -171,7 +179,11 @@ class MediaBuilder {
     });
   }
 
-  private async convertVideo(inputPath: string, outputDir: string, slug: string): Promise<string[]> {
+  private async convertVideo(
+    inputPath: string,
+    outputDir: string,
+    slug: string
+  ): Promise<string[]> {
     const mp4Path = path.join(outputDir, `${slug}.mp4`);
     const webmPath = path.join(outputDir, `${slug}.webm`);
     const posterPath = path.join(outputDir, `${slug}.webp`);
@@ -180,40 +192,62 @@ class MediaBuilder {
 
     // Convert to MP4 with vertical format and proper encoding
     await this.runFFmpeg([
-      '-y', '-i', inputPath,
-      '-t', '8',
-      '-vf', `scale=-2:${TARGET_HEIGHT},crop=${TARGET_WIDTH}:${TARGET_HEIGHT}:(in_w-${TARGET_WIDTH})/2:0,fps=30`,
-      '-c:v', 'libx264',
-      '-crf', '23',
-      '-preset', 'veryslow',
-      '-pix_fmt', 'yuv420p',
+      '-y',
+      '-i',
+      inputPath,
+      '-t',
+      '8',
+      '-vf',
+      `scale=-2:${TARGET_HEIGHT},crop=${TARGET_WIDTH}:${TARGET_HEIGHT}:(in_w-${TARGET_WIDTH})/2:0,fps=30`,
+      '-c:v',
+      'libx264',
+      '-crf',
+      '23',
+      '-preset',
+      'veryslow',
+      '-pix_fmt',
+      'yuv420p',
       '-an', // Remove audio
-      mp4Path
+      mp4Path,
     ]);
 
     // Convert MP4 to WebM
     await this.runFFmpeg([
-      '-y', '-i', mp4Path,
-      '-c:v', 'libvpx-vp9',
-      '-b:v', '0',
-      '-crf', '32',
-      '-row-mt', '1',
+      '-y',
+      '-i',
+      mp4Path,
+      '-c:v',
+      'libvpx-vp9',
+      '-b:v',
+      '0',
+      '-crf',
+      '32',
+      '-row-mt',
+      '1',
       '-an',
-      webmPath
+      webmPath,
     ]);
 
     // Generate poster from first frame
     await this.runFFmpeg([
-      '-y', '-i', mp4Path,
-      '-vframes', '1',
-      '-q:v', '3',
-      posterPath
+      '-y',
+      '-i',
+      mp4Path,
+      '-vframes',
+      '1',
+      '-q:v',
+      '3',
+      posterPath,
     ]);
 
     return [mp4Path, webmPath, posterPath];
   }
 
-  private async convertImage(inputPath: string, outputDir: string, slug: string): Promise<string[]> {
+  private async convertImage(
+    inputPath: string,
+    outputDir: string,
+    slug: string
+  ): Promise<string[]> {
     const outputPath = path.join(outputDir, `${slug}.webp`);
 
     console.log(`🖼️  Converting image: ${path.basename(inputPath)}`);
@@ -222,7 +256,7 @@ class MediaBuilder {
     await sharp(inputPath)
       .resize(TARGET_WIDTH, TARGET_HEIGHT, {
         fit: 'cover',
-        position: 'center'
+        position: 'center',
       })
       .webp({ quality: 85 })
       .toFile(outputPath);
@@ -242,7 +276,10 @@ class MediaBuilder {
     );
   }
 
-  private async processFile(inputPath: string, existingSlugs: Set<string>): Promise<void> {
+  private async processFile(
+    inputPath: string,
+    existingSlugs: Set<string>
+  ): Promise<void> {
     const ext = path.extname(inputPath).toLowerCase();
     const baseName = path.basename(inputPath, ext);
     const cacheKey = path.relative(RAW_DIR, inputPath);
@@ -255,7 +292,7 @@ class MediaBuilder {
 
     const slug = this.generateSlug(baseName, existingSlugs);
     const outputDir = path.join(OUT_DIR, slug);
-    
+
     // Create output directory
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
@@ -278,7 +315,7 @@ class MediaBuilder {
         size: stats.size,
         sha1: stats.sha1,
         outputs,
-        slug
+        slug,
       };
 
       console.log(`✅ Processed: ${slug}`);
@@ -291,31 +328,36 @@ class MediaBuilder {
     console.log('📝 Generating heroMedia.json...');
 
     const items: HeroMediaItem[] = [];
-    const outputDirs = fs.readdirSync(OUT_DIR).filter(name => 
-      name !== '_cache.json' && 
-      fs.statSync(path.join(OUT_DIR, name)).isDirectory()
-    );
+    const outputDirs = fs
+      .readdirSync(OUT_DIR)
+      .filter(
+        name =>
+          name !== '_cache.json' &&
+          fs.statSync(path.join(OUT_DIR, name)).isDirectory()
+      );
 
     for (const slug of outputDirs) {
       const dirPath = path.join(OUT_DIR, slug);
       const files = fs.readdirSync(dirPath);
-      
+
       const mp4File = files.find(f => f.endsWith('.mp4'));
       const webmFile = files.find(f => f.endsWith('.webm'));
       const posterFile = files.find(f => f.endsWith('.webp'));
-      const imageFile = files.find(f => f.endsWith('.webp') && f === `${slug}.webp`);
+      const imageFile = files.find(
+        f => f.endsWith('.webp') && f === `${slug}.webp`
+      );
 
       if (mp4File) {
         // Video item
         const mp4Path = path.join(dirPath, mp4File);
         const duration = await this.getVideoDuration(mp4Path);
-        
+
         const item: HeroMediaItem = {
           id: slug,
           type: 'video',
           mp4: `/media/hero/_out/${slug}/${mp4File}`,
           duration,
-          alt: this.humanizeAlt(slug)
+          alt: this.humanizeAlt(slug),
         };
 
         if (webmFile) {
@@ -333,7 +375,7 @@ class MediaBuilder {
           type: 'image',
           src: `/media/hero/_out/${slug}/${imageFile}`,
           duration: 6, // Default duration for images
-          alt: this.humanizeAlt(slug)
+          alt: this.humanizeAlt(slug),
         };
 
         items.push(item);
@@ -355,7 +397,8 @@ class MediaBuilder {
       return;
     }
 
-    const files = fs.readdirSync(RAW_DIR)
+    const files = fs
+      .readdirSync(RAW_DIR)
       .filter(file => ALL_EXTENSIONS.includes(path.extname(file).toLowerCase()))
       .map(file => path.join(RAW_DIR, file));
 
@@ -367,7 +410,7 @@ class MediaBuilder {
     }
 
     const existingSlugs = new Set<string>();
-    
+
     // Process all files
     for (const file of files) {
       await this.processFile(file, existingSlugs);
@@ -382,20 +425,20 @@ class MediaBuilder {
 
   async watch(): Promise<void> {
     console.log('👀 Watching for changes in _raw directory...');
-    
+
     // Initial build
     await this.build();
 
     // Setup file watcher
     const watcher = chokidar.watch(RAW_DIR, {
       ignored: /(^|[\/\\])\../, // ignore dotfiles
-      persistent: true
+      persistent: true,
     });
 
     const existingSlugs = new Set<string>();
 
     watcher
-      .on('add', async (filePath) => {
+      .on('add', async filePath => {
         const ext = path.extname(filePath).toLowerCase();
         if (ALL_EXTENSIONS.includes(ext)) {
           console.log(`🔍 New file detected: ${path.basename(filePath)}`);
@@ -404,7 +447,7 @@ class MediaBuilder {
           await this.generateHeroMediaJson();
         }
       })
-      .on('change', async (filePath) => {
+      .on('change', async filePath => {
         const ext = path.extname(filePath).toLowerCase();
         if (ALL_EXTENSIONS.includes(ext)) {
           console.log(`♻️  File changed: ${path.basename(filePath)}`);
@@ -413,7 +456,7 @@ class MediaBuilder {
           await this.generateHeroMediaJson();
         }
       })
-      .on('unlink', async (filePath) => {
+      .on('unlink', async filePath => {
         console.log(`🗑️  File removed: ${path.basename(filePath)}`);
         const cacheKey = path.relative(RAW_DIR, filePath);
         delete this.cache[cacheKey];
@@ -422,7 +465,7 @@ class MediaBuilder {
       });
 
     console.log('Press Ctrl+C to stop watching...');
-    
+
     // Keep the process alive
     process.on('SIGINT', () => {
       console.log('\n👋 Stopping file watcher...');

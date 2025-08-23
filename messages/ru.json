@@ -34,6 +34,12 @@
       "title": "Превью кейса",
       "subtitle": "Скрин из рекламного кабинета или лендинга клиента"
     },
+    "media": {
+      "region": "Галерея медиа в Hero",
+      "ads-manager": "Кейс: запуск рекламных кампаний Meta с трекингом Keitaro",
+      "analytics-growth": "Кейс: рост заявок по данным Keitaro и CRM",
+      "landing-preview": "Превью лендинга клиента на Next.js"
+    },
     "benefits": {
       "turnkey": {
         "title": "Под ключ и без головной боли",
