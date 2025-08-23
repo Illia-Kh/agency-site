@@ -21,3 +21,25 @@ pre,
 .font-mono {
   font-family: var(--font-geist-mono);
 }
+
+/* Checkmark draw animation */
+.chk-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: chk-draw var(--chk-duration, 1000ms) ease-out forwards;
+  will-change: stroke-dashoffset;
+}
+.chk-glow {
+  animation-duration: calc(var(--chk-duration, 1000ms) * 0.9);
+}
+@keyframes chk-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chk-path {
+    animation: none !important;
+  }
+}

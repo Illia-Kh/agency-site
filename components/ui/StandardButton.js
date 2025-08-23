@@ -6,17 +6,15 @@ const StandardButton = forwardRef(function StandardButton(
   ref
 ) {
   const baseStyles = `
-    inline-flex items-center justify-center gap-2
-    h-11 px-5 py-2.5
-    rounded-full 
-    border-2 border-[var(--primary)] 
-    bg-transparent 
-    text-sm font-medium text-[var(--white)]
-    transition-all duration-200
-    hover:bg-[var(--primary)]/10
-    focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]/60
-    active:bg-[var(--primary)]/15
-    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent
+    btn inline-flex items-center justify-center gap-2 select-none no-underline hover:no-underline
+    h-12 px-6 rounded-full
+    bg-transparent text-[var(--accent-blue)] font-semibold text-[15px]
+    border-2 border-[var(--accent-blue)]
+    transition-[background-color,transform,color,border-color] duration-200 ease-out
+    hover:bg-[color-mix(in_oklab,var(--accent-blue)_10%,transparent)] hover:scale-x-[1.02]
+    active:bg-[color-mix(in_oklab,var(--accent-blue)_16%,transparent)] active:scale-x-[1.00]
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-blue)]/40
+    disabled:opacity-60 disabled:cursor-not-allowed
     ${className}
   `
     .trim()

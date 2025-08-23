@@ -3,9 +3,14 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
-// iPhone frame SVG component
+// iPhone-like frame: SVG overlay + rounded/clipping container
 const IPhoneFrame = ({ children }) => (
-  <div className="relative hidden min-[765px]:block">
+  <div className="relative w-full h-full">
+    {/* Content area with rounding and clipping */}
+    <div className="relative w-full h-full rounded-[40px] overflow-hidden border-[6px] border-[var(--border)] bg-[var(--surface-elevated)]">
+      {children}
+    </div>
+    {/* Decorative outline overlay (no interactions) */}
     <svg
       width="360"
       height="640"
@@ -14,51 +19,18 @@ const IPhoneFrame = ({ children }) => (
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <rect
-        x="4"
-        y="4"
-        width="352"
-        height="632"
-        rx="48"
-        stroke="var(--border)"
-        strokeWidth="2"
-      />
-      <rect
-        x="12"
-        y="12"
-        width="336"
-        height="616"
-        rx="40"
-        fill="none"
-        stroke="var(--border)"
-        strokeWidth="1"
-        opacity="0.6"
-      />
-      {/* Home indicator */}
-      <rect
-        x="160"
-        y="620"
-        width="40"
-        height="4"
-        rx="2"
-        fill="var(--border)"
-        opacity="0.8"
-      />
       {/* Notch */}
       <rect
         x="130"
-        y="12"
+        y="18"
         width="100"
-        height="20"
-        rx="10"
+        height="16"
+        rx="8"
         fill="var(--bg)"
         stroke="var(--border)"
         strokeWidth="1"
       />
     </svg>
-    <div className="relative rounded-[48px] overflow-hidden border-4 border-[var(--border)]">
-      {children}
-    </div>
   </div>
 );
 
@@ -72,6 +44,7 @@ export default function HeroMedia({ items = [] }) {
   const observerRef = useRef(null);
 
   const currentItem = items.length > 0 ? items[currentIndex] : null;
+  const currentAlt = currentItem?.alt || currentItem?.altKey || '';
   const isVideo = currentItem?.type === 'video';
 
   // IntersectionObserver for auto-play/pause
@@ -189,12 +162,12 @@ export default function HeroMedia({ items = [] }) {
             autoPlay
             loop
             controls={false}
-            aria-label={currentItem.altKey}
+            aria-label={currentAlt}
           />
         ) : (
           <Image
             src={currentItem.src}
-            alt={currentItem.altKey}
+            alt={currentAlt}
             fill
             className="object-cover"
             priority={currentIndex === 0}
@@ -210,21 +183,21 @@ export default function HeroMedia({ items = [] }) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-[9/16] max-h-[45vh] md:max-h-[80vh] cursor-pointer"
+      className="relative w-full aspect-[9/19.5] max-h-[45vh] md:max-h-[80vh] cursor-pointer"
       role="region"
       aria-label="Hero media"
       onClick={handleContainerClick}
     >
-      {/* Desktop: iPhone frame for ≥765px */}
+      {/* Desktop: phone-styled frame */}
       <div className="hidden min-[765px]:block h-full">
         <IPhoneFrame>
-          <div className="w-full h-full overflow-hidden bg-[var(--surface-elevated)]">
+          <div className="w-full h-full">
             <MediaContent />
           </div>
         </IPhoneFrame>
       </div>
 
-      {/* Mobile: no frame for <765px */}
+      {/* Mobile: simple rounded container */}
       <div className="min-[765px]:hidden w-full h-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)]">
         <MediaContent />
       </div>
@@ -267,7 +240,7 @@ export default function HeroMedia({ items = [] }) {
             ) : (
               <Image
                 src={item.src}
-                alt={item.altKey}
+                alt={item.alt || item.altKey || ''}
                 width={100}
                 height={100}
                 loading={isNextItem ? 'eager' : 'lazy'}
