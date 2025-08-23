@@ -183,7 +183,7 @@ export default function HeroMedia({ items = [] }) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-[9/19.5] max-h-[45vh] md:max-h-[80vh] cursor-pointer"
+      className="relative w-full aspect-[9/16] max-h-[50vh] sm:max-h-[60vh] md:aspect-[9/19.5] md:max-h-[80vh] cursor-pointer"
       role="region"
       aria-label="Hero media"
       onClick={handleContainerClick}
@@ -198,12 +198,12 @@ export default function HeroMedia({ items = [] }) {
       </div>
 
       {/* Mobile: simple rounded container */}
-      <div className="min-[765px]:hidden w-full h-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)]">
+      <div className="min-[765px]:hidden w-full h-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)]">
         <MediaContent />
       </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-4 right-4 flex gap-1 z-20">
+      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 sm:bottom-4 sm:right-4 sm:left-auto sm:transform-none flex gap-1 z-20">
         {items.map((_, index) => (
           <button
             key={index}
