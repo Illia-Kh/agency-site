@@ -25,13 +25,20 @@ export default function Hero({ heroMediaItems = [] }) {
               {t('description')}
             </p>
 
-            {/* Auto-rotating benefit cards */}
-            <HeroBenefitCard />
+            {/* Auto-rotating benefit cards - visible on desktop */}
+            <div className="md:block hidden">
+              <HeroBenefitCard />
+            </div>
 
             {/* CTA Buttons - Unified style */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <StandardButton href="#contact">{t('cta')}</StandardButton>
               <StandardButton href="#about">{t('howWeWork')}</StandardButton>
+            </div>
+
+            {/* Auto-rotating benefit cards - mobile placement (after buttons) */}
+            <div className="md:hidden block">
+              <HeroBenefitCard />
             </div>
 
             {/* Static features list - keeping original for fallback */}

@@ -41,6 +41,7 @@
       "landing-preview": "Client-Landing-Page-Vorschau auf Next.js"
     },
     "benefits": {
+      "readMore": "Mehr über unsere Vorteile erfahren",
       "turnkey": {
         "title": "Schlüsselfertig und sorgenfrei",
         "text": "Domain, Hosting, SSL, weiße Seite, wir starten alles selbst."
