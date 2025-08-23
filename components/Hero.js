@@ -4,7 +4,7 @@ import HeroMedia from './HeroMedia';
 import HeroBenefitCard from './HeroBenefitCard';
 import StandardButton from './ui/StandardButton';
 
-export default function Hero() {
+export default function Hero({ heroMediaItems = [] }) {
   const t = useTranslations('hero');
 
   return (
@@ -54,7 +54,7 @@ export default function Hero() {
           {/* Right column - Media Gallery */}
           <div className="lg:col-span-2 flex items-center justify-center self-center mt-4 lg:mt-6">
             <div className="w-full lg:max-w-[680px]">
-              <HeroMedia />
+              <HeroMedia items={heroMediaItems} />
             </div>
           </div>
         </div>

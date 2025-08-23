@@ -2,19 +2,79 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import heroMediaData from '@/content/heroMedia.json';
+import { useTranslations } from 'next-intl';
 
-export default function HeroMedia() {
+// iPhone frame SVG component
+const IPhoneFrame = ({ children }) => (
+  <div className="relative hidden md:block">
+    <svg
+      width="360"
+      height="640"
+      viewBox="0 0 360 640"
+      className="absolute inset-0 w-full h-full z-10 pointer-events-none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <rect
+        x="4"
+        y="4"
+        width="352"
+        height="632"
+        rx="48"
+        stroke="var(--border)"
+        strokeWidth="2"
+      />
+      <rect
+        x="12"
+        y="12"
+        width="336"
+        height="616"
+        rx="40"
+        fill="none"
+        stroke="var(--border)"
+        strokeWidth="1"
+        opacity="0.6"
+      />
+      {/* Home indicator */}
+      <rect
+        x="160"
+        y="620"
+        width="40"
+        height="4"
+        rx="2"
+        fill="var(--border)"
+        opacity="0.8"
+      />
+      {/* Notch */}
+      <rect
+        x="130"
+        y="12"
+        width="100"
+        height="20"
+        rx="10"
+        fill="var(--bg)"
+        stroke="var(--border)"
+        strokeWidth="1"
+      />
+    </svg>
+    <div className="relative rounded-[48px] overflow-hidden border-4 border-[var(--border)]">
+      {children}
+    </div>
+  </div>
+);
+
+export default function HeroMedia({ items = [] }) {
+  const t = useTranslations('hero.media');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const containerRef = useRef(null);
-  const videoRef = useRef(null);
   const timerRef = useRef(null);
   const observerRef = useRef(null);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
-  const currentItem = heroMediaData[currentIndex];
-  const isVideo = currentItem.type === 'video';
+  const currentItem = items.length > 0 ? items[currentIndex] : null;
 
   // IntersectionObserver for auto-play/pause
   useEffect(() => {
@@ -36,9 +96,9 @@ export default function HeroMedia() {
     };
   }, []);
 
-  // Auto-advance logic
+  // Auto-advance logic (10 seconds)
   useEffect(() => {
-    if (!isVisible || isPaused) {
+    if (!isVisible || isPaused || items.length <= 1) {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
         timerRef.current = null;
@@ -47,45 +107,17 @@ export default function HeroMedia() {
     }
 
     const advanceSlide = () => {
-      setCurrentIndex(prev => (prev + 1) % heroMediaData.length);
+      setCurrentIndex(prev => (prev + 1) % items.length);
     };
 
-    if (isVideo && videoRef.current) {
-      const video = videoRef.current;
+    timerRef.current = setTimeout(advanceSlide, 10000); // 10 seconds
 
-      const handleVideoEnd = () => {
-        advanceSlide();
-      };
-
-      video.addEventListener('ended', handleVideoEnd);
-
-      return () => {
-        video.removeEventListener('ended', handleVideoEnd);
-      };
-    } else {
-      // For images, use timer
-      timerRef.current = setTimeout(advanceSlide, currentItem.duration * 1000);
-
-      return () => {
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-        }
-      };
-    }
-  }, [currentIndex, isVisible, isPaused, isVideo, currentItem.duration]);
-
-  // Handle video play/pause based on visibility
-  useEffect(() => {
-    if (videoRef.current && isVideo) {
-      if (isVisible && !isPaused) {
-        videoRef.current.play().catch(() => {
-          // Handle autoplay restrictions gracefully
-        });
-      } else {
-        videoRef.current.pause();
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
       }
-    }
-  }, [isVisible, isPaused, isVideo, currentIndex]);
+    };
+  }, [currentIndex, isVisible, isPaused, items.length]);
 
   // Respect prefers-reduced-motion
   useEffect(() => {
@@ -97,11 +129,54 @@ export default function HeroMedia() {
     }
   }, []);
 
+  // Early return after hooks
+  if (!items.length || !currentItem) {
+    return null;
+  }
+
   const handleDotClick = index => {
     setCurrentIndex(index);
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
+    }
+  };
+
+  const handleContainerClick = () => {
+    // Scroll to #gallery
+    const galleryElement = document.getElementById('gallery');
+    if (galleryElement) {
+      galleryElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Swipe gesture handlers
+  const handleTouchStart = e => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = e => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const swipeDistance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+
+    if (Math.abs(swipeDistance) > minSwipeDistance) {
+      if (swipeDistance > 0) {
+        // Swipe left - next slide
+        setCurrentIndex(prev => (prev + 1) % items.length);
+      } else {
+        // Swipe right - previous slide
+        setCurrentIndex(prev => (prev - 1 + items.length) % items.length);
+      }
+
+      // Reset timer
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
     }
   };
 
@@ -114,94 +189,97 @@ export default function HeroMedia() {
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-[9/16] max-h-[80vh] self-center rounded-2xl ring-1 ring-azure/40 bg-black/30 overflow-hidden"
+      className="relative w-full aspect-[9/16] max-h-[45vh] md:max-h-[80vh] cursor-pointer"
       role="region"
-      aria-label="Media gallery"
+      aria-label={t('region')}
+      onClick={handleContainerClick}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentIndex}
-          variants={fadeVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="absolute inset-0"
-        >
-          {isVideo ? (
-            <video
-              ref={videoRef}
-              className="h-full w-full object-cover"
-              muted
-              playsInline
-              autoPlay
-              loop
-              preload="metadata"
-              aria-label={currentItem.alt}
-              onLoadedData={() => {
-                if (isVisible && !isPaused && videoRef.current) {
-                  videoRef.current.play().catch(() => {});
-                }
-              }}
-            >
-              {currentItem.webm && (
-                <source src={currentItem.webm} type="video/webm" />
-              )}
-              {currentItem.mp4 && (
-                <source src={currentItem.mp4} type="video/mp4" />
-              )}
-            </video>
-          ) : (
+      {/* Desktop: iPhone frame */}
+      <div className="hidden md:block">
+        <IPhoneFrame>
+          <div className="w-full h-full overflow-hidden bg-[var(--surface-elevated)]">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentIndex}
+                variants={fadeVariants}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                className="absolute inset-0"
+              >
+                <img
+                  src={currentItem.src}
+                  alt={t(currentItem.altKey) || currentItem.altKey}
+                  className="w-full h-full object-cover"
+                  loading={currentIndex === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </IPhoneFrame>
+      </div>
+
+      {/* Mobile: no frame */}
+      <div className="md:hidden w-full h-full overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-elevated)]">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            variants={fadeVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            className="absolute inset-0"
+          >
             <img
               src={currentItem.src}
-              alt={currentItem.alt}
-              className="h-full w-full object-cover"
-              loading="lazy"
+              alt={t(currentItem.altKey) || currentItem.altKey}
+              className="w-full h-full object-cover"
+              loading={currentIndex === 0 ? 'eager' : 'lazy'}
+              decoding="async"
             />
-          )}
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       {/* Dot indicators */}
-      <div className="absolute bottom-4 right-4 flex gap-1">
-        {heroMediaData.map((_, index) => (
+      <div className="absolute bottom-4 right-4 flex gap-1 z-20">
+        {items.map((_, index) => (
           <button
             key={index}
-            onClick={() => handleDotClick(index)}
+            onClick={e => {
+              e.stopPropagation(); // Prevent container click
+              handleDotClick(index);
+            }}
             className={`w-2 h-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] ${
               index === currentIndex
                 ? 'bg-[var(--primary)] opacity-90 scale-110'
                 : 'bg-[var(--white)] opacity-40'
             }`}
             aria-label={`Go to slide ${index + 1}`}
-            aria-pressed={index === currentIndex}
+            aria-current={index === currentIndex ? 'true' : 'false'}
           />
         ))}
       </div>
 
-      {/* Preload next media */}
-      {heroMediaData.map((item, index) => {
+      {/* Preload next image */}
+      {items.map((item, index) => {
         if (index === currentIndex) return null;
-        const isNextItem = index === (currentIndex + 1) % heroMediaData.length;
+        const isNextItem = index === (currentIndex + 1) % items.length;
 
         return (
-          <div key={item.id} className="hidden">
-            {item.type === 'video' ? (
-              <video
-                preload={isNextItem ? 'metadata' : 'none'}
-                muted
-                playsInline
-              >
-                {item.webm && <source src={item.webm} type="video/webm" />}
-                {item.mp4 && <source src={item.mp4} type="video/mp4" />}
-              </video>
-            ) : (
-              <img
-                src={item.src}
-                alt={item.alt}
-                loading={isNextItem ? 'eager' : 'lazy'}
-              />
-            )}
+          <div key={index} className="hidden">
+            <img
+              src={item.src}
+              alt={t(item.altKey) || item.altKey}
+              loading={isNextItem ? 'eager' : 'lazy'}
+              decoding="async"
+            />
           </div>
         );
       })}

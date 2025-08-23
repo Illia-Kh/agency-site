@@ -34,6 +34,12 @@
       "title": "Fall-Vorschau",
       "subtitle": "Screenshot aus Werbekonto oder Client-Landing-Page"
     },
+    "media": {
+      "region": "Hero-Medien-Galerie",
+      "ads-manager": "Fall: Start von Meta-Werbekampagnen mit Keitaro-Tracking",
+      "analytics-growth": "Fall: Lead-Wachstum mit Keitaro- und CRM-Daten",
+      "landing-preview": "Client-Landing-Page-Vorschau auf Next.js"
+    },
     "benefits": {
       "turnkey": {
         "title": "Schlüsselfertig und sorgenfrei",

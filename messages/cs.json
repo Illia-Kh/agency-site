@@ -34,6 +34,12 @@
       "title": "Náhled případu",
       "subtitle": "Screenshot z reklamního účtu nebo klientovy stránky"
     },
+    "media": {
+      "region": "Hero média galerie",
+      "ads-manager": "Případ: spuštění Meta reklamních kampaní s Keitaro trackingem",
+      "analytics-growth": "Případ: růst leadů pomocí Keitaro a CRM dat",
+      "landing-preview": "Náhled klientovy landing page na Next.js"
+    },
     "benefits": {
       "turnkey": {
         "title": "Na klíč a bez starostí",

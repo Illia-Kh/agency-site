@@ -34,6 +34,12 @@
       "title": "Case preview",
       "subtitle": "Screenshot from advertising account or client's landing page"
     },
+    "media": {
+      "region": "Hero media gallery",
+      "ads-manager": "Case: launching Meta advertising campaigns with Keitaro tracking",
+      "analytics-growth": "Case: lead growth using Keitaro and CRM data",
+      "landing-preview": "Client landing page preview on Next.js"
+    },
     "benefits": {
       "turnkey": {
         "title": "Turnkey and hassle-free",
