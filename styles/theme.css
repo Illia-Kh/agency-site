@@ -10,6 +10,7 @@
 }
 
 :root {
+  --header-h: 72px;
   --bg: #ffffff;
   --bg-secondary: #f7f7f8;
   --surface-elevated: #efeff1;
@@ -84,6 +85,11 @@ body {
   transition:
     background-color 0.22s ease,
     color 0.22s ease;
+}
+
+/* Smooth anchor navigation with header offset */
+[id] {
+  scroll-margin-top: var(--header-h);
 }
 
 /* Focus ring for accessibility */

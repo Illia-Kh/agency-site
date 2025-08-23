@@ -78,22 +78,26 @@
   },
   "about": {
     "title": "Über uns",
-    "description": "Wir bauen den gesamten Trichter: vom Website-Prototyp bis zur Traffic-Akquisition. Parallel richten wir Analytics und Berichterstattung ein.",
+    "description": "Wir übernehmen den gesamten Online-Zyklus: von Prototyp und Website-Entwicklung bis hin zu Werbung, Tracking und Analytics. Wir sprechen einfach, arbeiten schnell und transparent: Das Ziel sind echte Leads und Verkäufe, nicht \"Häkchen\" in Berichten. Sie geben die Aufgabe — wir bauen ein verständliches System aus Website, Werbung und Daten.",
     "sites": {
       "title": "Websites",
-      "text": "Next.js, schnelles Laden, responsiv, SEO-Basis."
+      "text": "Schnelle responsive Websites und Landing Pages: Design, Entwicklung, SEO-Basis und Ladegeschwindigkeit.",
+      "link": "https://developer.mozilla.org/en-US/docs/Learn_web_development"
     },
     "tracking": {
       "title": "Tracking",
-      "text": "Keitaro, Domains, SSL, Integrationen, Anti-Bot-Filter."
+      "text": "Korrekte Datenerfassung: Domains, SSL, Pixel, UTM und Bot-Schutz.",
+      "link": "https://en.wikipedia.org/wiki/Web_tracking"
     },
     "traffic": {
       "title": "Traffic",
-      "text": "Meta/Google, Medienplan, Kreative, Tests und Skalierung."
+      "text": "Starten und skalieren Werbung: Medienplan, Kreative, Tests in Meta und Google.",
+      "link": "https://en.wikipedia.org/wiki/Online_advertising"
     },
     "analytics": {
       "title": "Analytics",
-      "text": "Benutzerdefinierte Dashboards, Attribution, LTV, Conversion-Trichter."
+      "text": "Klare Berichte und Attribution: Dashboards, Trichter, LTV und Wachstumspunkte.",
+      "link": "https://en.wikipedia.org/wiki/Web_analytics"
     }
   },
   "footer": {

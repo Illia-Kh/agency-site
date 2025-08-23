@@ -1,11 +1,37 @@
 'use client';
-import { useState } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import Logo from './Logo';
 import ContactDropdown from './ContactDropdown';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header({ locale }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    const updateHeaderHeight = () => {
+      const headerEl = document.querySelector('header');
+      if (headerEl) {
+        const height = headerEl.getBoundingClientRect().height;
+        document.documentElement.style.setProperty('--header-h', `${height}px`);
+      }
+    };
+
+    updateHeaderHeight();
+
+    const headerEl = document.querySelector('header');
+    let ro;
+    if (headerEl && 'ResizeObserver' in window) {
+      ro = new ResizeObserver(updateHeaderHeight);
+      ro.observe(headerEl);
+    }
+
+    window.addEventListener('resize', updateHeaderHeight);
+
+    return () => {
+      window.removeEventListener('resize', updateHeaderHeight);
+      if (ro) ro.disconnect();
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[var(--bg-secondary)] border-b border-[var(--border)] backdrop-blur transition-all duration-200 min-h-[4rem]">
