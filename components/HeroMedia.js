@@ -3,11 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
-// iPhone-like frame: SVG overlay + rounded/clipping container
+// iPhone-like frame: SVG overlay + rounded/clipping container with metallic border
 const IPhoneFrame = ({ children }) => (
   <div className="relative w-full h-full">
-    {/* Content area with rounding and clipping */}
-    <div className="relative w-full h-full rounded-[40px] overflow-hidden border-[6px] border-[var(--border)] bg-[var(--surface-elevated)]">
+    {/* Content area with metallic border and clipping */}
+    <div className="phone-frame-metallic relative w-full h-full overflow-hidden bg-[var(--surface-elevated)]">
       {children}
     </div>
     {/* Decorative outline overlay (no interactions) */}
@@ -19,7 +19,7 @@ const IPhoneFrame = ({ children }) => (
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Notch */}
+      {/* Notch with metallic styling */}
       <rect
         x="130"
         y="18"
@@ -27,8 +27,8 @@ const IPhoneFrame = ({ children }) => (
         height="16"
         rx="8"
         fill="var(--bg)"
-        stroke="var(--border)"
-        strokeWidth="1"
+        stroke="var(--metal-mid)"
+        strokeWidth="1.5"
       />
     </svg>
   </div>
