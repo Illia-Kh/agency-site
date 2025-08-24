@@ -1,5 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useReducedMotion, animate } from 'framer-motion';
 import Image from 'next/image';
 
 export default function GalleryGearRing() {
@@ -15,6 +16,50 @@ export default function GalleryGearRing() {
   // State for responsive radius detection
   const [isDesktop, setIsDesktop] = useState(false);
 
+  // Motion state as specified
+  const [rotationRad, setRotationRad] = useState(0);
+  const rotationRef = useRef(0); // mirror of rotationRad for RAF math
+
+  useEffect(() => {
+    rotationRef.current = rotationRad;
+  }, [rotationRad]);
+
+  // Constants as specified
+  const TAU = Math.PI * 2;
+  const AUTO_SPEED = 0.22; // radians per second (clockwise, small and smooth)
+  const SPRING = { type: 'spring', stiffness: 120, damping: 22 };
+
+  // Utils (keep EXACT as specified)
+  const normalize = a => ((a + Math.PI) % TAU) - Math.PI;
+  const thetaOf = (i, rot) => (TAU / items.length) * i + rot;
+  const frontIndex = () =>
+    items.reduce(
+      (best, _, i) => {
+        const th = thetaOf(i, rotationRef.current);
+        const d = Math.abs(normalize(th));
+        return d < best.d ? { i, d } : best;
+      },
+      { i: 0, d: Infinity }
+    ).i;
+
+  // Reduced motion
+  const prefersReduced = useReducedMotion();
+
+  // Hover pause
+  const hoverRef = useRef(false);
+  const onEnter = () => (hoverRef.current = true);
+  const onLeave = () => (hoverRef.current = false);
+
+  // Visibility pause
+  const hiddenRef = useRef(false);
+  useEffect(() => {
+    const onVis = () =>
+      (hiddenRef.current = document.visibilityState !== 'visible');
+    onVis();
+    document.addEventListener('visibilitychange', onVis);
+    return () => document.removeEventListener('visibilitychange', onVis);
+  }, []);
+
   useEffect(() => {
     const checkDesktop = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -28,8 +73,53 @@ export default function GalleryGearRing() {
     return () => window.removeEventListener('resize', checkDesktop);
   }, []);
 
+  // RAF autorotation loop
+  useEffect(() => {
+    if (prefersReduced) return; // no autorotation
+    let rafId,
+      last = performance.now();
+    const loop = t => {
+      const dt = (t - last) / 1000;
+      last = t;
+      if (!hoverRef.current && !hiddenRef.current) {
+        const next = rotationRef.current + AUTO_SPEED * dt;
+        rotationRef.current = next;
+        setRotationRad(next);
+      }
+      rafId = requestAnimationFrame(loop);
+    };
+    rafId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafId);
+  }, [prefersReduced]);
+
+  // Click to focus handler
+  const focusIndex = i => {
+    const th = thetaOf(i, rotationRef.current);
+    const delta = -normalize(th); // shortest arc to 0
+    const target = rotationRef.current + delta;
+    // animate numeric value and update React state on each frame
+    const controls = animate(rotationRef.current, target, {
+      ...SPRING,
+      onUpdate: v => {
+        rotationRef.current = v;
+        setRotationRad(v);
+      },
+    });
+    return () => controls.stop();
+  };
+
+  // Keyboard handler
+  const handleKeyDown = e => {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      focusIndex((frontIndex() + 1) % items.length);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      focusIndex((frontIndex() - 1 + items.length) % items.length);
+    }
+  };
+
   // Geometry constants
-  const rotationRad = 0; // Static for now (no autorotation yet)
   const radius = isDesktop ? 340 : 200;
 
   return (
@@ -38,6 +128,10 @@ export default function GalleryGearRing() {
       <div
         className="relative mx-auto flex items-center justify-center h-[42vh] sm:h-[48vh] md:h-[52vh]"
         style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        onKeyDown={handleKeyDown}
+        tabIndex={0}
       >
         {items.map((item, index) => {
           // STRICT math: theta calculation
@@ -74,6 +168,15 @@ export default function GalleryGearRing() {
                 zIndex,
                 pointerEvents: pointer,
                 boxShadow,
+              }}
+              onClick={() => focusIndex(index)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  focusIndex(index);
+                }
               }}
             >
               <div className="w-24 sm:w-32 md:w-40 aspect-[9/16] rounded-2xl border border-gray-300/70 bg-graphite-900 overflow-hidden">
