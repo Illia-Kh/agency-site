@@ -7,6 +7,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from 'react';
+import { useLayoutEffect } from 'react';
 
 /** Utility: clamp */
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -87,6 +88,9 @@ function computePose(
   tiltPower,
   orientation
 ) {
+  // Ensure server/client deterministic formatting by rounding angles
+  const round = (num, p = 6) => Number(Number(num).toFixed(p));
+
   const t = n > 1 ? i / (n - 1) - 0.5 : 0; // -0.5..0.5
   const baseAngle = t * arcDeg + rotDeg; // degrees
   const rad = toRad(baseAngle);
@@ -96,11 +100,16 @@ function computePose(
     1 - Math.min(1, Math.pow(Math.abs(baseAngle) / edge, tiltPower)); // 0..1 (центр=1)
   const yawAbs = tiltEdgeDeg + (tiltCenterDeg - tiltEdgeDeg) * centerFactor;
   const yawTilt = (Math.sign(baseAngle) || 1) * Math.min(Math.abs(yawAbs), 20);
+
+  // Rounded values for string serialization consistency across Node/Browser
+  const baseAngleR = round(baseAngle);
+  const yawTiltR = round(yawTilt);
+
   const transform =
     orientation === 'center'
-      ? `translateZ(${radius}px) rotateY(${baseAngle}deg) rotateY(${yawTilt}deg)`
-      : `rotateY(${baseAngle}deg) translateZ(${radius}px) rotateY(${yawTilt}deg)`;
-  return { baseAngle, approxZ, transform };
+      ? `translateZ(${radius}px) rotateY(${baseAngleR}deg) rotateY(${yawTiltR}deg)`
+      : `rotateY(${baseAngleR}deg) translateZ(${radius}px) rotateY(${yawTiltR}deg)`;
+  return { baseAngle: baseAngleR, approxZ, transform };
 }
 
 /** Headless controller hook. */
@@ -475,6 +484,28 @@ const ArcGallery = forwardRef(function ArcGallery(
 
 export default function Gallery() {
   const galleryRef = useRef(null);
+  const [sectionH, setSectionH] = useState(null);
+
+  // Match Hero block height: 100vh - header
+  useLayoutEffect(() => {
+    const measure = () => {
+      const headerEl = document.querySelector('header');
+      const headerH = headerEl ? headerEl.getBoundingClientRect().height : 0;
+      setSectionH(`calc(100vh - ${headerH}px)`);
+    };
+    measure();
+    const headerEl = document.querySelector('header');
+    let ro;
+    if (headerEl && 'ResizeObserver' in window) {
+      ro = new ResizeObserver(measure);
+      ro.observe(headerEl);
+    }
+    window.addEventListener('resize', measure);
+    return () => {
+      window.removeEventListener('resize', measure);
+      if (ro) ro.disconnect();
+    };
+  }, []);
 
   const handleSelect = index => {
     // Could navigate to a detail page or open a modal
@@ -482,8 +513,12 @@ export default function Gallery() {
   };
 
   return (
-    <section id="cases" className="py-16 lg:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section
+      id="cases"
+      className="py-0"
+      style={sectionH ? { height: sectionH } : undefined}
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 h-full flex items-center">
         <ArcGallery
           ref={galleryRef}
           onSelect={handleSelect}
