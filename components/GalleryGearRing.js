@@ -9,7 +9,9 @@ export default function GalleryGearRing({
   radiusMobile = 200,
   radiusDesktop = 340,
   sectorDeg = 180,
-  idleTimeoutMs = 3500,
+  idleTimeoutMs = 3500, // eslint-disable-line no-unused-vars -- kept for API compatibility
+  forceAuto = false,
+  debug = false,
 } = {}) {
   // Default items array with 5 demo entries (fallback if no items prop)
   const defaultItems = [
@@ -38,7 +40,6 @@ export default function GalleryGearRing({
   const AUTO_SPEED = autoSpeed; // radians per second (clockwise, small and smooth)
   const SPRING = { type: 'spring', stiffness: 110, damping: 24 };
   const SECTOR_TO_TAU = Math.PI; // one sector ~180° for drag conversion
-  const IDLE_TIMEOUT = idleTimeoutMs;
 
   // Utils (keep EXACT as specified)
   const normalize = a => ((a + Math.PI) % TAU) - Math.PI;
@@ -76,8 +77,13 @@ export default function GalleryGearRing({
     velocity: 0,
   });
 
-  const onEnter = () => (hoverRef.current = true);
-  const onLeave = () => (hoverRef.current = false);
+  const onMouseEnter = () => {
+    hoverRef.current = true;
+  };
+
+  const onMouseLeave = () => {
+    hoverRef.current = false;
+  };
 
   // Visibility pause
   useEffect(() => {
@@ -88,20 +94,21 @@ export default function GalleryGearRing({
     return () => document.removeEventListener('visibilitychange', onVis);
   }, []);
 
-  // Offscreen pause using IntersectionObserver
+  // Offscreen pause using IntersectionObserver with lower threshold
   useEffect(() => {
     if (!stageRef.current || typeof window === 'undefined') return;
 
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       ([entry]) => {
-        offscreenRef.current = entry.isIntersecting === false;
+        offscreenRef.current =
+          !entry.isIntersecting || entry.intersectionRatio < 0.2;
       },
-      { threshold: 0.4 }
+      { threshold: [0, 0.2, 0.4, 1] }
     );
 
-    observer.observe(stageRef.current);
+    io.observe(stageRef.current);
 
-    return () => observer.disconnect();
+    return () => io.disconnect();
   }, []);
 
   useEffect(() => {
@@ -206,52 +213,35 @@ export default function GalleryGearRing({
     handlePointerUp(e);
   };
 
-  // Enhanced RAF autorotation loop with pause policy
+  // Enhanced RAF autorotation loop with robust pause policy
   useEffect(() => {
-    if (prefersReduced) return; // no autorotation
-
-    let rafId;
-    let last = performance.now();
-
+    let rafId,
+      last = performance.now();
     const loop = t => {
-      const dt = Math.min((t - last) / 1000, 0.05); // clamp dt to avoid jumps
+      const dt = Math.min((t - last) / 1000, 0.05); // clamp to 50ms
       last = t;
 
-      // Check if any pause conditions are active
-      const isPaused =
-        hoverRef.current ||
-        hiddenRef.current ||
-        draggingRef.current ||
-        offscreenRef.current;
+      // Define paused state exactly as specified
+      const paused =
+        !forceAuto &&
+        (prefersReduced ||
+          hoverRef.current ||
+          hiddenRef.current ||
+          offscreenRef.current ||
+          draggingRef.current);
 
-      // Auto-resume logic: only resume if all pauses cleared and idle timeout passed
-      const timeSinceUserInput = Date.now() - lastUserInputRef.current;
-      const canAutoResume = !isPaused && timeSinceUserInput > IDLE_TIMEOUT;
-
-      if (
-        canAutoResume ||
-        (!hoverRef.current &&
-          !hiddenRef.current &&
-          !draggingRef.current &&
-          !offscreenRef.current &&
-          timeSinceUserInput > IDLE_TIMEOUT)
-      ) {
+      if (!paused || forceAuto) {
         const next = rotationRef.current + AUTO_SPEED * dt;
         rotationRef.current = next;
         setRotationRad(next);
       }
-
       rafId = requestAnimationFrame(loop);
     };
-
     rafId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafId);
+  }, [forceAuto, prefersReduced, AUTO_SPEED]);
 
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, [prefersReduced, AUTO_SPEED, IDLE_TIMEOUT]);
-
-  // Click to focus handler
+  // Click to focus handler - always works regardless of pause state
   const focusIndex = i => {
     const th = thetaOf(i, rotationRef.current);
     const delta = -normalize(th); // shortest arc to 0
@@ -262,7 +252,7 @@ export default function GalleryGearRing({
       dragStateRef.current.inertialControls.stop();
     }
 
-    // animate numeric value and update React state on each frame
+    // animate using framer-motion animate with SPRING config
     const controls = animate(rotationRef.current, target, {
       ...SPRING,
       onUpdate: v => {
@@ -308,14 +298,55 @@ export default function GalleryGearRing({
     };
   }, []);
 
+  // Debug HUD component
+  const DebugHUD = () => {
+    if (!debug) return null;
+
+    // Calculate paused state for display
+    const paused =
+      !forceAuto &&
+      (prefersReduced ||
+        hoverRef.current ||
+        hiddenRef.current ||
+        offscreenRef.current ||
+        draggingRef.current);
+
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '8px',
+          right: '8px',
+          zIndex: 9999,
+          fontFamily: 'monospace',
+          fontSize: '12px',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          color: 'white',
+          borderRadius: '4px',
+          padding: '4px 8px',
+          lineHeight: '1.2',
+        }}
+      >
+        <div>PRM: {String(prefersReduced)}</div>
+        <div>hover: {hoverRef.current.toString()}</div>
+        <div>hidden: {hiddenRef.current.toString()}</div>
+        <div>offscreen: {offscreenRef.current.toString()}</div>
+        <div>drag: {draggingRef.current.toString()}</div>
+        <div>paused: {paused.toString()}</div>
+        <div>rot: {rotationRef.current.toFixed(2)}</div>
+        <div>front: {frontIndex()}</div>
+      </div>
+    );
+  };
+
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 mt-[-80px]">
       {/* 3D Stage Container */}
       <div
         ref={stageRef}
         className="relative mx-auto flex items-center justify-center h-[42vh] sm:h-[48vh] md:h-[52vh]"
-        onMouseEnter={onEnter}
-        onMouseLeave={onLeave}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         onKeyDown={handleKeyDown}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -327,7 +358,7 @@ export default function GalleryGearRing({
         style={{
           perspective: '1200px',
           transformStyle: 'preserve-3d',
-          touchAction: 'none', // Prevent default touch behaviors
+          touchAction: 'pan-y', // Allow vertical scroll while enabling horizontal drag
         }}
       >
         {galleryItems.map((item, index) => {
@@ -401,6 +432,9 @@ export default function GalleryGearRing({
             </div>
           );
         })}
+
+        {/* Debug HUD */}
+        <DebugHUD />
       </div>
     </section>
   );
