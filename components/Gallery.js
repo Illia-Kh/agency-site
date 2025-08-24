@@ -307,15 +307,15 @@ function MetalFrame({ width, height, frame, lightAngle = 30, children }) {
 const ArcGallery = forwardRef(function ArcGallery(
   {
     items = [],
-    radius = 680,
-    arcDeg = 96,
+    radius = 820,
+    arcDeg = 84,
     // базовый «диапазон» наклона разобьём на край/центр
-    tiltEdgeDeg = 2,
-    tiltCenterDeg = 10,
-    tiltPower = 1.2,
+    tiltEdgeDeg = 1.5,
+    tiltCenterDeg = 8,
+    tiltPower = 1.1,
     orientation = 'outward',
-    itemW = 270, // «маленький телефон» в CSS-px
-    itemH = 480, // 9:16
+    itemW = 234, // «маленький телефон» в CSS-px
+    itemH = 416, // 9:16
     frameWidth = 12,
     onSelect = () => {},
     snap = true,
@@ -397,7 +397,7 @@ const ArcGallery = forwardRef(function ArcGallery(
       style={{
         perspective: '1200px',
         transformStyle: 'preserve-3d',
-        height: itemH * 1.1,
+        height: itemH * 1.08,
         touchAction: 'pan-y',
         ['--metal-dark']: 'var(--metal-dark)',
         ['--metal-mid']: 'var(--metal-mid)',
@@ -516,22 +516,8 @@ export default function Gallery() {
   );
 
   return (
-    <section id="gallery" className="overflow-hidden py-16 lg:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        {/* Gallery Header */}
-        <div className="mb-12 flex items-end justify-between">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
-            {t('title')}
-          </h2>
-          <a
-            href="#contact"
-            className="text-sm text-[var(--primary)] hover:text-[var(--primary-hover)]"
-          >
-            {t('ctaText')}
-          </a>
-        </div>
-
-        {/* Arc Gallery */}
+    <section className="py-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <ArcGallery
           ref={galleryRef}
           items={galleryItems}
