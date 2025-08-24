@@ -7,6 +7,7 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from 'react';
+import { useTranslations } from 'next-intl';
 
 /** Utility: clamp */
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -474,6 +475,7 @@ const ArcGallery = forwardRef(function ArcGallery(
 });
 
 export default function Gallery() {
+  const t = useTranslations('gallery');
   const galleryRef = useRef(null);
 
   const handleSelect = index => {
@@ -481,18 +483,82 @@ export default function Gallery() {
     console.log('Selected item:', index); // eslint-disable-line no-console
   };
 
+  // Create actual gallery items with case study content
+  const galleryItems = useMemo(
+    () => [
+      <GalleryCard
+        key="clinic"
+        title={t('cases.clinic')}
+        details={t('details')}
+      />,
+      <GalleryCard key="ecom" title={t('cases.ecom')} details={t('details')} />,
+      <GalleryCard
+        key="google"
+        title={t('cases.google')}
+        details={t('details')}
+      />,
+      <GalleryCard key="meta" title={t('cases.meta')} details={t('details')} />,
+      <GalleryCard
+        key="keitaro"
+        title={t('cases.keitaro')}
+        details={t('details')}
+      />,
+      <GalleryCard
+        key="whitepage"
+        title={t('cases.whitepage')}
+        details={t('details')}
+      />,
+      <GalleryCard key="extra1" title="Case Study 7" details={t('details')} />,
+      <GalleryCard key="extra2" title="Case Study 8" details={t('details')} />,
+      <GalleryCard key="extra3" title="Case Study 9" details={t('details')} />,
+    ],
+    [t]
+  );
+
   return (
-    <section
-      id="gallery"
-      className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24"
-    >
-      <ArcGallery
-        ref={galleryRef}
-        onSelect={handleSelect}
-        snap={true}
-        autoplay={false}
-        className="max-w-full"
-      />
+    <section id="gallery" className="overflow-hidden py-16 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        {/* Gallery Header */}
+        <div className="mb-12 flex items-end justify-between">
+          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
+            {t('title')}
+          </h2>
+          <a
+            href="#contact"
+            className="text-sm text-[var(--primary)] hover:text-[var(--primary-hover)]"
+          >
+            {t('ctaText')}
+          </a>
+        </div>
+
+        {/* Arc Gallery */}
+        <ArcGallery
+          ref={galleryRef}
+          items={galleryItems}
+          onSelect={handleSelect}
+          snap={true}
+          autoplay={false}
+          className="w-full"
+        />
+      </div>
     </section>
+  );
+}
+
+// Gallery Card Component
+function GalleryCard({ title, details = 'Details' }) {
+  return (
+    <div className="w-full h-full flex flex-col bg-[var(--surface-elevated)] text-[var(--text)]">
+      {/* Image placeholder */}
+      <div className="flex-1 bg-gradient-to-br from-[var(--primary-200)] to-[var(--primary-400)] flex items-center justify-center">
+        <div className="text-white text-lg font-medium opacity-80">Preview</div>
+      </div>
+
+      {/* Case title */}
+      <div className="p-4 text-center">
+        <h3 className="text-sm font-semibold text-[var(--text)]">{title}</h3>
+        <p className="text-xs text-[var(--text)] opacity-60 mt-1">{details}</p>
+      </div>
+    </div>
   );
 }
