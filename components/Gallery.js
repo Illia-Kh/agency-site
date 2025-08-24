@@ -7,7 +7,6 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from 'react';
-import { useTranslations } from 'next-intl';
 
 /** Utility: clamp */
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -77,12 +76,26 @@ function useRafLoop(fn, enabled = true) {
 }
 
 /** Compute layout pose for an item on an arc. */
-function computePose(i, n, rotDeg, arcDeg, radius, tiltDeg, orientation) {
+function computePose(
+  i,
+  n,
+  rotDeg,
+  arcDeg,
+  radius,
+  tiltEdgeDeg,
+  tiltCenterDeg,
+  tiltPower,
+  orientation
+) {
   const t = n > 1 ? i / (n - 1) - 0.5 : 0; // -0.5..0.5
   const baseAngle = t * arcDeg + rotDeg; // degrees
   const rad = toRad(baseAngle);
   const approxZ = Math.cos(rad) * radius; // for zIndex sorting
-  const yawTilt = (Math.sign(baseAngle) || 1) * Math.min(Math.abs(tiltDeg), 20);
+  const edge = arcDeg / 2 || 1;
+  const centerFactor =
+    1 - Math.min(1, Math.pow(Math.abs(baseAngle) / edge, tiltPower)); // 0..1 (центр=1)
+  const yawAbs = tiltEdgeDeg + (tiltCenterDeg - tiltEdgeDeg) * centerFactor;
+  const yawTilt = (Math.sign(baseAngle) || 1) * Math.min(Math.abs(yawAbs), 20);
   const transform =
     orientation === 'center'
       ? `translateZ(${radius}px) rotateY(${baseAngle}deg) rotateY(${yawTilt}deg)`
@@ -246,14 +259,14 @@ function nearestIndexFromRot(rot, count, arcDeg) {
 }
 
 /** MetalFrame view primitive */
-function MetalFrame({ size, frame, lightAngle = 30, children }) {
+function MetalFrame({ width, height, frame, lightAngle = 30, children }) {
   const borderR = 16;
   return (
     <div
       className="relative"
       style={{
-        width: size,
-        height: size,
+        width,
+        height,
         padding: frame,
         borderRadius: borderR,
         background: `conic-gradient(from ${lightAngle}deg at 50% 50%,
@@ -293,11 +306,15 @@ function MetalFrame({ size, frame, lightAngle = 30, children }) {
 const ArcGallery = forwardRef(function ArcGallery(
   {
     items = [],
-    radius = 300,
-    arcDeg = 120,
-    tiltDeg = 6,
+    radius = 680,
+    arcDeg = 96,
+    // базовый «диапазон» наклона разобьём на край/центр
+    tiltEdgeDeg = 2,
+    tiltCenterDeg = 10,
+    tiltPower = 1.2,
     orientation = 'outward',
-    itemSize = 128,
+    itemW = 270, // «маленький телефон» в CSS-px
+    itemH = 480, // 9:16
     frameWidth = 12,
     onSelect = () => {},
     snap = true,
@@ -308,11 +325,27 @@ const ArcGallery = forwardRef(function ArcGallery(
   ref
 ) {
   const containerRef = useRef(null);
+
+  // Если в пропсы не передали items — подставим 9 нумерованных карточек
+  const defaultItems = useMemo(
+    () =>
+      Array.from({ length: 9 }, (_, i) => (
+        <div
+          key={i}
+          className="w-full h-full grid place-items-center text-3xl font-medium"
+          style={{ background: 'var(--surface-2)', color: 'var(--text)' }}
+        >
+          {i + 1}
+        </div>
+      )),
+    []
+  );
+
   const ctrl = useArcController({
-    count: items.length,
+    count: (items && items.length ? items : defaultItems).length,
     arcDeg,
     radius,
-    tiltDeg,
+    tiltDeg: tiltCenterDeg, // Use center tilt for controller compatibility
     orientation,
     snap,
     autoplay,
@@ -327,28 +360,6 @@ const ArcGallery = forwardRef(function ArcGallery(
       return ctrl.state;
     },
   }));
-
-  // accessibility: keyboard
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const onKey = e => {
-      if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        ctrl.api.next();
-      }
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        ctrl.api.prev();
-      }
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        onSelect(ctrl.state.centerIndex);
-      }
-    };
-    el.addEventListener('keydown', onKey);
-    return () => el.removeEventListener('keydown', onKey);
-  }, [onSelect]);
 
   // pointer events
   useEffect(() => {
@@ -372,20 +383,20 @@ const ArcGallery = forwardRef(function ArcGallery(
   }, []);
 
   // render
-  const n = items.length;
+  const n = (items && items.length ? items : defaultItems).length;
   const rot = ctrl.state.rot;
 
   return (
     <div
       ref={containerRef}
-      role="listbox"
+      role="list"
       aria-label="3D arc gallery"
-      tabIndex={0}
+      tabIndex={-1}
       className={`relative mx-auto select-none ${className}`}
       style={{
         perspective: '1200px',
         transformStyle: 'preserve-3d',
-        height: itemSize * 1.32,
+        height: itemH * 1.1,
         touchAction: 'pan-y',
         ['--metal-dark']: 'var(--metal-dark)',
         ['--metal-mid']: 'var(--metal-mid)',
@@ -407,14 +418,16 @@ const ArcGallery = forwardRef(function ArcGallery(
         className="absolute inset-0 grid place-items-center"
         style={{ transformStyle: 'preserve-3d' }}
       >
-        {items.map((it, i) => {
+        {(items && items.length ? items : defaultItems).map((it, i) => {
           const { baseAngle, approxZ, transform } = computePose(
             i,
             n,
             rot,
             arcDeg,
             radius,
-            tiltDeg,
+            tiltEdgeDeg,
+            tiltCenterDeg,
+            tiltPower,
             orientation
           );
           // simple virtualization: render only within arc + margin
@@ -434,7 +447,7 @@ const ArcGallery = forwardRef(function ArcGallery(
                 backfaceVisibility: 'hidden',
               }}
             >
-              <MetalFrame size={itemSize} frame={frameWidth}>
+              <MetalFrame width={itemW} height={itemH} frame={frameWidth}>
                 {typeof it === 'string' ? (
                   <img
                     src={it}
@@ -461,52 +474,11 @@ const ArcGallery = forwardRef(function ArcGallery(
 });
 
 export default function Gallery() {
-  const t = useTranslations('gallery');
   const galleryRef = useRef(null);
-
-  // Create gallery items using translation data
-  const galleryItems = [
-    { id: 'clinic', label: t('cases.clinic') },
-    { id: 'ecom', label: t('cases.ecom') },
-    { id: 'google', label: t('cases.google') },
-    { id: 'meta', label: t('cases.meta') },
-    { id: 'keitaro', label: t('cases.keitaro') },
-    { id: 'whitepage', label: t('cases.whitepage') },
-  ];
-
-  // Convert to display elements for the Arc Gallery
-  const items = galleryItems.map((item, i) => (
-    <div
-      key={item.id}
-      className="w-full h-full grid place-items-center text-sm font-medium"
-      style={{
-        background: 'var(--bg-secondary)',
-        color: 'var(--text)',
-        padding: '8px',
-      }}
-    >
-      <div className="text-center">
-        <div className="text-2xl mb-2">
-          {i === 0
-            ? '🏥'
-            : i === 1
-              ? '🛒'
-              : i === 2
-                ? '🎯'
-                : i === 3
-                  ? '📱'
-                  : i === 4
-                    ? '📊'
-                    : '🔒'}
-        </div>
-        <div className="text-xs leading-tight">{item.label}</div>
-      </div>
-    </div>
-  ));
 
   const handleSelect = index => {
     // Could navigate to a detail page or open a modal
-    console.log('Selected item:', galleryItems[index]); // eslint-disable-line no-console
+    console.log('Selected item:', index); // eslint-disable-line no-console
   };
 
   return (
@@ -514,63 +486,13 @@ export default function Gallery() {
       id="gallery"
       className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24"
     >
-      <div className="text-center mb-12">
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
-          {t('title')}
-        </h2>
-        <p className="mt-3 text-[var(--text)] opacity-70">
-          Arc Gallery concept - 3D interactive showcase
-        </p>
-        <a
-          href="#contact"
-          className="mt-4 inline-block text-sm text-[var(--primary)] hover:text-[var(--primary-hover)]"
-        >
-          {t('ctaText')}
-        </a>
-      </div>
-
-      {/* Arc Gallery Integration */}
-      <div className="flex flex-col items-center gap-6">
-        <div className="flex items-center gap-3 mb-4">
-          <button
-            className="px-4 py-2 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text)] hover:bg-[var(--surface-elevated)] transition-colors"
-            onClick={() => galleryRef.current?.prev()}
-          >
-            ← Prev
-          </button>
-          <button
-            className="px-4 py-2 rounded-xl border border-[var(--border)] bg-[var(--bg-secondary)] text-[var(--text)] hover:bg-[var(--surface-elevated)] transition-colors"
-            onClick={() => galleryRef.current?.next()}
-          >
-            Next →
-          </button>
-          <button
-            className="px-4 py-2 rounded-xl border border-[var(--border)] bg-[var(--primary)] text-white hover:bg-[var(--primary-hover)] transition-colors"
-            onClick={() => galleryRef.current?.centerOn(2)}
-          >
-            Center #3
-          </button>
-        </div>
-
-        <ArcGallery
-          ref={galleryRef}
-          items={items}
-          arcDeg={120}
-          radius={280}
-          tiltDeg={7}
-          itemSize={120}
-          frameWidth={10}
-          onSelect={handleSelect}
-          snap={true}
-          autoplay={false}
-          className="max-w-full"
-        />
-
-        <p className="text-xs text-[var(--text)] opacity-60 text-center max-w-lg">
-          Interactive 3D gallery: drag to rotate, click items to center them,
-          use arrow keys for navigation
-        </p>
-      </div>
+      <ArcGallery
+        ref={galleryRef}
+        onSelect={handleSelect}
+        snap={true}
+        autoplay={false}
+        className="max-w-full"
+      />
     </section>
   );
 }
