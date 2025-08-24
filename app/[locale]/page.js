@@ -1,7 +1,6 @@
 import Hero from '@/components/Hero';
 import About from '@/components/About';
-import GalleryGearRing from '@/components/GalleryGearRing';
-// import Gallery from '@/components/Gallery'; // Commented out - replaced with new GalleryGearRing
+import Gallery from '@/components/Gallery';
 import Footer from '@/components/Footer';
 import { getHeroMediaFiles } from '@/lib/getHeroMediaFiles';
 
@@ -13,8 +12,7 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col">
       <Hero heroMediaItems={heroMediaItems} />
       <About />
-      <GalleryGearRing />
-      {/* <Gallery /> */}
+      <Gallery />
       <Footer />
     </main>
   );
