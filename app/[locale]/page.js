@@ -1,7 +1,6 @@
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import GalleryGearRing from '@/components/GalleryGearRing';
-import Gallery from '@/components/Gallery';
 import Footer from '@/components/Footer';
 import { getHeroMediaFiles } from '@/lib/getHeroMediaFiles';
 
@@ -14,7 +13,6 @@ export default async function Home() {
       <Hero heroMediaItems={heroMediaItems} />
       <About />
       <GalleryGearRing />
-      <Gallery />
       <Footer />
     </main>
   );
