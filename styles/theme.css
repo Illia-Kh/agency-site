@@ -46,6 +46,11 @@
   --primary-800: #0a6c9e;
   --primary-900: #074a6b;
   --focus: color-mix(in oklab, var(--primary) 55%, white);
+  /* Arc Gallery metal frame variables */
+  --metal-dark: hsl(220 10% 30%);
+  --metal-mid: hsl(220 8% 55%);
+  --metal-light: hsl(220 6% 78%);
+  --surface-2: var(--surface-elevated);
 }
 :root[data-theme='dark'] {
   --bg: #0f0f10;
@@ -72,6 +77,11 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow-md: 0 8px 28px rgba(0, 0, 0, 0.35);
   --focus: color-mix(in oklab, var(--primary) 55%, black);
+  /* Arc Gallery metal frame variables for dark theme */
+  --metal-dark: hsl(220 10% 25%);
+  --metal-mid: hsl(220 8% 45%);
+  --metal-light: hsl(220 6% 68%);
+  --surface-2: var(--surface-elevated);
 }
 
 html,
