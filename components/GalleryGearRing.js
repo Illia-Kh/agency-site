@@ -29,10 +29,8 @@ export default function GalleryGearRing() {
   }, []);
 
   // Geometry constants
-  const N = items.length;
   const rotationRad = 0; // Static for now (no autorotation yet)
   const radius = isDesktop ? 340 : 200;
-  const FRONT_CUTOFF = Math.PI / 2; // 90°
 
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 mt-[-80px]">
@@ -41,45 +39,44 @@ export default function GalleryGearRing() {
         className="relative mx-auto flex items-center justify-center h-[42vh] sm:h-[48vh] md:h-[52vh]"
         style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
       >
-        {items.map((item, i) => {
-          // Calculate angle for this card
-          const theta = ((2 * Math.PI) / N) * i + rotationRad;
+        {items.map((item, index) => {
+          // STRICT math: theta calculation
+          const theta = ((2 * Math.PI) / items.length) * index + rotationRad;
 
-          // Depth factor based on frontness
-          const depth = Math.cos(theta);
-
-          // Visibility window (front sector only)
+          // Angle normalization and visibility (front sector only)
           const absAng = Math.abs(
             ((theta + Math.PI) % (2 * Math.PI)) - Math.PI
-          );
-          const visible = absAng <= FRONT_CUTOFF;
+          ); // (-π..π]
+          const visible = absAng <= Math.PI / 2; // show only ±90°
+          const depth = Math.max(0, Math.cos(theta)); // frontness [0..1], back half→0
 
-          // Opacity (only front sector)
-          const opacity = visible ? 0.4 + 0.6 * Math.max(0, depth) : 0;
+          // Accents
+          const scale = 0.92 + 0.2 * depth; // 0.92..1.12
+          const opacity = visible ? 0.4 + 0.6 * depth : 0;
+          const zIndex = Math.round(1000 * (0.001 + depth));
+          const pointer = visible ? 'auto' : 'none';
 
-          // Scale (center emphasized, sides smaller, back hidden)
-          const t = Math.max(0, depth); // back half clamps to 0
-          const scale = 0.9 + 0.2 * t; // front 1.1; sides ≈ 0.9–1.0
-
-          // Z-index for stacking (higher when closer)
-          const zIndex = Math.round(1000 * (0.001 + t));
-
-          // Pointer events
-          const pointerEvents = visible ? 'auto' : 'none';
+          // Silver halo intensity by depth
+          const boxShadow = visible
+            ? `0 0 6px rgba(192,192,192,${0.5 + 0.4 * depth}), 0 0 20px rgba(192,192,192,${0.05 + 0.15 * depth})`
+            : 'none';
 
           return (
             <div
               key={item.id}
-              className="absolute will-change-transform"
               style={{
-                transform: `rotateY(${theta}rad) translateZ(${radius}px) rotateY(${-theta}rad) scale(${scale})`,
+                transform: `rotateY(${theta}rad) translateZ(${radius}px) rotateY(${-theta}rad)`,
+                transformStyle: 'preserve-3d',
+                position: 'absolute',
+                willChange: 'transform',
+                scale: scale.toString(),
                 opacity,
                 zIndex,
-                pointerEvents,
-                transformStyle: 'preserve-3d',
+                pointerEvents: pointer,
+                boxShadow,
               }}
             >
-              <div className="w-24 sm:w-32 md:w-40 aspect-[9/16] rounded-2xl border border-gray-300/70 bg-graphite-900 overflow-hidden shadow-[0_0_6px_rgba(192,192,192,0.9),0_0_20px_rgba(192,192,192,0.2)]">
+              <div className="w-24 sm:w-32 md:w-40 aspect-[9/16] rounded-2xl border border-gray-300/70 bg-graphite-900 overflow-hidden">
                 <Image
                   src={item.image}
                   alt={`Gallery item ${item.id}`}
