@@ -34,7 +34,7 @@ export default function Header({ locale }) {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[var(--bg-secondary)] border-b border-[var(--border)] backdrop-blur transition-all duration-200 min-h-[4rem]">
+    <header className="sticky top-0 z-50 w-full backdrop-blur supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--bg),transparent_65%)] border-b border-[color-mix(in_oklab,var(--azure),var(--bg)_90%)] transition-all duration-200 min-h-[4rem]">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8 h-16">
         <Logo />
 
@@ -46,7 +46,7 @@ export default function Header({ locale }) {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 rounded-lg text-[var(--text)] hover:bg-[var(--border)] transition-colors"
+          className="md:hidden p-2 rounded-lg text-[var(--text)] hover:bg-[var(--border)] transition-colors focus-visible:ring-2 focus-visible:ring-[var(--azure)] focus-visible:ring-offset-2"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle mobile menu"
           aria-expanded={isMobileMenuOpen}
@@ -78,7 +78,7 @@ export default function Header({ locale }) {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-[var(--border)] bg-[var(--bg-secondary)]">
+        <div className="md:hidden border-t border-[color-mix(in_oklab,var(--azure),var(--bg)_90%)] bg-[color-mix(in_oklab,var(--bg),transparent_65%)] backdrop-blur">
           <div className="px-4 py-3 space-y-3">
             <ContactDropdown />
             <LanguageSwitcher currentLocale={locale} />

@@ -82,23 +82,23 @@
     "description": "We take over the entire online cycle: from site prototype and development to advertising, tracking and analytics. We speak simply, work quickly and transparently: the goal is real leads and sales, not \"checkmarks\" in reports. You give the task — we assemble an understandable system from the site, advertising and data.",
     "sites": {
       "title": "Sites",
-      "text": "Fast responsive sites and landing pages: design, development, SEO base and loading speed.",
-      "link": "https://developer.mozilla.org/en-US/docs/Learn_web_development"
+      "text": "Design & development, SEO foundation, loading speed.",
+      "link": "/en/services#sites"
     },
     "tracking": {
       "title": "Tracking",
-      "text": "Correct data collection: domains, SSL, pixels, UTM and bot protection.",
-      "link": "https://en.wikipedia.org/wiki/Web_tracking"
+      "text": "Accurate data: domains, SSL, pixels, UTM, bot protection.",
+      "link": "/en/services#tracking"
     },
     "traffic": {
       "title": "Traffic",
-      "text": "Launch and scale advertising: media plan, creatives, tests in Meta and Google.",
-      "link": "https://en.wikipedia.org/wiki/Online_advertising"
+      "text": "Meta & Google campaigns: media plan, creatives, tests, scale.",
+      "link": "/en/services#traffic"
     },
     "analytics": {
       "title": "Analytics",
-      "text": "Clear reports and attribution: dashboards, funnels, LTV and growth points.",
-      "link": "https://en.wikipedia.org/wiki/Web_analytics"
+      "text": "Dashboards, funnels, LTV — clear reports and growth insights.",
+      "link": "/en/services#analytics"
     }
   },
   "footer": {
@@ -106,8 +106,11 @@
     "description": "Website development and promotion turnkey. Czech Republic · EU",
     "copyright": "All rights reserved.",
     "companyName": "IKH Agency",
-    "email": "hello@example.com",
-    "telegram": "Telegram"
+    "email": "hello@ikhagency.com",
+    "telegram": "Telegram",
+    "privacy": "Privacy",
+    "cookies": "Cookies", 
+    "terms": "Terms"
   },
   "gallery": {
     "title": "Gallery / Cases",

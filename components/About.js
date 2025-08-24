@@ -48,8 +48,6 @@ export default function About() {
               <Link
                 key={f.title}
                 href={f.link}
-                target="_blank"
-                rel="noopener noreferrer"
                 aria-label={`${f.title}: ${f.text}`}
                 className="group block rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)] p-5 transition-all duration-200 hover:scale-[1.03] hover:shadow-lg hover:shadow-[color-mix(in_oklab,var(--border)_25%,transparent)] cursor-pointer no-underline focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)]"
                 role="link"

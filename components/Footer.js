@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 export default function Footer() {
@@ -44,8 +45,32 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-[var(--border)] py-4 text-center text-xs text-[var(--text)] opacity-60">
-        © {new Date().getFullYear()} IKH Agency. {t('copyright')}
+      <div className="border-t border-[var(--border)] py-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div className="text-xs text-[var(--text)] opacity-60">
+            © {new Date().getFullYear()} IKH Agency. {t('copyright')}
+          </div>
+          <div className="flex gap-4 text-xs">
+            <Link
+              href="/en/privacy"
+              className="text-[var(--text)] opacity-60 hover:opacity-100 hover:underline"
+            >
+              {t('privacy')}
+            </Link>
+            <Link
+              href="/en/cookies"
+              className="text-[var(--text)] opacity-60 hover:opacity-100 hover:underline"
+            >
+              {t('cookies')}
+            </Link>
+            <Link
+              href="/en/terms"
+              className="text-[var(--text)] opacity-60 hover:opacity-100 hover:underline"
+            >
+              {t('terms')}
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   );
