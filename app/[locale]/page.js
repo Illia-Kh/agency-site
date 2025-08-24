@@ -13,7 +13,7 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col">
       <Hero heroMediaItems={heroMediaItems} />
       <About />
-      <GalleryGearRing debug forceAuto />
+      <GalleryGearRing />
       {/* <Gallery /> */}
       <Footer />
     </main>
