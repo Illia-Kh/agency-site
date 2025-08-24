@@ -9,23 +9,27 @@ The `GalleryRing` component creates an interactive circular gallery of cards arr
 ## Key Features
 
 ### ✅ Ring Layout
+
 - Cards positioned along a circular path using CSS transforms
 - Center card emphasized with larger scale (110%) and stronger glow
 - Side cards scaled down (90%) with reduced opacity
 - Back cards completely hidden (opacity: 0)
 
 ### ✅ Mobile-First Design
+
 - All cards use 9:16 aspect ratio for mobile preview
 - Responsive radius: 280px (mobile) to 380px (desktop)
 - Card sizes: 128px (mobile), 160px (tablet), 192px (desktop)
 
 ### ✅ Interactive Features
+
 - **Auto-rotation**: Continuous clockwise rotation every 4 seconds
 - **Click interaction**: Cards smoothly animate to center position
 - **Hover effects**: Pause auto-rotation and subtle scale animations
 - **Dot indicators**: Clickable navigation dots below the ring
 
 ### ✅ Styling & Effects
+
 - Rounded corners (`rounded-2xl`)
 - Silver border (`border-gray-300/70`)
 - Glow effects: Intense for center card, subtle for others
@@ -33,6 +37,7 @@ The `GalleryRing` component creates an interactive circular gallery of cards arr
 - Smooth hover overlays
 
 ### ✅ Accessibility & Performance
+
 - Respects `prefers-reduced-motion` setting
 - Proper ARIA labels for navigation
 - Next.js Image optimization with responsive sizing
@@ -61,11 +66,11 @@ import GalleryRing from './components/GalleryRing';
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `items` | Array | Demo images | Array of objects with `id` and `image` properties |
-| `autoRotate` | Boolean | `true` | Enable/disable automatic rotation |
-| `rotationInterval` | Number | `4000` | Rotation interval in milliseconds |
+| Prop               | Type    | Default     | Description                                       |
+| ------------------ | ------- | ----------- | ------------------------------------------------- |
+| `items`            | Array   | Demo images | Array of objects with `id` and `image` properties |
+| `autoRotate`       | Boolean | `true`      | Enable/disable automatic rotation                 |
+| `rotationInterval` | Number  | `4000`      | Rotation interval in milliseconds                 |
 
 ### Items Array Structure
 
@@ -82,12 +87,14 @@ const items = [
 ### Ring Positioning Mathematics
 
 Cards are positioned using the transform formula:
+
 ```css
-transform: rotate(angle) translateY(-radius) rotate(-angle)
+transform: rotate(angle) translateY(-radius) rotate(-angle);
 ```
 
 Where:
-- `angle` = (index - currentCenter) * (360 / totalCards)
+
+- `angle` = (index - currentCenter) \* (360 / totalCards)
 - `radius` = responsive value (280px mobile, 380px desktop)
 - Double rotation keeps cards upright while positioning them in circle
 
@@ -101,6 +108,7 @@ Where:
 ### Animation System
 
 Uses Framer Motion with:
+
 - Spring transitions for smooth card movement
 - Hover and tap gestures for interaction feedback
 - Conditional rendering to avoid hydration issues
@@ -145,7 +153,7 @@ export default function HomePage() {
           Explore our latest projects in an interactive gallery
         </p>
       </div>
-      
+
       <GalleryRing />
     </section>
   );
