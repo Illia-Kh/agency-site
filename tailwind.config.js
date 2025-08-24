@@ -6,7 +6,7 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './styles/**/*.{js,ts,jsx,tsx,mdx,css}',
   ],
-  theme: { 
+  theme: {
     extend: {
       colors: {
         azure: {
@@ -34,9 +34,9 @@ module.exports = {
           800: '#1a1a1a',
           900: '#161618',
           950: '#0f0f10',
-        }
-      }
-    } 
+        },
+      },
+    },
   },
   plugins: [],
 };
