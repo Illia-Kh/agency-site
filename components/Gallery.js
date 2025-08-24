@@ -1,38 +1,27 @@
-// COMMENTED OUT - OLD GALLERY COMPONENT
-// This component has been replaced with a new clean GalleryGearRing implementation
-
-// Temporary placeholder - this file should be removed in future iterations
-export default function Gallery() {
-  return null;
-}
-
-/*
-// OLD IMPLEMENTATION - COMMENTED OUT FOR REFERENCE
 'use client';
-import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 export default function Gallery() {
-  // Gallery items with placeholder images
-  const galleryItems = [
-    { id: 1, imageSrc: '/gallery/demo1.png' },
-    { id: 2, imageSrc: '/gallery/demo2.png' },
-    { id: 3, imageSrc: '/gallery/demo3.png' },
-    { id: 4, imageSrc: '/gallery/demo4.png' },
-    { id: 5, imageSrc: '/gallery/demo5.png' },
-  ];
-
-  const [currentIndex, setCurrentIndex] = useState(2); // Start with middle card active
-  const [isPaused, setIsPaused] = useState(false);
-  const timerRef = useRef(null);
-
-  // ... rest of the complex implementation was here ...
+  const t = useTranslations('gallery');
 
   return (
-    <section id="gallery" className="w-full bg-graphite-950 py-16">
-      // ... complex gallery implementation was here ...
+    <section
+      id="gallery"
+      className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24"
+    >
+      <div className="text-center">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
+          {t('title')}
+        </h2>
+        <p className="mt-3 text-[var(--text)] opacity-70">
+          {/* Clean gallery implementation coming soon */}
+        </p>
+      </div>
+
+      {/* Clean block - no implementation yet */}
+      <div className="mt-12">
+        {/* Gallery content will be implemented here */}
+      </div>
     </section>
   );
 }
-*/
