@@ -2,9 +2,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import VideoSmart from './media/VideoSmart';
+
+type MediaItem = {
+  id: string;
+  type: string;
+  src: string;
+  poster?: string;
+  alt?: string;
+  altKey?: string;
+  duration?: number;
+};
+
+type HeroMediaProps = {
+  items?: MediaItem[];
+};
 
 // iPhone-like frame: SVG overlay + rounded/clipping container
-const IPhoneFrame = ({ children }) => (
+const IPhoneFrame = ({ children }: { children: React.ReactNode }) => (
   <div className="relative w-full h-full">
     {/* Content area with rounding and clipping */}
     <div className="relative w-full h-full rounded-[40px] overflow-hidden border-[6px] border-[var(--border)] bg-[var(--surface-elevated)]">
@@ -34,14 +49,13 @@ const IPhoneFrame = ({ children }) => (
   </div>
 );
 
-export default function HeroMedia({ items = [] }) {
+export default function HeroMedia({ items = [] }: HeroMediaProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const containerRef = useRef(null);
-  const videoRef = useRef(null);
-  const timerRef = useRef(null);
-  const observerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   const currentItem = items.length > 0 ? items[currentIndex] : null;
   const currentAlt = currentItem?.alt || currentItem?.altKey || '';
@@ -90,19 +104,6 @@ export default function HeroMedia({ items = [] }) {
     };
   }, [currentIndex, isVisible, isPaused, items.length]);
 
-  // Handle video play/pause based on visibility
-  useEffect(() => {
-    if (videoRef.current && isVideo) {
-      if (isVisible && !isPaused) {
-        videoRef.current.play().catch(() => {
-          // Handle autoplay failure
-        });
-      } else {
-        videoRef.current.pause();
-      }
-    }
-  }, [isVisible, isPaused, isVideo, currentIndex]);
-
   // Respect prefers-reduced-motion
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -118,7 +119,7 @@ export default function HeroMedia({ items = [] }) {
     return null;
   }
 
-  const handleDotClick = index => {
+  const handleDotClick = (index: number) => {
     setCurrentIndex(index);
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -140,7 +141,7 @@ export default function HeroMedia({ items = [] }) {
     exit: { opacity: 0, scale: 0.98 },
   };
 
-  const MediaContent = ({ className }) => (
+  const MediaContent = ({ className }: { className?: string }) => (
     <AnimatePresence mode="wait">
       <motion.div
         key={currentIndex}
@@ -152,17 +153,11 @@ export default function HeroMedia({ items = [] }) {
         className={`absolute inset-0 ${className}`}
       >
         {isVideo ? (
-          <video
-            ref={videoRef}
+          <VideoSmart
             src={currentItem.src}
             poster={currentItem.poster}
-            className="w-full h-full object-cover"
-            muted
-            playsInline
-            autoPlay
-            loop
-            controls={false}
-            aria-label={currentAlt}
+            className="w-full h-full"
+            autoPlay={isVisible && !isPaused}
           />
         ) : (
           <Image
@@ -192,14 +187,14 @@ export default function HeroMedia({ items = [] }) {
       <div className="hidden min-[765px]:block h-full">
         <IPhoneFrame>
           <div className="w-full h-full">
-            <MediaContent />
+            <MediaContent className="" />
           </div>
         </IPhoneFrame>
       </div>
 
       {/* Mobile: simple rounded container */}
       <div className="min-[765px]:hidden w-full h-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)]">
-        <MediaContent />
+        <MediaContent className="" />
       </div>
 
       {/* Dot indicators */}
@@ -211,7 +206,7 @@ export default function HeroMedia({ items = [] }) {
               e.stopPropagation(); // Prevent container click
               handleDotClick(index);
             }}
-            className={`w-2 h-2 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-[var(--bg)] ${
+            className={`w-2 h-2 rounded-full transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg)] ${
               index === currentIndex
                 ? 'bg-[var(--primary)] opacity-90 scale-110'
                 : 'bg-[var(--white)] opacity-40'
@@ -230,12 +225,11 @@ export default function HeroMedia({ items = [] }) {
         return (
           <div key={index} className="hidden">
             {item.type === 'video' ? (
-              <video
+              <VideoSmart
                 src={item.src}
                 poster={item.poster}
-                preload={isNextItem ? 'metadata' : 'none'}
-                muted
-                playsInline
+                autoPlay={false}
+                className="w-full h-full"
               />
             ) : (
               <Image

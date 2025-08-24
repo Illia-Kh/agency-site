@@ -1,0 +1,10 @@
+<svg width="340" height="600" viewBox="0 0 340 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="340" height="600" fill="#1e40af"/>
+  <rect x="20" y="40" width="300" height="60" rx="8" fill="white"/>
+  <rect x="20" y="120" width="200" height="20" rx="4" fill="rgba(255,255,255,0.8)"/>
+  <rect x="20" y="150" width="250" height="20" rx="4" fill="rgba(255,255,255,0.6)"/>
+  <rect x="20" y="200" width="280" height="180" rx="12" fill="rgba(255,255,255,0.1)"/>
+  <rect x="20" y="400" width="120" height="40" rx="20" fill="#3b82f6"/>
+  <text x="170" y="300" text-anchor="middle" fill="white" font-family="Arial" font-size="24" font-weight="bold">CLINIC</text>
+  <text x="170" y="330" text-anchor="middle" fill="white" font-family="Arial" font-size="16">Landing Page</text>
+</svg>

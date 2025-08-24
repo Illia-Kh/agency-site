@@ -1,7 +1,19 @@
 'use client';
 import { forwardRef } from 'react';
 
-const StandardButton = forwardRef(function StandardButton(
+type StandardButtonProps = {
+  children: React.ReactNode;
+  href?: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  className?: string;
+} & React.ComponentProps<'button'> &
+  React.ComponentProps<'a'>;
+
+const StandardButton = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  StandardButtonProps
+>(function StandardButton(
   { children, href, onClick, disabled = false, className = '', ...props },
   ref
 ) {
@@ -23,11 +35,11 @@ const StandardButton = forwardRef(function StandardButton(
   if (href && !disabled) {
     return (
       <a
-        ref={ref}
+        ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
         className={baseStyles}
         onClick={onClick}
-        {...props}
+        {...(props as React.ComponentProps<'a'>)}
       >
         {children}
       </a>
@@ -36,12 +48,12 @@ const StandardButton = forwardRef(function StandardButton(
 
   return (
     <button
-      ref={ref}
+      ref={ref as React.Ref<HTMLButtonElement>}
       type="button"
       className={baseStyles}
       onClick={onClick}
       disabled={disabled}
-      {...props}
+      {...(props as React.ComponentProps<'button'>)}
     >
       {children}
     </button>
