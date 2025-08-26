@@ -38,7 +38,7 @@ export default async function LocaleLayout({
       <body className="min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased selection:bg-white/10">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Header locale={locale} />
-          {children}
+          <main className="relative pt-[var(--header-h)]">{children}</main>
         </NextIntlClientProvider>
       </body>
     </html>

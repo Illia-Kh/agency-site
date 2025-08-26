@@ -1,5 +1,7 @@
 'use client';
 import { useTranslations } from 'next-intl';
+import MediaCarousel from './carousel/MediaCarousel';
+import galleryMediaData from '../content/galleryMedia.json';
 
 export default function Gallery() {
   const t = useTranslations('gallery');
@@ -12,41 +14,58 @@ export default function Gallery() {
     { id: 5, caption: t('cases.keitaro'), alt: 'Case 5' },
     { id: 6, caption: t('cases.whitepage'), alt: 'Case 6' },
   ];
+
   return (
-    <section
-      id="cases"
-      className="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:pb-20"
-    >
-      <div className="mb-6 flex items-end justify-between">
-        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
-          {t('title')}
-        </h2>
-        <a
-          href="#contact"
-          className="text-sm text-[var(--primary)] hover:text-[var(--primary-hover)]"
-        >
-          {t('ctaText')}
-        </a>
-      </div>
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map(it => (
-          <figure
-            key={it.id}
-            className="group overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)]"
-          >
-            <div
-              className="aspect-video bg-[var(--surface-elevated)]"
-              aria-label={it.alt}
-            ></div>
-            <figcaption className="flex items-center justify-between px-4 py-3 text-sm text-[var(--text)]">
-              <span>{it.caption}</span>
-              <span className="opacity-60 group-hover:opacity-100">
-                {t('details')}
-              </span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </section>
+    <>
+      {/* Gallery Carousel Section */}
+      <section id="gallery" className="relative w-full py-8 sm:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 flex items-end justify-between">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
+              Portfolio Gallery
+            </h2>
+          </div>
+          <div className="flex justify-center">
+            <MediaCarousel items={galleryMediaData} variant="gallery" />
+          </div>
+        </div>
+      </section>
+
+      {/* Cases Section */}
+      <section id="cases" className="relative w-full py-8 sm:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mb-6 flex items-end justify-between">
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl text-[var(--text)]">
+              {t('title')}
+            </h2>
+            <a
+              href="#contact"
+              className="text-sm text-[var(--primary)] hover:text-[var(--primary-hover)]"
+            >
+              {t('ctaText')}
+            </a>
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {items.map(it => (
+              <figure
+                key={it.id}
+                className="group overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--bg-secondary)]"
+              >
+                <div
+                  className="aspect-video bg-[var(--surface-elevated)]"
+                  aria-label={it.alt}
+                ></div>
+                <figcaption className="flex items-center justify-between px-4 py-3 text-sm text-[var(--text)]">
+                  <span>{it.caption}</span>
+                  <span className="opacity-60 group-hover:opacity-100">
+                    {t('details')}
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
 }

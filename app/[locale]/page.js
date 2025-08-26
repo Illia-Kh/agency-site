@@ -9,11 +9,11 @@ export default async function Home() {
   const heroMediaItems = await getHeroMediaFiles();
 
   return (
-    <main className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <Hero heroMediaItems={heroMediaItems} />
       <About />
       <Gallery />
       <Footer />
-    </main>
+    </div>
   );
 }

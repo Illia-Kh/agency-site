@@ -1,0 +1,20 @@
+[
+  {
+    "id": "gallery-1",
+    "type": "image",
+    "src": "/media/hero/ads-manager-poster.svg",
+    "alt": "Gallery showcase 1"
+  },
+  {
+    "id": "gallery-2",
+    "type": "image",
+    "src": "/media/hero/analytics-growth-poster.svg",
+    "alt": "Gallery showcase 2"
+  },
+  {
+    "id": "gallery-3",
+    "type": "image",
+    "src": "/media/hero/landing-preview.svg",
+    "alt": "Gallery showcase 3"
+  }
+]
