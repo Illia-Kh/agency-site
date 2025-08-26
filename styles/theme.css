@@ -10,8 +10,10 @@
 }
 
 :root {
+  --header-h: 64px;
   --bg: #ffffff;
   --bg-secondary: #f7f7f8;
+  --surface: #efeff1;
   --surface-elevated: #efeff1;
   --border: #e5e5e7;
   --text: #111111;
@@ -50,6 +52,7 @@
 :root[data-theme='dark'] {
   --bg: #0f0f10;
   --bg-secondary: #161618;
+  --surface: #1a1a1c;
   --surface-elevated: #1a1a1c;
   --border: #2a2a2e;
   --text: #f5f5f6;
@@ -145,4 +148,11 @@ a:not(.btn):hover {
 }
 .btn-graphite:hover {
   background: var(--highlight-hover);
+}
+
+/* Header height responsive breakpoint */
+@media (min-width: 640px) {
+  :root {
+    --header-h: 72px;
+  }
 }

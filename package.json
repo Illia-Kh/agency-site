@@ -16,6 +16,8 @@
     "media:watch": "tsx scripts/media-build.ts watch"
   },
   "dependencies": {
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.23.12",
     "next": "15.4.5",
     "next-intl": "^4.3.4",
